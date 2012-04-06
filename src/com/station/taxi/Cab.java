@@ -64,12 +64,12 @@ public class Cab extends Thread {
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(ONE_SECOND);
+			Thread.sleep(ONE_SECOND * mDrivingTime);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		arrived();
 	}
-
 	/**
 	 * 
 	 * @param drivingTime
@@ -86,6 +86,18 @@ public class Cab extends Thread {
 			// TODO fill mDrivingTime
 		}
 		mState = STATE_DRIVING;
+		start();
+	}
+
+	private void arrived() {
+		notifyArrival();
+		
+	}
+	
+	private void notifyArrival() {
+		for(Passanger p: mPassangers) {
+			p.onArrival(this, mMeter.getCurrentValue());
+		}
 	}
 	
 	/**

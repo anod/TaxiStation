@@ -8,7 +8,7 @@ import java.util.concurrent.CyclicBarrier;
  * @author alex
  *
  */
-public class Passanger extends Thread {
+public class Passanger extends Thread implements IArrivalEventListener {
 	private static final int STATE_WAITING = 0;
 	private static final int STATE_DRIVING = 1; //TODO: better name
 	private static final int STATE_EXIT = 2;
@@ -58,8 +58,13 @@ public class Passanger extends Thread {
 			}
 		}
 	}
-
+	
 	private void onWaitingState() {
 		// TODO assign mExitTime
+	}
+
+	@Override
+	public void onArrival(Cab cab, double price) {
+		
 	}	
 }
