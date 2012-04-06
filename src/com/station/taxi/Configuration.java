@@ -6,11 +6,13 @@ package com.station.taxi;
  */
 public class Configuration {
 
-	public void load(String filename) {
+	public static Station load(String filename) {
 		//TODO load configuration from xml
+		
+		return null;
 	}
 	
-	public void save(Station station, String filename) {
+	public static void save(Station station, String filename) {
 		//TODO save station to configuration file
 	}
 }

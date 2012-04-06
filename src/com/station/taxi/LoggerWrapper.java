@@ -18,7 +18,7 @@ import java.util.logging.SimpleFormatter;
  *
  */
 public class LoggerWrapper {
-	private static Logger sLogger = Logger.getLogger("TaxiStation");
+	private static Logger sLogger = Logger.getLogger("logs/TaxiStation");
 	
 	static {
 		ConsoleHandler consoleHandler = new ConsoleHandler();
@@ -26,7 +26,7 @@ public class LoggerWrapper {
 		sLogger.setUseParentHandlers(false);
 		sLogger.addHandler(consoleHandler);
 		try {
-			sLogger.addHandler(new FileHandler("StationLog.xml"));
+			sLogger.addHandler(new FileHandler("logs/StationLog.txt"));
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -77,7 +77,7 @@ public class LoggerWrapper {
 	 * @throws IOException
 	 */
 	public static void addCabLogger(Cab cab) throws SecurityException, IOException {
-		FileHandler fileHandler = new FileHandler("CabLog"+cab.getNumer()+".txt");
+		FileHandler fileHandler = new FileHandler("logs/CabLog"+cab.getNumer()+".txt");
 		fileHandler.setFormatter(new SimpleFormatter());
 		fileHandler.setFilter(new CabFilter(cab.getNumer()));
 		sLogger.addHandler(fileHandler);

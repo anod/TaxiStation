@@ -1,24 +1,38 @@
 package com.station.taxi;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 /**
  * Taxi cab station
  * @author alex
  *
  */
 public class Station {
-	private ArrayList<Cab> mTaxiWaiting;
-	private ArrayList<Cab> mTaxiDriving;
-	private ArrayList<Cab> mTaxiBreak;
+	/**
+	 * ArrayBlockingQueue is a queue of a fixed size. 
+	 * So if you set the size at 5, and attempt to insert an 6th element,
+	 * the insert statement will block until another thread removes an element. 
+	 *
+	 * The most important difference between LinkedBlockingQueue and ConcurrentLinkedQueue 
+	 * is that if you request an element from a LinkedBlockingQueue and the queue is empty,
+	 * your thread will wait until there is something there.
+	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
+	 */
+	private ConcurrentLinkedQueue<Cab> mTaxiWaiting;
+	private ConcurrentLinkedQueue<Cab> mTaxiDriving;
+	private ConcurrentLinkedQueue<Cab> mTaxiBreak;
 	private ArrayList<Passanger> mPassangerQueue;
-	private ArrayList<Passanger> mPassangerExit;
+	private ConcurrentLinkedQueue<Passanger> mPassangerExit;
 
 	private String mName;
-	private String mMaxWaitingCount;
+	private int mMaxWaitingCount;
 	
-	public Station(String name, String maxWaitingCount) {
+	public Station(String name, int maxWaitingCount) {
 		mName = name;
 		mMaxWaitingCount = maxWaitingCount;
+		mTaxiWaiting = new ConcurrentLinkedQueue<Cab>();
 	}
 
 	/**
@@ -42,20 +56,11 @@ public class Station {
 		return mTaxiDriving.size();
 	}
 
-	/**
-	 * @return Number of taxi cabs on break
-	 */
-	public int getBreakTaxiCount() {
-		return mTaxiBreak.size();
+	public void fillTaxi() {
+		// Check example from 04-threads.pptx
+		//ExecutorService lineManager = Executors.newFixedThreadPool(Cab.MAX_PASSANGERS);
 	}
 	
-
-	/**
-	 * @return Number of passangers in waiting queue
-	 */
-	public int getBreakTaxiCount() {
-		return mTaxiBreak.size();
-	}
 
 
 }
