@@ -1,23 +1,23 @@
-package com.station.taxi;
+package com.station.taxi.logger;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
-import java.util.logging.Filter;
-import java.util.logging.Formatter;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import com.station.taxi.Cab;
 
 /**
  * Helper to create log
  * @author alex
  *
+ * TODO add passanger loger
+ *
  */
 public class LoggerWrapper {
+	private static final String LOG_CAB = "logs/CabLog_%s.txt";
 	private static Logger sLogger = Logger.getLogger("logs/TaxiStation");
 	
 	static {
@@ -34,42 +34,6 @@ public class LoggerWrapper {
 		}
 	}
 	
-	class TaxiFormatter extends Formatter {
-		final private SimpleDateFormat mDateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		@Override
-		public String format(LogRecord record) {
-			StringBuffer sb = new StringBuffer(1000);
-			sb.append(mDateFormatter.format(new Date()));
-			sb.append(" ");
-			sb.append(record.getMessage());
-			return sb.toString();
-		}
-		
-	}
-	
-	/**
-	 * Filters log messages for specific cab
-	 * @author alex
-	 *
-	 */
-	class CabFilter implements Filter {
-		final private static String PATTERN = "[cab%d]";
-		private int mCabId;
-		
-		public CabFilter(int cabId) {
-			mCabId = cabId;
-		}
-
-		@Override
-		public boolean isLoggable(LogRecord record) {
-			String cabPattern = String.format(PATTERN, mCabId); 
-			if (record.getMessage().contains(cabPattern)) {
-				return true;
-			}
-			return false;
-		}
-	}
-	
 	/**
 	 * Add a new Cab Logger
 	 * @param cab
@@ -77,7 +41,7 @@ public class LoggerWrapper {
 	 * @throws IOException
 	 */
 	public static void addCabLogger(Cab cab) throws SecurityException, IOException {
-		FileHandler fileHandler = new FileHandler("logs/CabLog"+cab.getNumer()+".txt");
+		FileHandler fileHandler = new FileHandler(String.format(LOG_CAB, cab.getNumer()));
 		fileHandler.setFormatter(new SimpleFormatter());
 		fileHandler.setFilter(new CabFilter(cab.getNumer()));
 		sLogger.addHandler(fileHandler);

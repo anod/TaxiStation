@@ -22,8 +22,8 @@ public class TaxiMeter {
 		mCurrentValue = mInitPrice;
 	}
 	
-	public void increase() {
-		mCurrentValue += mOneSecPrice;
+	public void calc(int seconds) {
+		mCurrentValue += mOneSecPrice * seconds;
 	}	
 	
 }

@@ -20,6 +20,7 @@ public class Cab extends Thread {
 	private TaxiMeter mMeter;
 	private int mState;
 	private int mDrivingTime = 0;
+	private boolean mKeepRunning = true;
 	
 	public Cab(int num, String breakAction, TaxiMeter meter) {
 		mNumber = num;
@@ -63,12 +64,39 @@ public class Cab extends Thread {
 	 */
 	@Override
 	public void run() {
+		while ( mKeepRunning ) {
+			switch(mState) {
+				case STATE_DRIVING:
+					driving();
+				break;
+				case STATE_WAITING:
+					// TODO
+				break;
+				case STATE_BREAK:
+					// TODO
+				break;								
+			}
+			
+	        try {
+	        	sleep(50); 
+	        } catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void driving() {
 		try {
-			Thread.sleep(ONE_SECOND * mDrivingTime);
+			sleep(ONE_SECOND * mDrivingTime);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		arrived();
+		mMeter.calc(mDrivingTime); 
+		notifyArrival();
+		mState = STATE_WAITING;
 	}
 	/**
 	 * 
@@ -86,12 +114,6 @@ public class Cab extends Thread {
 			// TODO fill mDrivingTime
 		}
 		mState = STATE_DRIVING;
-		start();
-	}
-
-	private void arrived() {
-		notifyArrival();
-		
 	}
 	
 	private void notifyArrival() {

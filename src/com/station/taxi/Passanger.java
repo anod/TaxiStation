@@ -17,6 +17,8 @@ public class Passanger extends Thread implements IArrivalEventListener {
 	private String mName;
 	private String mDestination;
 	private CyclicBarrier mTaxiCab;
+	private boolean mKeepRunning = true;
+	private int mState = 0;
 	
 	public Passanger(String name, String destination) {
 		mName = name;
@@ -46,6 +48,31 @@ public class Passanger extends Thread implements IArrivalEventListener {
 	 */
 	@Override
 	public void run() {
+		while ( mKeepRunning  ) {
+			switch( mState ) {
+				case STATE_DRIVING:
+					driving();
+				break;
+				case STATE_WAITING:
+					// TODO
+				break;
+				case STATE_EXIT:
+					// TODO
+				break;								
+			}
+			
+	        try {
+	        	sleep(50); 
+	        } catch (InterruptedException e) {
+				e.printStackTrace();
+			}			
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void driving() {
 		if (mTaxiCab!=null) {
 			try {
 				mTaxiCab.await();
