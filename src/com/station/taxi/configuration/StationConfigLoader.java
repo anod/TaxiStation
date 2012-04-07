@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.station.taxi.Cab;
-import com.station.taxi.Passanger;
+import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.TaxiMeter;
 
@@ -35,22 +35,25 @@ public class StationConfigLoader {
         TaxiMeter meter = readTaxiMeter(doc);
         Station station = readStation(doc, meter);
         ArrayList<Cab> taxis = readTaxiCabs(doc);
-        ArrayList<Passanger> passangers = readPassangers(doc);
-   
-        
-        
+        for(Cab cab: taxis) {
+        	station.addCab(cab);
+        }
+        ArrayList<Passenger> passengers = readPassengers(doc);
+        for(Passenger passenger: passengers) {
+        	station.addPassenger(passenger);
+        }
 		return station;
 	}
 
-	private ArrayList<Passanger> readPassangers(Document doc) {
-		ArrayList<Passanger> result = new ArrayList<Passanger>();
+	private ArrayList<Passenger> readPassengers(Document doc) {
+		ArrayList<Passenger> result = new ArrayList<Passenger>();
 		
         NodeList taxis = doc.getElementsByTagName("passenger");
         for(int i=0; i<taxis.getLength() ; i++){
         	 NamedNodeMap attrs = taxis.item(i).getAttributes();
              String name = attrs.getNamedItem("name").getNodeValue();
              String destination = attrs.getNamedItem("destination").getNodeValue();
-        	 result.add(new Passanger(name, destination));
+        	 result.add(new Passenger(name, destination));
         }
 		return result;		
 	}

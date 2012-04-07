@@ -8,13 +8,14 @@ import java.util.ArrayList;
  *
  */
 public class Cab extends Thread {
-	private static final int ONE_SECOND = 1000;
 	public static final int MAX_PASSANGERS = 4;
+
+	private static final int ONE_SECOND = 1000;
 	private static final int STATE_BREAK=0;
 	private static final int STATE_DRIVING=1;
 	private static final int STATE_WAITING=2;
 
-	private ArrayList<Passanger> mPassangers = new ArrayList<Passanger>(MAX_PASSANGERS);
+	private ArrayList<Passenger> mPassangers = new ArrayList<Passenger>(MAX_PASSANGERS);
 	private String mWhileWaiting;
 	private int mNumber;
 	private TaxiMeter mMeter;
@@ -26,30 +27,41 @@ public class Cab extends Thread {
 		mNumber = num;
 		mWhileWaiting = whileWaiting;
 	}
-
+	/**
+	 * Cab Id Number
+	 * @return
+	 */
 	public int getNumer() {
 		return mNumber;
 	}
-	
-	public String getBreakAction() {
+	/**
+	 * Action while waiting
+	 * @return
+	 */
+	public String getWhileWaitingAction() {
 		return mWhileWaiting;
 	}
-
 	/**
 	 * Add passanger to Cab
 	 * @param passanger
 	 * @throws Exception
 	 */
-	public void addPassanger(Passanger passanger) throws Exception {
+	public void addPassanger(Passenger passanger) throws Exception {
 		if (mPassangers.size() > 0) {
-			Passanger first = mPassangers.get(0);
+			Passenger first = mPassangers.get(0);
 			if (!first.getDestination().equals(passanger.getDestination())) {
 				throw new Exception("Wrong destination");
 			}
 		}
 		mPassangers.add(passanger);
 	}
-	
+	/**
+	 * Set TaxiMeter instance
+	 * @param meter
+	 */
+	public void setMeter(TaxiMeter meter) {
+		mMeter = meter;
+	}
 	/**
 	 * Check if cab is full
 	 * @return
@@ -116,7 +128,7 @@ public class Cab extends Thread {
 	}
 	
 	private void notifyArrival() {
-		for(Passanger p: mPassangers) {
+		for(Passenger p: mPassangers) {
 			p.onArrival(this, mMeter.getCurrentValue());
 		}
 	}

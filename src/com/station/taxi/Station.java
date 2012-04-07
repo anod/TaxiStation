@@ -1,8 +1,9 @@
 package com.station.taxi;
 
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 /**
  * Taxi cab station
  * @author alex
@@ -19,11 +20,11 @@ public class Station {
 	 * your thread will wait until there is something there.
 	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
 	 */
-	private ArrayBlockingQueue<Cab> mTaxiWaiting;
+	private ConcurrentLinkedQueue<Cab> mTaxiWaiting;
 	private ConcurrentLinkedQueue<Cab> mTaxiDriving;
 	private ConcurrentLinkedQueue<Cab> mTaxiBreak;
-	private ArrayList<Passanger> mPassangerQueue;
-	private ConcurrentLinkedQueue<Passanger> mPassangerExit;
+	private ConcurrentLinkedQueue<Passenger> mPassangerQueue;
+	private ConcurrentLinkedQueue<Passenger> mPassangerExit;
 
 	private String mName;
 	private int mMaxWaitingCount;
@@ -31,7 +32,8 @@ public class Station {
 	
 	public Station(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
 		mName = name;
-		mTaxiWaiting = new ArrayBlockingQueue<Cab>(maxWaitingCount);
+		mMaxWaitingCount = maxWaitingCount;
+		mTaxiWaiting = new ConcurrentLinkedQueue<Cab>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
 	}
 
@@ -41,15 +43,39 @@ public class Station {
 	public String getName() {
 		return mName;
 	}
-	
 	/**
 	 * @return Number of taxi cabs in waiting state
 	 */
 	public int getWaitingTaxiCount() {
 		return mTaxiWaiting.size();
 	}
-
-	public TaxiMeter createTaxiMeter() {
+	/**
+	 * @return Number of taxi cabs in driving state
+	 */
+	public int getDrivingTaxiCount() {
+		return mTaxiDriving.size();
+	}
+	/**
+	 * Add a cab to the station
+	 * @param cab
+	 */
+	public void addCab(Cab cab) {
+		cab.setMeter(createTaxiMeter());
+		// TODO decide which queue, mMaxWaitingCount
+		mTaxiWaiting.add(cab);
+	}
+	/**
+	 * Add a passenger to the station
+	 * @param cab
+	 */
+	public void addPassenger(Passenger passenger) {
+		mPassangerQueue.add(passenger);
+	}	
+	/**
+	 * Creates new instance of taxi meter
+	 * @return
+	 */
+	private TaxiMeter createTaxiMeter() {
 		try {
 			return mDefaultTaxiMeter.clone();
 		} catch (CloneNotSupportedException e) {
@@ -58,13 +84,9 @@ public class Station {
 		return null;
 	}
 	/**
-	 * @return Number of taxi cabs in driving state
+	 * Fill cab with passengers
 	 */
-	public int getDrivingTaxiCount() {
-		return mTaxiDriving.size();
-	}
-
-	public void fillTaxi() {
+	private void fillTaxi() {
 		// Check example from 04-threads.pptx
 		//ExecutorService lineManager = Executors.newFixedThreadPool(Cab.MAX_PASSANGERS);
 	}
