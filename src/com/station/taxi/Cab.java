@@ -15,17 +15,16 @@ public class Cab extends Thread {
 	private static final int STATE_WAITING=2;
 
 	private ArrayList<Passanger> mPassangers = new ArrayList<Passanger>(MAX_PASSANGERS);
-	private String mBreakAction;
+	private String mWhileWaiting;
 	private int mNumber;
 	private TaxiMeter mMeter;
 	private int mState;
 	private int mDrivingTime = 0;
 	private boolean mKeepRunning = true;
 	
-	public Cab(int num, String breakAction, TaxiMeter meter) {
+	public Cab(int num, String whileWaiting) {
 		mNumber = num;
-		mBreakAction = breakAction;
-		mMeter = meter;
+		mWhileWaiting = whileWaiting;
 	}
 
 	public int getNumer() {
@@ -33,7 +32,7 @@ public class Cab extends Thread {
 	}
 	
 	public String getBreakAction() {
-		return mBreakAction;
+		return mWhileWaiting;
 	}
 
 	/**

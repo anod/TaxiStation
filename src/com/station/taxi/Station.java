@@ -1,9 +1,8 @@
 package com.station.taxi;
 
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 /**
  * Taxi cab station
  * @author alex
@@ -20,7 +19,7 @@ public class Station {
 	 * your thread will wait until there is something there.
 	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
 	 */
-	private ConcurrentLinkedQueue<Cab> mTaxiWaiting;
+	private ArrayBlockingQueue<Cab> mTaxiWaiting;
 	private ConcurrentLinkedQueue<Cab> mTaxiDriving;
 	private ConcurrentLinkedQueue<Cab> mTaxiBreak;
 	private ArrayList<Passanger> mPassangerQueue;
@@ -28,11 +27,12 @@ public class Station {
 
 	private String mName;
 	private int mMaxWaitingCount;
+	private TaxiMeter mDefaultTaxiMeter;
 	
-	public Station(String name, int maxWaitingCount) {
+	public Station(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
 		mName = name;
-		mMaxWaitingCount = maxWaitingCount;
-		mTaxiWaiting = new ConcurrentLinkedQueue<Cab>();
+		mTaxiWaiting = new ArrayBlockingQueue<Cab>(maxWaitingCount);
+		mDefaultTaxiMeter = defaultTaxiMeter;
 	}
 
 	/**
@@ -49,6 +49,14 @@ public class Station {
 		return mTaxiWaiting.size();
 	}
 
+	public TaxiMeter createTaxiMeter() {
+		try {
+			return mDefaultTaxiMeter.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * @return Number of taxi cabs in driving state
 	 */

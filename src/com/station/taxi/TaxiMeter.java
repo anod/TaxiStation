@@ -4,13 +4,13 @@ package com.station.taxi;
  * @author alex
  *
  */
-public class TaxiMeter {
-	final private double mInitPrice;
+public class TaxiMeter implements Cloneable {
+	final private double mStartPrice;
 	final private double mOneSecPrice;
 	private double mCurrentValue;
 	
-	public TaxiMeter(double initPrice, double oneSecPrice) {
-		mInitPrice = initPrice;
+	public TaxiMeter(double startPrice, double oneSecPrice) {
+		mStartPrice = startPrice;
 		mOneSecPrice = oneSecPrice;
 	}
 	
@@ -19,11 +19,17 @@ public class TaxiMeter {
 	}
 	
 	public void reset() {
-		mCurrentValue = mInitPrice;
+		mCurrentValue = mStartPrice;
 	}
 	
 	public void calc(int seconds) {
 		mCurrentValue += mOneSecPrice * seconds;
+	}
+
+	@Override
+	protected TaxiMeter clone() throws CloneNotSupportedException {
+		return new TaxiMeter(mStartPrice, mOneSecPrice);
 	}	
+	
 	
 }
