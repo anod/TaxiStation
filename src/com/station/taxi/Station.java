@@ -1,5 +1,6 @@
 package com.station.taxi;
 
+import java.util.Random;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,7 +11,7 @@ import com.station.taxi.logger.LoggerWrapper;
  * @author alex
  *
  */
-public class Station extends Thread{
+public class Station extends Thread {
 	/**
 	 * ArrayBlockingQueue is a queue of a fixed size. 
 	 * So if you set the size at 5, and attempt to insert an 6th element,
@@ -22,7 +23,7 @@ public class Station extends Thread{
 	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
 	 */
 	private ArrayBlockingQueue<Cab> mTaxiWaiting;
-	private LinkedBlockingQueue<Cab> mTaxiDriving;
+	private Vector<Cab> mTaxiDriving;
 	private LinkedBlockingQueue<Cab> mTaxiBreak;
 	private Vector<Passenger> mPassangersList;
 	private LinkedBlockingQueue<Passenger> mPassangerExit;
@@ -37,11 +38,11 @@ public class Station extends Thread{
 		mMaxWaitingCount = maxWaitingCount;
 		mTaxiWaiting = new ArrayBlockingQueue<Cab>(maxWaitingCount);
 		mTaxiBreak = new LinkedBlockingQueue<Cab>();
+		mTaxiDriving = new Vector<Cab>();
 		mPassangersList = new Vector<Passenger>();
 		mPassangerExit = new LinkedBlockingQueue<Passenger>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
 	}
-	
 
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
@@ -128,18 +129,21 @@ public class Station extends Thread{
 	private void fillTaxi() {
 		// Get first cab in queue, if there is no cabs in waiting queue
 		// waits until new cab will be added
-		Cab cab;
-		synchronized (mTaxiWaiting) {
-			cab = mTaxiWaiting.poll();
-			if (cab == null) {
-				try {
-					mTaxiWaiting.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				cab = mTaxiWaiting.poll();
-			}
+		Cab cab = getNextWaitingCab();
+		addPassangersToCab(cab);
+		
+		mTaxiDriving.add(cab);
+		try {
+			cab.drive(null);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * @param cab
+	 */
+	private void addPassangersToCab(Cab cab) {
 		synchronized (cab) {
 			Passenger firstPassenger = mPassangersList.get(0);
 			mPassangersList.remove(0);
@@ -158,6 +162,25 @@ public class Station extends Thread{
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	private Cab getNextWaitingCab() {
+		Cab cab;
+		synchronized (mTaxiWaiting) {
+			cab = mTaxiWaiting.poll();
+			if (cab == null) {
+				try {
+					mTaxiWaiting.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				cab = mTaxiWaiting.poll();
+			}
+		}
+		return cab;
 	}
 	
 

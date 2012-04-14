@@ -3,6 +3,7 @@ package com.station.taxi;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import com.station.taxi.logger.LoggerWrapper;
 
@@ -91,8 +92,6 @@ public class Cab extends Thread {
 				break;
 				case STATE_BREAK:
 					//
-					LoggerWrapper.logCab(this,"Go to break");
-					// TODO
 				break;								
 			}
 			
@@ -117,6 +116,8 @@ public class Cab extends Thread {
 		mMeter.calc(mDrivingTime); 
 		notifyArrival();
 		mState = STATE_WAITING;
+		Passenger first = mPassangers.get(0);
+		LoggerWrapper.logCab(this,"Arrived to desitnation '"+first.getDestination()+"' with "+mPassangers.size()+" passengers");		
 		mPassangers.clear();
 	}
 	/**
@@ -132,9 +133,12 @@ public class Cab extends Thread {
 		if (drivingTime != null) {
 			mDrivingTime = drivingTime;
 		} else {
-			// TODO fill mDrivingTime
+			Random rand = new Random();
+			mDrivingTime = rand.nextInt(10)+5;			
 		}
 		mState = STATE_DRIVING;
+		Passenger first = mPassangers.get(0);
+		LoggerWrapper.logCab(this,"Start driving to '"+first.getDestination()+"' with "+mPassangers.size()+" passengers");
 	}
 	
 	private void notifyArrival() {
