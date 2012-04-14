@@ -1,15 +1,16 @@
 package com.station.taxi;
 
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Vector;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import com.station.taxi.logger.LoggerWrapper;
 /**
  * Taxi cab station
  * @author alex
  *
  */
-public class Station {
+public class Station extends Thread{
 	/**
 	 * ArrayBlockingQueue is a queue of a fixed size. 
 	 * So if you set the size at 5, and attempt to insert an 6th element,
@@ -20,28 +21,57 @@ public class Station {
 	 * your thread will wait until there is something there.
 	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
 	 */
-	private ConcurrentLinkedQueue<Cab> mTaxiWaiting;
-	private ConcurrentLinkedQueue<Cab> mTaxiDriving;
-	private ConcurrentLinkedQueue<Cab> mTaxiBreak;
-	private ConcurrentLinkedQueue<Passenger> mPassangerQueue;
-	private ConcurrentLinkedQueue<Passenger> mPassangerExit;
+	private ArrayBlockingQueue<Cab> mTaxiWaiting;
+	private LinkedBlockingQueue<Cab> mTaxiDriving;
+	private LinkedBlockingQueue<Cab> mTaxiBreak;
+	private Vector<Passenger> mPassangersList;
+	private LinkedBlockingQueue<Passenger> mPassangerExit;
 
-	private String mName;
+	private String mStationName;
 	private int mMaxWaitingCount;
 	private TaxiMeter mDefaultTaxiMeter;
+	private boolean mKeepRunning = true;
 	
 	public Station(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
-		mName = name;
+		mStationName = name;
 		mMaxWaitingCount = maxWaitingCount;
-		mTaxiWaiting = new ConcurrentLinkedQueue<Cab>();
+		mTaxiWaiting = new ArrayBlockingQueue<Cab>(maxWaitingCount);
+		mTaxiBreak = new LinkedBlockingQueue<Cab>();
+		mPassangersList = new Vector<Passenger>();
+		mPassangerExit = new LinkedBlockingQueue<Passenger>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#run()
+	 */
+	@Override
+	public void run() {
+		for(Cab cab: mTaxiWaiting) {
+			cab.start();
+		}
+		for(Cab cab: mTaxiBreak) {
+			cab.start();
+		}
+		for(Passenger p: mPassangersList) {
+			p.start();
+		}		
+		while ( mKeepRunning ) {
+			fillTaxi();
+	        try {
+	        	sleep(50); 
+	        } catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
 	 * @return Station name
 	 */
-	public String getName() {
-		return mName;
+	public String getStationName() {
+		return mStationName;
 	}
 	/**
 	 * @return Number of taxi cabs in waiting state
@@ -61,15 +91,24 @@ public class Station {
 	 */
 	public void addCab(Cab cab) {
 		cab.setMeter(createTaxiMeter());
+		try {
+			LoggerWrapper.addCabLogger(cab);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		// TODO decide which queue, mMaxWaitingCount
-		mTaxiWaiting.add(cab);
+		if (mTaxiWaiting.size() >= mMaxWaitingCount) {
+			mTaxiBreak.add(cab);
+		} else {
+			mTaxiWaiting.add(cab);
+		}
 	}
 	/**
 	 * Add a passenger to the station
 	 * @param cab
 	 */
 	public void addPassenger(Passenger passenger) {
-		mPassangerQueue.add(passenger);
+		mPassangersList.add(passenger);
 	}	
 	/**
 	 * Creates new instance of taxi meter
@@ -87,10 +126,39 @@ public class Station {
 	 * Fill cab with passengers
 	 */
 	private void fillTaxi() {
-		// Check example from 04-threads.pptx
-		//ExecutorService lineManager = Executors.newFixedThreadPool(Cab.MAX_PASSANGERS);
+		// Get first cab in queue, if there is no cabs in waiting queue
+		// waits until new cab will be added
+		Cab cab;
+		synchronized (mTaxiWaiting) {
+			cab = mTaxiWaiting.poll();
+			if (cab == null) {
+				try {
+					mTaxiWaiting.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				cab = mTaxiWaiting.poll();
+			}
+		}
+		synchronized (cab) {
+			Passenger firstPassenger = mPassangersList.get(0);
+			mPassangersList.remove(0);
+			try {
+				cab.addPassanger(firstPassenger);
+				String dest = firstPassenger.getDestination();
+				for(Passenger passenger : mPassangersList) {
+					if (passenger.getDestination().equals(dest)) {
+						cab.addPassanger(passenger);
+					}
+					if (cab.isFull()) {
+						break;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
-
 
 }

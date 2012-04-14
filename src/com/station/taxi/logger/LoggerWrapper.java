@@ -5,7 +5,6 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import com.station.taxi.Cab;
 
@@ -13,7 +12,7 @@ import com.station.taxi.Cab;
  * Helper to create log
  * @author alex
  *
- * TODO add passanger loger
+ * TODO add passanger logger
  *
  */
 public class LoggerWrapper {
@@ -42,13 +41,17 @@ public class LoggerWrapper {
 	 */
 	public static void addCabLogger(Cab cab) throws SecurityException, IOException {
 		FileHandler fileHandler = new FileHandler(String.format(LOG_CAB, cab.getNumer()));
-		fileHandler.setFormatter(new SimpleFormatter());
+		fileHandler.setFormatter(new TaxiFormatter());
 		fileHandler.setFilter(new CabFilter(cab.getNumer()));
 		sLogger.addHandler(fileHandler);
 	}
 	
+	public static void logCab(Cab cab, String message) {
+		log(String.format(CabFilter.PATTERN, cab.getNumer()) + " " + message);
+	}
+	
 	public static void log(String message) {
-		sLogger.log(Level.INFO, message);
+		sLogger.log(Level.INFO, message + "\n");
 	}
 
 }

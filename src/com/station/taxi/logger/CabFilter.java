@@ -9,7 +9,7 @@ import java.util.logging.LogRecord;
  *
  */
 class CabFilter implements Filter {
-	final private static String PATTERN = "[cab%d]";
+	final public static String PATTERN = "[cab%d]";
 	private int mCabId;
 	
 	public CabFilter(int cabId) {

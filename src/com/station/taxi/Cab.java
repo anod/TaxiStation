@@ -1,6 +1,10 @@
 package com.station.taxi;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.station.taxi.logger.LoggerWrapper;
 
 /**
  *  Tax cab object
@@ -15,7 +19,7 @@ public class Cab extends Thread {
 	private static final int STATE_DRIVING=1;
 	private static final int STATE_WAITING=2;
 
-	private ArrayList<Passenger> mPassangers = new ArrayList<Passenger>(MAX_PASSANGERS);
+	private List<Passenger> mPassangers;
 	private String mWhileWaiting;
 	private int mNumber;
 	private TaxiMeter mMeter;
@@ -26,6 +30,8 @@ public class Cab extends Thread {
 	public Cab(int num, String whileWaiting) {
 		mNumber = num;
 		mWhileWaiting = whileWaiting;
+		// safe for threads
+		mPassangers = Collections.synchronizedList(new ArrayList<Passenger>(MAX_PASSANGERS));
 	}
 	/**
 	 * Cab Id Number
@@ -43,17 +49,17 @@ public class Cab extends Thread {
 	}
 	/**
 	 * Add passanger to Cab
-	 * @param passanger
+	 * @param passenger
 	 * @throws Exception
 	 */
-	public void addPassanger(Passenger passanger) throws Exception {
+	public void addPassanger(Passenger passenger) throws Exception {
 		if (mPassangers.size() > 0) {
 			Passenger first = mPassangers.get(0);
-			if (!first.getDestination().equals(passanger.getDestination())) {
+			if (!first.getDestination().equals(passenger.getDestination())) {
 				throw new Exception("Wrong destination");
 			}
 		}
-		mPassangers.add(passanger);
+		mPassangers.add(passenger);
 	}
 	/**
 	 * Set TaxiMeter instance
@@ -81,9 +87,11 @@ public class Cab extends Thread {
 					driving();
 				break;
 				case STATE_WAITING:
-					// TODO
+					//
 				break;
 				case STATE_BREAK:
+					//
+					LoggerWrapper.logCab(this,"Go to break");
 					// TODO
 				break;								
 			}
@@ -104,10 +112,12 @@ public class Cab extends Thread {
 			sleep(ONE_SECOND * mDrivingTime);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			return;
 		}
 		mMeter.calc(mDrivingTime); 
 		notifyArrival();
 		mState = STATE_WAITING;
+		mPassangers.clear();
 	}
 	/**
 	 * 

@@ -9,10 +9,13 @@ public class Main {
     	
     	StationConfigLoader config = new StationConfigLoader("configs/config1.xml");
     	
+    	Station station;
     	try {
-			Station station = config.load();
+			station = config.load();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
+		station.start();
     }
 }
