@@ -138,7 +138,7 @@ public class Cab extends Thread {
 		}
 		mState = STATE_DRIVING;
 		Passenger first = mPassangers.get(0);
-		LoggerWrapper.logCab(this,"Start driving to '"+first.getDestination()+"' with "+mPassangers.size()+" passengers");
+		LoggerWrapper.logCab(this,"Start driving to '"+first.getDestination()+"' with "+mPassangers.size()+" passengers. Estimated time: +"+mDrivingTime+" seconds");
 	}
 	
 	private void notifyArrival() {
@@ -153,6 +153,7 @@ public class Cab extends Thread {
 	public void requestBreak() {
 		//TODO
 		mState = STATE_BREAK;
+		LoggerWrapper.logCab(this,"Go to break, ");		
 	}
 	
 	/**
