@@ -1,9 +1,7 @@
 package com.station.taxi;
 
-import java.util.Random;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import com.station.taxi.logger.LoggerWrapper;
 /**
@@ -11,7 +9,12 @@ import com.station.taxi.logger.LoggerWrapper;
  * @author alex
  *
  */
-public class Station extends Thread {
+public class Station extends Thread implements ICabEventListener {
+    /**
+     * Lock used when maintaining queue of requested updates.
+     */
+    public static Object sLock = new Object();
+    
 	/**
 	 * ArrayBlockingQueue is a queue of a fixed size. 
 	 * So if you set the size at 5, and attempt to insert an 6th element,
@@ -23,11 +26,13 @@ public class Station extends Thread {
 	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
 	 */
 	private ArrayBlockingQueue<Cab> mTaxiWaiting;
-	private Vector<Cab> mTaxiDriving;
-	private LinkedBlockingQueue<Cab> mTaxiBreak;
-	private Vector<Passenger> mPassangersList;
-	private LinkedBlockingQueue<Passenger> mPassangerExit;
+	private ArrayList<Cab> mTaxiDriving;
+	private ArrayList<Cab> mTaxiBreak;
+	private ArrayList<Passenger> mPassengersList;
+	private ArrayList<Passenger> mPassengerExit;
 
+
+	
 	private String mStationName;
 	private int mMaxWaitingCount;
 	private TaxiMeter mDefaultTaxiMeter;
@@ -37,10 +42,10 @@ public class Station extends Thread {
 		mStationName = name;
 		mMaxWaitingCount = maxWaitingCount;
 		mTaxiWaiting = new ArrayBlockingQueue<Cab>(maxWaitingCount);
-		mTaxiBreak = new LinkedBlockingQueue<Cab>();
-		mTaxiDriving = new Vector<Cab>();
-		mPassangersList = new Vector<Passenger>();
-		mPassangerExit = new LinkedBlockingQueue<Passenger>();
+		mTaxiBreak = new ArrayList<Cab>();
+		mTaxiDriving = new ArrayList<Cab>();
+		mPassengersList = new ArrayList<Passenger>();
+		mPassengerExit = new ArrayList<Passenger>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
 	}
 
@@ -55,12 +60,16 @@ public class Station extends Thread {
 		for(Cab cab: mTaxiBreak) {
 			cab.start();
 		}
-		for(Passenger p: mPassangersList) {
+		for(Passenger p: mPassengersList) {
 			p.start();
 		}		
 		while ( mKeepRunning ) {
-			fillTaxi();
-	        try {
+			try {
+				
+				synchronized (sLock) {
+					fillTaxi();
+				}
+				
 	        	sleep(50); 
 	        } catch (InterruptedException e) {
 				e.printStackTrace();
@@ -91,25 +100,26 @@ public class Station extends Thread {
 	 * @param cab
 	 */
 	public void addCab(Cab cab) {
+		//Set taxi meter
 		cab.setMeter(createTaxiMeter());
-		try {
-			LoggerWrapper.addCabLogger(cab);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// TODO decide which queue, mMaxWaitingCount
+		cab.register(this);
+
 		if (mTaxiWaiting.size() >= mMaxWaitingCount) {
+			cab.goToBreak();
 			mTaxiBreak.add(cab);
 		} else {
+			cab.goToWaiting();
 			mTaxiWaiting.add(cab);
 		}
+		
+		LoggerWrapper.addCabLogger(cab);
 	}
 	/**
 	 * Add a passenger to the station
 	 * @param cab
 	 */
 	public void addPassenger(Passenger passenger) {
-		mPassangersList.add(passenger);
+		mPassengersList.add(passenger);
 	}	
 	/**
 	 * Creates new instance of taxi meter
@@ -125,18 +135,20 @@ public class Station extends Thread {
 	}
 	/**
 	 * Fill cab with passengers
+	 * @throws InterruptedException 
 	 */
-	private void fillTaxi() {
+	private void fillTaxi() throws InterruptedException {
 		// Get first cab in queue, if there is no cabs in waiting queue
 		// waits until new cab will be added
-		Cab cab = getNextWaitingCab();
-		addPassangersToCab(cab);
-		
-		mTaxiDriving.add(cab);
-		try {
-			cab.drive(null);
-		} catch (Exception e) {
-			e.printStackTrace();
+		synchronized (sLock) {
+			Cab cab = mTaxiWaiting.take();
+			addPassangersToCab(cab);
+			mTaxiDriving.add(cab);
+			try {
+				cab.drive();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -145,12 +157,12 @@ public class Station extends Thread {
 	 */
 	private void addPassangersToCab(Cab cab) {
 		synchronized (cab) {
-			Passenger firstPassenger = mPassangersList.get(0);
-			mPassangersList.remove(0);
+			Passenger firstPassenger = mPassengersList.get(0);
+			mPassengersList.remove(0);
 			try {
 				cab.addPassanger(firstPassenger);
 				String dest = firstPassenger.getDestination();
-				for(Passenger passenger : mPassangersList) {
+				for(Passenger passenger : mPassengersList) {
 					if (passenger.getDestination().equals(dest)) {
 						cab.addPassanger(passenger);
 					}
@@ -164,23 +176,26 @@ public class Station extends Thread {
 		}
 	}
 
-	/**
-	 * @return
-	 */
-	private Cab getNextWaitingCab() {
-		Cab cab;
-		synchronized (mTaxiWaiting) {
-			cab = mTaxiWaiting.poll();
-			if (cab == null) {
-				try {
-					mTaxiWaiting.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				cab = mTaxiWaiting.poll();
+	@Override
+	public void onBreakRequest(Cab cab) {
+		synchronized (sLock) {
+			if (cab.isDriving()) {
+				mTaxiDriving.remove(cab);
+			} else {
+				mTaxiWaiting.remove(cab);
 			}
+			mTaxiBreak.add(cab);
+			cab.goToBreak();
 		}
-		return cab;
+	}
+
+	@Override
+	public void onWaitingRequest(Cab cab) {
+		synchronized (sLock) {
+			mTaxiDriving.remove(cab);
+			mTaxiWaiting.add(cab);
+			cab.goToWaiting();
+		}
 	}
 	
 

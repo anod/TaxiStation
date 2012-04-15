@@ -12,7 +12,7 @@ import com.station.taxi.Cab;
  * Helper to create log
  * @author alex
  *
- * TODO add passanger logger
+ * TODO add passenger logger
  *
  */
 public class LoggerWrapper {
@@ -36,14 +36,19 @@ public class LoggerWrapper {
 	/**
 	 * Add a new Cab Logger
 	 * @param cab
-	 * @throws SecurityException
-	 * @throws IOException
 	 */
-	public static void addCabLogger(Cab cab) throws SecurityException, IOException {
-		FileHandler fileHandler = new FileHandler(String.format(LOG_CAB, cab.getNumer()));
-		fileHandler.setFormatter(new TaxiFormatter());
-		fileHandler.setFilter(new CabFilter(cab.getNumer()));
-		sLogger.addHandler(fileHandler);
+	public static void addCabLogger(Cab cab) {
+		
+		FileHandler fileHandler;
+		try {
+			fileHandler = new FileHandler(String.format(LOG_CAB, cab.getNumer()));
+			fileHandler.setFormatter(new TaxiFormatter());
+			fileHandler.setFilter(new CabFilter(cab.getNumer()));
+			sLogger.addHandler(fileHandler);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static void logCab(Cab cab, String message) {

@@ -8,26 +8,33 @@ import java.util.Random;
 import com.station.taxi.logger.LoggerWrapper;
 
 /**
- *  Tax cab object
+ * Tax cab object
  * @author alex
- *
  */
 public class Cab extends Thread {
 	public static final int MAX_PASSANGERS = 4;
 
 	private static final int ONE_SECOND = 1000;
-	private static final int STATE_BREAK=0;
-	private static final int STATE_DRIVING=1;
-	private static final int STATE_WAITING=2;
+	private static final int STATUS_BREAK=0;
+	private static final int STATUS_DRIVING=1;
+	private static final int STATUS_WAITING=2;
 
+	private ICabEventListener mStationListener;
 	private List<Passenger> mPassangers;
 	private String mWhileWaiting;
 	private int mNumber;
 	private TaxiMeter mMeter;
-	private int mState;
+	private int mCabStatus;
 	private int mDrivingTime = 0;
 	private boolean mKeepRunning = true;
+
+	private int mBreakTime;
 	
+	/**
+	 * 
+	 * @param num Cab number
+	 * @param whileWaiting action while waiting?
+	 */
 	public Cab(int num, String whileWaiting) {
 		mNumber = num;
 		mWhileWaiting = whileWaiting;
@@ -42,11 +49,32 @@ public class Cab extends Thread {
 		return mNumber;
 	}
 	/**
-	 * Action while waiting
+	 * Return true if cab driving
 	 * @return
 	 */
-	public String getWhileWaitingAction() {
-		return mWhileWaiting;
+	public boolean isDriving() {
+		return mCabStatus == STATUS_DRIVING;
+	}
+	/**
+	 * Return true if cab is waiting
+	 * @return
+	 */
+	public boolean isWaiting() {
+		return mCabStatus == STATUS_WAITING;
+	}
+	/**
+	 * Return true if cab on break
+	 * @return
+	 */
+	public boolean isOnBreak() {
+		return mCabStatus == STATUS_BREAK;
+	}	
+	/**
+	 * Register station listener
+	 * @param stationListener
+	 */
+	public void register(ICabEventListener stationListener) {
+		mStationListener = stationListener;
 	}
 	/**
 	 * Add passanger to Cab
@@ -83,15 +111,15 @@ public class Cab extends Thread {
 	@Override
 	public void run() {
 		while ( mKeepRunning ) {
-			switch(mState) {
-				case STATE_DRIVING:
+			switch(mCabStatus) {
+				case STATUS_DRIVING:
 					driving();
 				break;
-				case STATE_WAITING:
+				case STATUS_WAITING:
 					//
 				break;
-				case STATE_BREAK:
-					//
+				case STATUS_BREAK:
+					onBreak();
 				break;								
 			}
 			
@@ -104,9 +132,26 @@ public class Cab extends Thread {
 	}
 
 	/**
-	 * 
+	 * Do a whileWaiting action for mBreakTime 
+	 */
+	private void onBreak() {
+		LoggerWrapper.logCab(this,"Goto break for "+mBreakTime+" seconds to "+mWhileWaiting);
+		try {
+			sleep(ONE_SECOND * mBreakTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return;
+		}
+		LoggerWrapper.logCab(this,"Finished break");
+		mStationListener.onWaitingRequest(this);
+	}
+	/**
+	 * Drive to the destination
 	 */
 	private void driving() {
+		String destination = mPassangers.get(0).getDestination();
+		int size = mPassangers.size();
+		LoggerWrapper.logCab(this,"Start driving to '"+destination+"' with "+size+" passengers. Estimated time: +"+mDrivingTime+" seconds");
 		try {
 			sleep(ONE_SECOND * mDrivingTime);
 		} catch (InterruptedException e) {
@@ -114,10 +159,8 @@ public class Cab extends Thread {
 			return;
 		}
 		mMeter.calc(mDrivingTime); 
+		LoggerWrapper.logCab(this,"Arrived to desitnation '"+destination+"' with "+size+" passengers");		
 		notifyArrival();
-		mState = STATE_WAITING;
-		Passenger first = mPassangers.get(0);
-		LoggerWrapper.logCab(this,"Arrived to desitnation '"+first.getDestination()+"' with "+mPassangers.size()+" passengers");		
 		mPassangers.clear();
 	}
 	/**
@@ -125,43 +168,46 @@ public class Cab extends Thread {
 	 * @param drivingTime
 	 * @throws Exception 
 	 */
-	public void drive(Integer drivingTime) throws Exception {
+	public void drive() throws Exception {
 		if (mPassangers.size() == 0) {
 			throw new Exception("Empty cab");
 		}
 		mMeter.reset();
-		if (drivingTime != null) {
-			mDrivingTime = drivingTime;
-		} else {
-			Random rand = new Random();
-			mDrivingTime = rand.nextInt(10)+5;			
-		}
-		mState = STATE_DRIVING;
-		Passenger first = mPassangers.get(0);
-		LoggerWrapper.logCab(this,"Start driving to '"+first.getDestination()+"' with "+mPassangers.size()+" passengers. Estimated time: +"+mDrivingTime+" seconds");
+		Random rand = new Random();
+		mDrivingTime = rand.nextInt(10)+5;			
+		mCabStatus = STATUS_DRIVING;
 	}
-	
+	/**
+	 * Go to waiting state
+	 */
+	public void goToWaiting() {
+		mCabStatus = STATUS_WAITING;
+	}
+	/**
+	 * Go to break
+	 */
+	public void goToBreak() {
+		//TODO
+		Random rand = new Random();	
+		mBreakTime  = rand.nextInt(10)+5;		
+		mCabStatus = STATUS_BREAK;	
+	}
+
+	/**
+	 * Notify passengers and station about end of the trip...
+	 */
 	private void notifyArrival() {
 		for(Passenger p: mPassangers) {
 			p.onArrival(this, mMeter.getCurrentValue());
 		}
+		mStationListener.onWaitingRequest(this);
 	}
 	
 	/**
-	 * Go to break
+	 * Request break from station
 	 */
-	public void requestBreak() {
-		//TODO
-		mState = STATE_BREAK;
-		LoggerWrapper.logCab(this,"Go to break, ");		
-	}
-	
-	/**
-	 * Go to waiting queue
-	 */
-	public void requestWaiting() {
-		//TODO
-		mState = STATE_WAITING;
+	private void requestBreak() {
+		mStationListener.onBreakRequest(this);
 	}
 	
 }

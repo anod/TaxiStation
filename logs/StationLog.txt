@@ -2,93 +2,117 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2012-04-14T18:06:24</date>
-  <millis>1334415984733</millis>
-  <sequence>0</sequence>
-  <logger>logs/TaxiStation</logger>
-  <level>INFO</level>
-  <class>com.station.taxi.logger.LoggerWrapper</class>
-  <method>log</method>
-  <thread>9</thread>
-  <message>[cab111] Start driving to 'Holon' with 3 passengers. Estimated time: +14 seconds
-</message>
-</record>
-<record>
-  <date>2012-04-14T18:06:24</date>
-  <millis>1334415984787</millis>
+  <date>2012-04-15T21:19:13</date>
+  <millis>1334513953904</millis>
   <sequence>1</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
   <method>log</method>
-  <thread>9</thread>
-  <message>[cab222] Start driving to 'Eilat' with 2 passengers. Estimated time: +8 seconds
+  <thread>16</thread>
+  <message>[cab888] Goto break for 5 seconds to readNewsPaper
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:24</date>
-  <millis>1334415984839</millis>
-  <sequence>2</sequence>
+  <date>2012-04-15T21:19:13</date>
+  <millis>1334513953899</millis>
+  <sequence>0</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
   <method>log</method>
-  <thread>9</thread>
-  <message>[cab333] Start driving to 'Holon' with 2 passengers. Estimated time: +11 seconds
+  <thread>15</thread>
+  <message>[cab777] Goto break for 12 seconds to drink
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:24</date>
-  <millis>1334415984893</millis>
+  <date>2012-04-15T21:19:13</date>
+  <millis>1334513953949</millis>
   <sequence>3</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
   <method>log</method>
-  <thread>9</thread>
-  <message>[cab444] Start driving to 'RamatGan' with 2 passengers. Estimated time: +10 seconds
+  <thread>11</thread>
+  <message>[cab222] Start driving to 'Eilat' with 2 passengers. Estimated time: +14 seconds
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:24</date>
-  <millis>1334415984944</millis>
+  <date>2012-04-15T21:19:13</date>
+  <millis>1334513953949</millis>
+  <sequence>2</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>10</thread>
+  <message>[cab111] Start driving to 'Holon' with 3 passengers. Estimated time: +5 seconds
+</message>
+</record>
+<record>
+  <date>2012-04-15T21:19:14</date>
+  <millis>1334513954057</millis>
   <sequence>4</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
   <method>log</method>
-  <thread>9</thread>
-  <message>[cab555] Start driving to 'Herzeliya' with 2 passengers. Estimated time: +10 seconds
+  <thread>12</thread>
+  <message>[cab333] Start driving to 'Holon' with 2 passengers. Estimated time: +10 seconds
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:32</date>
-  <millis>1334415992829</millis>
+  <date>2012-04-15T21:19:14</date>
+  <millis>1334513954057</millis>
   <sequence>5</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
   <method>log</method>
-  <thread>11</thread>
-  <message>[cab222] Arrived to desitnation 'Eilat' with 2 passengers
+  <thread>13</thread>
+  <message>[cab444] Start driving to 'RamatGan' with 2 passengers. Estimated time: +8 seconds
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:34</date>
-  <millis>1334415994931</millis>
+  <date>2012-04-15T21:19:14</date>
+  <millis>1334513954157</millis>
   <sequence>6</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
   <method>log</method>
-  <thread>13</thread>
-  <message>[cab444] Arrived to desitnation 'RamatGan' with 2 passengers
+  <thread>14</thread>
+  <message>[cab555] Start driving to 'Herzeliya' with 2 passengers. Estimated time: +7 seconds
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:34</date>
-  <millis>1334415994983</millis>
+  <date>2012-04-15T21:19:18</date>
+  <millis>1334513958909</millis>
   <sequence>7</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>16</thread>
+  <message>[cab888] Finished break
+</message>
+</record>
+<record>
+  <date>2012-04-15T21:19:18</date>
+  <millis>1334513958952</millis>
+  <sequence>8</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>10</thread>
+  <message>[cab111] Arrived to desitnation 'Holon' with 3 passengers
+</message>
+</record>
+<record>
+  <date>2012-04-15T21:19:21</date>
+  <millis>1334513961159</millis>
+  <sequence>9</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
@@ -98,9 +122,21 @@
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:35</date>
-  <millis>1334415995883</millis>
-  <sequence>8</sequence>
+  <date>2012-04-15T21:19:22</date>
+  <millis>1334513962057</millis>
+  <sequence>10</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>13</thread>
+  <message>[cab444] Arrived to desitnation 'RamatGan' with 2 passengers
+</message>
+</record>
+<record>
+  <date>2012-04-15T21:19:24</date>
+  <millis>1334513964058</millis>
+  <sequence>11</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
@@ -110,14 +146,26 @@
 </message>
 </record>
 <record>
-  <date>2012-04-14T18:06:38</date>
-  <millis>1334415998778</millis>
-  <sequence>9</sequence>
+  <date>2012-04-15T21:19:25</date>
+  <millis>1334513965908</millis>
+  <sequence>12</sequence>
   <logger>logs/TaxiStation</logger>
   <level>INFO</level>
   <class>com.station.taxi.logger.LoggerWrapper</class>
   <method>log</method>
-  <thread>10</thread>
-  <message>[cab111] Arrived to desitnation 'Holon' with 3 passengers
+  <thread>15</thread>
+  <message>[cab777] Finished break
+</message>
+</record>
+<record>
+  <date>2012-04-15T21:19:27</date>
+  <millis>1334513967952</millis>
+  <sequence>13</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab222] Arrived to desitnation 'Eilat' with 2 passengers
 </message>
 </record>
