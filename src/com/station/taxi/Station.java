@@ -30,8 +30,6 @@ public class Station extends Thread implements ICabEventListener {
 	private ArrayList<Cab> mTaxiBreak;
 	private ArrayList<Passenger> mPassengersList;
 	private ArrayList<Passenger> mPassengerExit;
-
-
 	
 	private String mStationName;
 	private int mMaxWaitingCount;
@@ -83,13 +81,17 @@ public class Station extends Thread implements ICabEventListener {
 	 * @return Number of taxi cabs in waiting state
 	 */
 	public int getWaitingTaxiCount() {
-		return mTaxiWaiting.size();
+		synchronized (sLock) {
+			return mTaxiWaiting.size();
+		}
 	}
 	/**
 	 * @return Number of taxi cabs in driving state
 	 */
 	public int getDrivingTaxiCount() {
-		return mTaxiDriving.size();
+		synchronized (sLock) {
+			return mTaxiDriving.size();
+		}
 	}
 	/**
 	 * Add a cab to the station
@@ -156,8 +158,7 @@ public class Station extends Thread implements ICabEventListener {
 	 */
 	private void addPassangersToCab(Cab cab) {
 		synchronized (cab) {
-			Passenger firstPassenger = mPassengersList.get(0);
-			mPassengersList.remove(0);
+			Passenger firstPassenger = mPassengersList.remove(0);
 			try {
 				cab.addPassanger(firstPassenger);
 				String dest = firstPassenger.getDestination();

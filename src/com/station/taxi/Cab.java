@@ -56,20 +56,6 @@ public class Cab extends Thread {
 		return mCabStatus == STATUS_DRIVING;
 	}
 	/**
-	 * Return true if cab is waiting
-	 * @return
-	 */
-	public boolean isWaiting() {
-		return mCabStatus == STATUS_WAITING;
-	}
-	/**
-	 * Return true if cab on break
-	 * @return
-	 */
-	public boolean isOnBreak() {
-		return mCabStatus == STATUS_BREAK;
-	}	
-	/**
 	 * Register station listener
 	 * @param stationListener
 	 */
