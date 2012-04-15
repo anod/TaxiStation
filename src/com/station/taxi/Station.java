@@ -25,7 +25,7 @@ public class Station extends Thread implements ICabEventListener {
 	 * your thread will wait until there is something there.
 	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
 	 */
-	private ArrayBlockingQueue<Cab> mTaxiWaiting;
+	private ArrayList<Cab> mTaxiWaiting;
 	private ArrayList<Cab> mTaxiDriving;
 	private ArrayList<Cab> mTaxiBreak;
 	private ArrayList<Passenger> mPassengersList;
@@ -41,7 +41,7 @@ public class Station extends Thread implements ICabEventListener {
 	public Station(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
 		mStationName = name;
 		mMaxWaitingCount = maxWaitingCount;
-		mTaxiWaiting = new ArrayBlockingQueue<Cab>(maxWaitingCount);
+		mTaxiWaiting = new ArrayList<Cab>();
 		mTaxiBreak = new ArrayList<Cab>();
 		mTaxiDriving = new ArrayList<Cab>();
 		mPassengersList = new ArrayList<Passenger>();
@@ -65,11 +65,7 @@ public class Station extends Thread implements ICabEventListener {
 		}		
 		while ( mKeepRunning ) {
 			try {
-				
-				synchronized (sLock) {
-					fillTaxi();
-				}
-				
+				fillTaxi();
 	        	sleep(50); 
 	        } catch (InterruptedException e) {
 				e.printStackTrace();
@@ -141,7 +137,10 @@ public class Station extends Thread implements ICabEventListener {
 		// Get first cab in queue, if there is no cabs in waiting queue
 		// waits until new cab will be added
 		synchronized (sLock) {
-			Cab cab = mTaxiWaiting.take();
+			if (mTaxiWaiting.isEmpty() || mPassengersList.isEmpty()) {
+				return;
+			}
+			Cab cab = mTaxiWaiting.remove(0);
 			addPassangersToCab(cab);
 			mTaxiDriving.add(cab);
 			try {
