@@ -117,6 +117,13 @@ public class Cab extends Thread {
 		}
 	}
 
+	private void waiting() {
+		Random rand = new Random();
+		int value = rand.nextInt(100);
+		if (value < 5) {
+			requestBreak();
+		}
+	}
 	/**
 	 * Do a whileWaiting action for mBreakTime 
 	 */
