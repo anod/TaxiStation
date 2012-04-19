@@ -143,7 +143,7 @@ public class Station extends Thread implements ICabEventListener {
 				return;
 			}
 			Cab cab = mTaxiWaiting.remove(0);
-			addPassangersToCab(cab);
+			addPassengersToCab(cab);
 			mTaxiDriving.add(cab);
 			try {
 				cab.drive();
@@ -152,23 +152,24 @@ public class Station extends Thread implements ICabEventListener {
 			}
 		}
 	}
-
 	/**
 	 * @param cab
 	 */
-	private void addPassangersToCab(Cab cab) {
+	private void addPassengersToCab(Cab cab) {
 		synchronized (cab) {
 			Passenger firstPassenger = mPassengersList.remove(0);
 			try {
 				cab.addPassanger(firstPassenger);
 				String dest = firstPassenger.getDestination();
-				for(Passenger passenger : mPassengersList) {
-					if (passenger.getDestination().equals(dest)) {
-						cab.addPassanger(passenger);
+				for(int i=0; i<mPassengersList.size(); i++) {
+					Passenger p = mPassengersList.get(i);
+					if (p.getDestination().equals(dest)) {
+						cab.addPassanger(p);
+						mPassengersList.remove(i);
 					}
 					if (cab.isFull()) {
 						break;
-					}
+					}					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
