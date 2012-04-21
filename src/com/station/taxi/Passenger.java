@@ -8,8 +8,9 @@ import com.station.taxi.logger.LoggerWrapper;
 
 /**
  * Represents passenger of taxi cab
- * @author alex
- *
+ * @author alex  
+ * @author Eran Zimbler
+ * @version 0.1 
  */
 public class Passenger extends Thread {
 	private static final int STATE_WAITING = 0;
@@ -21,9 +22,9 @@ public class Passenger extends Thread {
 	private int mExitTime = 0;
 	private String mName;
 	private String mDestination;
-	private CyclicBarrier mTaxiCab;
 	private boolean mKeepRunning = true;
 	private int mState = 0;
+	private int mTimeLeft = 0;
 	
 	public Passenger(String name, String destination) {
 		mName = name;
@@ -43,29 +44,16 @@ public class Passenger extends Thread {
 	public String getDestination() {
 		return mDestination;
 	}
+	public int getExitTime() {
+		return mExitTime;
+	}
+	
 	public void register(ITaxiEventListener stationListener) {
 		mStationListener = stationListener;
 	}
-//	public void accept(final CyclicBarrier cab) {
-//		mTaxiCab = cab;
-//	}
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Thread#run()
-	 */
 	@Override
 	public void run() {
 		while ( mKeepRunning  ) {
-//			switch( mState ) { // Not sure case is needed also not sure all states are needed.
-//				case STATE_TRANSIT:
-////					driving();
-//				break;
-//				case STATE_WAITING:
-//					inWaitQueue();
-//				break;
-//				case STATE_EXIT:
-//					// TODO
-//				break;
 			if(mState == STATE_WAITING)
 			{
 				inWaitQueue();
@@ -79,48 +67,34 @@ public class Passenger extends Thread {
 	}
 
 	private void inWaitQueue() {
-		// TODO should be called when in waiting state
-		if(mExitTime >=0) {
+		if(mTimeLeft >=0) { // using >= since it is possible the passenger is picked up when he is about to leave
 			try {
 				sleep(ONE_SECOND);
-				mExitTime--;
+				mTimeLeft--;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else {
 			LoggerWrapper.logPassenger(this, "Waited too long leaving line angrily");
+			
 			mStationListener.onExitRequest(this);
 			mState = STATE_EXIT;
 		}
 	}
 	
-//	private void driving() {
-//		if (mTaxiCab!=null) {
-//			try {
-//				mTaxiCab.await();
-//			} catch (BrokenBarrierException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-	
 	public void enterWaitLine() {
 		mState = STATE_WAITING;
 		Random rand = new Random();	
-		mExitTime  = rand.nextInt(5);	
+		mExitTime  = rand.nextInt(5);
+		mTimeLeft = mExitTime;
 	}
 	public void enterCab() {
 		mState = STATE_TRANSIT;
-		mExitTime  = 0;	
+		mExitTime -= mTimeLeft; 
 	}
 	public void onArrival(Cab cab, double price,int splitBy) {
 		LoggerWrapper.logPassenger(this, "Arrived at " + mDestination + " with " + (splitBy-1) + " people paid " + price/splitBy);
 		mState =  STATE_EXIT;
-		mStationListener.onExitRequest(this);
+		//mStationListener.onExitRequest(this);
 	}	
 }

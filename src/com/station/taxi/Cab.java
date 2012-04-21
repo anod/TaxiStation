@@ -2,6 +2,7 @@ package com.station.taxi;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -10,6 +11,8 @@ import com.station.taxi.logger.LoggerWrapper;
 /**
  * Tax cab object
  * @author alex
+ * @author Eran Zimbler
+ * @version 0.1
  */
 public class Cab extends Thread {
 	public static final int MAX_PASSANGERS = 4;
@@ -26,6 +29,7 @@ public class Cab extends Thread {
 	private TaxiMeter mMeter;
 	private int mCabStatus;
 	private int mDrivingTime = 0;
+	private List<Recipt> mReciptsList;
 	private boolean mKeepRunning = true;
 
 	private int mBreakTime;
@@ -152,6 +156,7 @@ public class Cab extends Thread {
 		String destination = mPassangers.get(0).getDestination();
 		int size = mPassangers.size();
 		LoggerWrapper.logCab(this,"Start driving to '"+destination+"' with "+size+" passengers. Estimated time: +"+mDrivingTime+" seconds");
+		Recipt r = new Recipt();
 		try {
 			sleep(ONE_SECOND * mDrivingTime);
 		} catch (InterruptedException e) {
@@ -159,6 +164,10 @@ public class Cab extends Thread {
 			return;
 		}
 		mMeter.calc(mDrivingTime); 
+		r.setEndTime();
+		r.setPassengersAmount(size);
+		r.setRidePrice(mMeter.getCurrentValue());
+		mReciptsList.add(r);
 		LoggerWrapper.logCab(this,"Arrived to desitnation '"+destination+"' with "+size+" passengers");		
 		notifyArrival();
 		mPassangers.clear();

@@ -5,9 +5,10 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import com.station.taxi.logger.LoggerWrapper;
 /**
- * Taxi cab station
+ * Taxi cab station object
  * @author alex
- *
+ * @author Eran Zimbler
+ * @version 0.1
  */
 public class Station extends Thread implements ITaxiEventListener {
     /**
@@ -91,6 +92,24 @@ public class Station extends Thread implements ITaxiEventListener {
 	public int getDrivingTaxiCount() {
 		synchronized (sLock) {
 			return mTaxiDriving.size();
+		}
+	}
+	/**
+	 * @return Number of passengers waiting in line
+	 */
+	public int getWaitingPassengersCount()
+	{
+		synchronized (sLock) {
+			return mPassengersList.size();
+		}
+	}
+	/**
+	 * @return Number of passengers that left the line angry
+	 */
+	public int getExitPassengersCount()
+	{
+		synchronized (sLock) {
+			return mPassengerExit.size();
 		}
 	}
 	/**
