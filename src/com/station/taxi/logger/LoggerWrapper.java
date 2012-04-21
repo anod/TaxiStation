@@ -7,16 +7,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.station.taxi.Cab;
+import com.station.taxi.Passenger;
 
 /**
  * Helper to create log
  * @author alex
  *
- * TODO add passenger logger
- *
  */
 public class LoggerWrapper {
 	private static final String LOG_CAB = "logs/CabLog_%s.txt";
+	private static final String LOG_PASSENGER = "logs/PassengerLog_%s.txt";
 	private static Logger sLogger = Logger.getLogger("logs/TaxiStation");
 	
 	static {
@@ -50,11 +50,21 @@ public class LoggerWrapper {
 		}
 		
 	}
-	
+	public static void addPassengerLogger(Passenger p) {
+		FileHandler fileHandler;
+		try {
+			fileHandler = new FileHandler(String.format(LOG_PASSENGER, p.getPassangerName()));
+			sLogger.addHandler(fileHandler);
+		} catch (Exception e)
+		{ e.printStackTrace(); }
+	}
 	public static void logCab(Cab cab, String message) {
 		log(String.format(CabFilter.PATTERN, cab.getNumer()) + " " + message);
 	}
-	
+	public static void logPassenger(Passenger p,String message)
+	{
+		log(p.getPassangerName() + " " + message);
+	}
 	public static void log(String message) {
 		sLogger.log(Level.INFO, message + "\n");
 	}

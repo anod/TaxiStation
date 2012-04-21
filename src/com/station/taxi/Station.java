@@ -9,7 +9,7 @@ import com.station.taxi.logger.LoggerWrapper;
  * @author alex
  *
  */
-public class Station extends Thread implements ICabEventListener {
+public class Station extends Thread implements ITaxiEventListener {
     /**
      * Lock used when maintaining queue of requested updates.
      */
@@ -116,8 +116,11 @@ public class Station extends Thread implements ICabEventListener {
 	 * Add a passenger to the station
 	 * @param cab
 	 */
-	public void addPassenger(Passenger passenger) {
-		mPassengersList.add(passenger);
+	public void addPassenger(Passenger p) {
+		p.register(this);
+		mPassengersList.add(p);
+		p.enterWaitLine();
+		LoggerWrapper.addPassengerLogger(p);
 	}	
 	/**
 	 * Creates new instance of taxi meter
@@ -198,6 +201,15 @@ public class Station extends Thread implements ICabEventListener {
 			cab.goToWaiting();
 		}
 	}
-	
-
+	@Override
+	public void onExitRequest(Passenger p)
+	{
+		synchronized (sLock) {
+			if(mPassengersList.contains(p))
+			{
+				mPassengersList.remove(p);
+			}
+			mPassengerExit.add(p);
+		}
+	}	
 }

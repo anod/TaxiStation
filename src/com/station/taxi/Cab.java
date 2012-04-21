@@ -19,7 +19,7 @@ public class Cab extends Thread {
 	private static final int STATUS_DRIVING=1;
 	private static final int STATUS_WAITING=2;
 
-	private ICabEventListener mStationListener;
+	private ITaxiEventListener mStationListener;
 	private List<Passenger> mPassangers;
 	private String mWhileWaiting;
 	private int mNumber;
@@ -59,7 +59,7 @@ public class Cab extends Thread {
 	 * Register station listener
 	 * @param stationListener
 	 */
-	public void register(ICabEventListener stationListener) {
+	public void register(ITaxiEventListener stationListener) {
 		mStationListener = stationListener;
 	}
 	/**
@@ -75,6 +75,13 @@ public class Cab extends Thread {
 			}
 		}
 		mPassangers.add(passenger);
+		passenger.enterCab();
+	}
+	public Passenger removePassenger() {
+		if(mPassangers.size() > 0) {
+			return mPassangers.remove(0);
+		}
+		return null;
 	}
 	/**
 	 * Set TaxiMeter instance
@@ -191,7 +198,7 @@ public class Cab extends Thread {
 	 */
 	private void notifyArrival() {
 		for(Passenger p: mPassangers) {
-			p.onArrival(this, mMeter.getCurrentValue());
+			p.onArrival(this, mMeter.getCurrentValue(),mPassangers.size());
 		}
 		mStationListener.onWaitingRequest(this);
 	}
