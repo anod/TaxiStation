@@ -10,8 +10,10 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 
 /**
- * Helper to create log
+ * Helper object to create log
  * @author alex
+ * @author Eran Zimbler
+ * @version 0.1
  *
  */
 public class LoggerWrapper {

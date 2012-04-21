@@ -2,8 +2,8 @@ package com.station.taxi;
 /**
  * 
  * @author alex
- * updated to taxi so i can add some more interfaces for passenger.
- *
+ * @author Eran Zimbler
+ * @version 0.1
  */
 public interface ITaxiEventListener {
 	/**
