@@ -29,7 +29,7 @@ public class Cab extends Thread {
 	private TaxiMeter mMeter;
 	private int mCabStatus;
 	private int mDrivingTime = 0;
-	private List<Recipt> mReciptsList;
+	private List<Receipt> mReciptsList;
 	private boolean mKeepRunning = true;
 
 	private int mBreakTime;
@@ -44,6 +44,7 @@ public class Cab extends Thread {
 		mWhileWaiting = whileWaiting;
 		// safe for threads
 		mPassangers = Collections.synchronizedList(new ArrayList<Passenger>(MAX_PASSANGERS));
+		mReciptsList = Collections.synchronizedList(new ArrayList<Receipt>());
 	}
 	/**
 	 * Cab Id Number
@@ -68,14 +69,14 @@ public class Cab extends Thread {
 	}
 	public double getTotalEarning(){
 		double total = 0;
-		for (Recipt r : mReciptsList) { //a map function like in most scripting and functional lanugage would be great here
+		for (Receipt r : mReciptsList) { //a map function like in most scripting and functional lanugage would be great here
 			total += r.getPrice();
 		}
 		return total;
 	}
 	public double getTotalEarning(Date start,Date end){
 		double total =0;
-		for (Recipt r : mReciptsList) {
+		for (Receipt r : mReciptsList) {
 			if(r.getStartTime().after(start) && r.getStartTime().before(end))
 				total += r.getPrice();
 		}
@@ -165,7 +166,7 @@ public class Cab extends Thread {
 		String destination = mPassangers.get(0).getDestination();
 		int size = mPassangers.size();
 		LoggerWrapper.logCab(this,"Start driving to '"+destination+"' with "+size+" passengers. Estimated time: +"+mDrivingTime+" seconds");
-		Recipt r = new Recipt();
+		Receipt r = new Receipt();
 		try {
 			sleep(ONE_SECOND * mDrivingTime);
 		} catch (InterruptedException e) {

@@ -2,14 +2,14 @@ package com.station.taxi;
 
 import java.util.Date;
 
-public class Recipt {
+public class Receipt {
 	private double mPrice;
 	private Date mStartTime;
 	private Date mEndTime;
 	private int mPassengersCount;
 	
 	
-	public Recipt() {
+	public Receipt() {
 		mStartTime = new Date();
 	}
 	

@@ -60,7 +60,10 @@ public class LoggerWrapper {
 		FileHandler fileHandler;
 		try {
 			fileHandler = new FileHandler(String.format(LOG_PASSENGER, p.getPassangerName()));
+			fileHandler.setFormatter(new TaxiFormatter());
+			fileHandler.setFilter(new PassengerFilter(p.getPassangerName()));
 			sLogger.addHandler(fileHandler);
+			
 		} catch (Exception e)
 		{ e.printStackTrace(); }
 	}
@@ -79,7 +82,7 @@ public class LoggerWrapper {
 	 */
 	public static void logPassenger(Passenger p,String message)
 	{
-		log(p.getPassangerName() + " " + message);
+		log(String.format(PassengerFilter.PATTERN,p.getPassangerName()) + " " + message);
 	}
 	/**
 	 * Put a message into info log
