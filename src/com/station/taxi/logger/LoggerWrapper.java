@@ -52,6 +52,10 @@ public class LoggerWrapper {
 		}
 		
 	}
+	/**
+	 * Add a passenger logger
+	 * @param p
+	 */
 	public static void addPassengerLogger(Passenger p) {
 		FileHandler fileHandler;
 		try {
@@ -60,13 +64,27 @@ public class LoggerWrapper {
 		} catch (Exception e)
 		{ e.printStackTrace(); }
 	}
+	/**
+	 * Write a cab action
+	 * @param cab
+	 * @param message
+	 */
 	public static void logCab(Cab cab, String message) {
 		log(String.format(CabFilter.PATTERN, cab.getNumer()) + " " + message);
 	}
+	/**
+	 * Write a passenger action
+	 * @param p
+	 * @param message
+	 */
 	public static void logPassenger(Passenger p,String message)
 	{
 		log(p.getPassangerName() + " " + message);
 	}
+	/**
+	 * Put a message into info log
+	 * @param message
+	 */
 	public static void log(String message) {
 		sLogger.log(Level.INFO, message + "\n");
 	}

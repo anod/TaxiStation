@@ -12,6 +12,10 @@ class CabFilter implements Filter {
 	final public static String PATTERN = "[cab%d]";
 	private int mCabId;
 	
+	/**
+	 * 
+	 * @param cabId Cab unique number
+	 */
 	public CabFilter(int cabId) {
 		mCabId = cabId;
 	}

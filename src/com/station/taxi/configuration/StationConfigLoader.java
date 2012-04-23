@@ -17,14 +17,29 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.TaxiMeter;
-
+/**
+ * Parse configuration xml and load station
+ * @author alex
+ *
+ */
 public class StationConfigLoader {
 	private String mFileName;
 
+	/**
+	 * 
+	 * @param fileName path to configuration file
+	 */
 	public StationConfigLoader(String fileName) {
 		mFileName = fileName;
 	}
 	
+	/**
+	 * Load station from config
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
 	public Station load() throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -45,6 +60,11 @@ public class StationConfigLoader {
 		return station;
 	}
 
+	/**
+	 * Creates passengers from configuration
+	 * @param doc
+	 * @return
+	 */
 	private ArrayList<Passenger> readPassengers(Document doc) {
 		ArrayList<Passenger> result = new ArrayList<Passenger>();
 		
@@ -58,6 +78,11 @@ public class StationConfigLoader {
 		return result;		
 	}
 
+	/**
+	 * Creates cabs from configuration
+	 * @param doc
+	 * @return
+	 */
 	private ArrayList<Cab> readTaxiCabs(Document doc) {
 		ArrayList<Cab> result = new ArrayList<Cab>();
 
@@ -71,6 +96,12 @@ public class StationConfigLoader {
 		return result;
 	}
 
+	/**
+	 * Create a station from configuration
+	 * @param doc
+	 * @param meter
+	 * @return
+	 */
 	private Station readStation(Document doc, TaxiMeter meter) {
         NodeList stations = doc.getElementsByTagName("station");
         
@@ -82,6 +113,7 @@ public class StationConfigLoader {
 	}
 
 	/**
+	 * Read taxi meter values
 	 * @param doc
 	 */
 	private TaxiMeter readTaxiMeter(Document doc) {

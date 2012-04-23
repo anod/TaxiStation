@@ -1,8 +1,6 @@
 package com.station.taxi;
 
 import java.util.Random;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
 
 import com.station.taxi.logger.LoggerWrapper;
 

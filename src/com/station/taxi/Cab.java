@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import com.station.taxi.logger.LoggerWrapper;
@@ -97,12 +96,6 @@ public class Cab extends Thread {
 		mPassangers.add(passenger);
 		passenger.enterCab();
 	}
-	public Passenger removePassenger() {
-		if(mPassangers.size() > 0) {
-			return mPassangers.remove(0);
-		}
-		return null;
-	}
 	/**
 	 * Set TaxiMeter instance
 	 * @param meter
@@ -129,7 +122,7 @@ public class Cab extends Thread {
 					driving();
 				break;
 				case STATUS_WAITING:
-					//
+					waiting();
 				break;
 				case STATUS_BREAK:
 					onBreak();
@@ -212,7 +205,6 @@ public class Cab extends Thread {
 	 * Go to break
 	 */
 	public void goToBreak() {
-		//TODO
 		Random rand = new Random();	
 		mBreakTime  = rand.nextInt(10)+5;		
 		mCabStatus = STATUS_BREAK;	
