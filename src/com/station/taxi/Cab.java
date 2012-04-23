@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.station.taxi.logger.LoggerWrapper;
@@ -65,6 +66,21 @@ public class Cab extends Thread {
 	 */
 	public void register(IStationEventListener stationListener) {
 		mStationListener = stationListener;
+	}
+	public double getTotalEarning(){
+		double total = 0;
+		for (Recipt r : mReciptsList) { //a map function like in most scripting and functional lanugage would be great here
+			total += r.getPrice();
+		}
+		return total;
+	}
+	public double getTotalEarning(Date start,Date end){
+		double total =0;
+		for (Recipt r : mReciptsList) {
+			if(r.getStartTime().after(start) && r.getStartTime().before(end))
+				total += r.getPrice();
+		}
+		return total;
 	}
 	/**
 	 * Add passanger to Cab
