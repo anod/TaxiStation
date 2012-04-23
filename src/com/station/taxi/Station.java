@@ -10,7 +10,7 @@ import com.station.taxi.logger.LoggerWrapper;
  * @author Eran Zimbler
  * @version 0.1
  */
-public class Station extends Thread implements ITaxiEventListener {
+public class Station extends Thread implements IStationEventListener {
     /**
      * Lock used when maintaining queue of requested updates.
      */
@@ -199,6 +199,10 @@ public class Station extends Thread implements ITaxiEventListener {
 		}
 	}
 
+	/**
+	 * Called when cab requests for a break;
+	 * @param Cab instance of Cab
+	 */
 	@Override
 	public void onBreakRequest(Cab cab) {
 		synchronized (sLock) {
@@ -212,6 +216,10 @@ public class Station extends Thread implements ITaxiEventListener {
 		}
 	}
 
+	/**
+	 * When cab arrived to destination it returns to the station
+	 * @param Cab instance of cab 
+	 */
 	@Override
 	public void onWaitingRequest(Cab cab) {
 		synchronized (sLock) {
@@ -220,6 +228,10 @@ public class Station extends Thread implements ITaxiEventListener {
 			cab.goToWaiting();
 		}
 	}
+	
+	/**
+	 * Passenger request to exit from the queue
+	 */
 	@Override
 	public void onExitRequest(Passenger p)
 	{

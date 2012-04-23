@@ -2,8 +2,6 @@ package com.station.taxi;
 
 import java.util.Date;
 
-import javax.xml.datatype.Duration;
-
 public class Recipt {
 	private double mPrice;
 	private Date mStartTime;

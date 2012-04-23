@@ -22,7 +22,7 @@ public class Cab extends Thread {
 	private static final int STATUS_DRIVING=1;
 	private static final int STATUS_WAITING=2;
 
-	private ITaxiEventListener mStationListener;
+	private IStationEventListener mStationListener;
 	private List<Passenger> mPassangers;
 	private String mWhileWaiting;
 	private int mNumber;
@@ -63,7 +63,7 @@ public class Cab extends Thread {
 	 * Register station listener
 	 * @param stationListener
 	 */
-	public void register(ITaxiEventListener stationListener) {
+	public void register(IStationEventListener stationListener) {
 		mStationListener = stationListener;
 	}
 	/**

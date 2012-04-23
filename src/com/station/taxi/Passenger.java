@@ -17,7 +17,7 @@ public class Passenger extends Thread {
 	private static final int STATE_TRANSIT = 1;
 	private static final int STATE_EXIT = 2;
 
-	private ITaxiEventListener mStationListener;
+	private IStationEventListener mStationListener;
 	private static final int ONE_SECOND = 1000;
 	private int mExitTime = 0;
 	private String mName;
@@ -48,7 +48,7 @@ public class Passenger extends Thread {
 		return mExitTime;
 	}
 	
-	public void register(ITaxiEventListener stationListener) {
+	public void register(IStationEventListener stationListener) {
 		mStationListener = stationListener;
 	}
 	@Override
@@ -94,7 +94,7 @@ public class Passenger extends Thread {
 	}
 	public void onArrival(Cab cab, double price,int splitBy) {
 		LoggerWrapper.logPassenger(this, "Arrived at " + mDestination + " with " + (splitBy-1) + " people paid " + price/splitBy);
-		mState =  STATE_EXIT;
+		mState = STATE_EXIT;
 		//mStationListener.onExitRequest(this);
 	}	
 }

@@ -5,14 +5,14 @@ package com.station.taxi;
  * @author Eran Zimbler
  * @version 0.1
  */
-public interface ITaxiEventListener {
+public interface IStationEventListener {
 	/**
 	 * Cab request break event
 	 * @param cab
 	 */
 	public void onBreakRequest(Cab cab);
 	/**
-	 * Cab request waiting event
+	 * Cab request waiting event after arriving to the destination
 	 * @param cab
 	 */
 	public void onWaitingRequest(Cab cab);
