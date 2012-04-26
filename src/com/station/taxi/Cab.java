@@ -165,8 +165,8 @@ public class Cab extends Thread {
 	private void driving() {
 		String destination = mPassangers.get(0).getDestination();
 		int size = mPassangers.size();
+		mMeter.start();
 		LoggerWrapper.logCab(this,"Start driving to '"+destination+"' with "+size+" passengers. Estimated time: +"+mDrivingTime+" seconds");
-		Receipt r = new Receipt();
 		try {
 			sleep(ONE_SECOND * mDrivingTime);
 		} catch (InterruptedException e) {
@@ -174,10 +174,7 @@ public class Cab extends Thread {
 			return;
 		}
 		mMeter.calc(mDrivingTime); 
-		r.setEndTime();
-		r.setPassengersAmount(size);
-		r.setRidePrice(mMeter.getCurrentValue());
-		mReciptsList.add(r);
+		mReciptsList.add(mMeter.stop(size));
 		LoggerWrapper.logCab(this,"Arrived to desitnation '"+destination+"' with "+size+" passengers");		
 		notifyArrival();
 		mPassangers.clear();

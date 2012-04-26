@@ -2,12 +2,17 @@ package com.station.taxi;
 /**
  * Taxi Meter calculate price for driven distance
  * @author alex
+ * @author Eran Zimbler
+ * @version 0.1
  *
  */
+import java.util.Date;
+
 public class TaxiMeter implements Cloneable {
 	final private double mStartPrice;
 	final private double mOneSecPrice;
 	private double mCurrentValue;
+	private Date mRideStart;
 	
 	/**
 	 * @param startPrice min price for every ride
@@ -44,6 +49,14 @@ public class TaxiMeter implements Cloneable {
 	@Override
 	protected TaxiMeter clone() throws CloneNotSupportedException {
 		return new TaxiMeter(mStartPrice, mOneSecPrice);
+	}
+
+	public Receipt stop(int numOfPassengers) {
+		return new Receipt(mRideStart, new Date(), mCurrentValue, numOfPassengers);
+	}
+
+	public void start() {
+		mRideStart = new Date();
 	}	
 	
 	

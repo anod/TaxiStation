@@ -1,7 +1,13 @@
 package com.station.taxi;
 
 import java.util.Date;
-
+/**
+ * Receipt is used to keep the receipts in the cab object.
+ * @author alex
+ * @author Eran Zimbler
+ * @version 0.1
+ *
+ */
 public class Receipt {
 	private double mPrice;
 	private Date mStartTime;
@@ -9,8 +15,11 @@ public class Receipt {
 	private int mPassengersCount;
 	
 	
-	public Receipt() {
-		mStartTime = new Date();
+	public Receipt(Date start,Date end,double price,int passengers) {
+		mStartTime = start;
+		mEndTime = end;
+		mPrice = price;
+		mPassengersCount = passengers;
 	}
 	
 	public double getPrice() {
@@ -24,15 +33,6 @@ public class Receipt {
 	}
 	public int getPassengersCount() {
 		return mPassengersCount;
-	}
-	public void setRidePrice(double price){
-		mPrice = price;
-	}
-	public void setPassengersAmount(int num){
-		mPassengersCount = num;
-	}
-	public void setEndTime(){
-		mEndTime = new Date();
 	}
 	/**
 	 * Calculates the time of the ride in seconds
