@@ -50,8 +50,12 @@ public class Cab extends Thread {
 	 * Cab Id Number
 	 * @return
 	 */
-	public int getNumer() {
+	public int getNumber() {
 		return mNumber;
+	}
+	public String getWhileWaiting()
+	{
+		return mWhileWaiting;
 	}
 	/**
 	 * Return true if cab driving

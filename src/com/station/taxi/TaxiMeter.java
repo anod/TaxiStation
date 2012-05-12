@@ -13,7 +13,7 @@ public class TaxiMeter implements Cloneable {
 	final private double mOneSecPrice;
 	private double mCurrentValue;
 	private Date mRideStart;
-	
+		
 	/**
 	 * @param startPrice min price for every ride
 	 * @param onSecPrice price for one second of a ride
@@ -57,7 +57,16 @@ public class TaxiMeter implements Cloneable {
 
 	public void start() {
 		mRideStart = new Date();
+	}
+
+	public double getPricePerSecond() {
+		return mOneSecPrice;
+	}
+
+	public double getStartPrice() {
+		return mStartPrice;
 	}	
+	
 	
 	
 }

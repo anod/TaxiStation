@@ -2,6 +2,7 @@ package com.station.taxi;
 
 import java.util.ArrayList;
 
+import com.station.taxi.configuration.StationConfigStorage;
 import com.station.taxi.logger.LoggerWrapper;
 /**
  * Taxi cab station object
@@ -46,7 +47,6 @@ public class Station extends Thread implements IStationEventListener {
 		mPassengerExit = new ArrayList<Passenger>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
 	}
-
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
@@ -70,7 +70,16 @@ public class Station extends Thread implements IStationEventListener {
 			}
 		}
 	}
-
+	public void save(String fileName){
+		ArrayList<Cab> totalC = mTaxiDriving;
+		totalC.addAll(mTaxiWaiting);
+		totalC.addAll(mTaxiBreak);
+		ArrayList<Passenger> totalP = mPassengersList;
+		totalP.addAll(mPassengerExit);
+		TaxiMeter meter = createTaxiMeter();
+		StationConfigStorage newConfig = new StationConfigStorage(fileName);
+		newConfig.SaveStation(meter, mStationName, mMaxWaitingCount, totalC, totalP);
+	}
 	/**
 	 * @return Station name
 	 */
@@ -179,6 +188,7 @@ public class Station extends Thread implements IStationEventListener {
 	private void addPassengersToCab(Cab cab) {
 		synchronized (cab) {
 			Passenger firstPassenger = mPassengersList.remove(0);
+			mPassengerExit.add(firstPassenger);
 			try {
 				cab.addPassanger(firstPassenger);
 				String dest = firstPassenger.getDestination();
@@ -187,6 +197,7 @@ public class Station extends Thread implements IStationEventListener {
 					if (p.getDestination().equals(dest)) {
 						cab.addPassanger(p);
 						mPassengersList.remove(i);
+						mPassengerExit.add(p);
 					}
 					if (cab.isFull()) {
 						break;

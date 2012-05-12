@@ -20,5 +20,6 @@ public class Main {
 		}
     	//Start station thread
 		station.start();
+		station.save("configs/config2.xml");
     }
 }

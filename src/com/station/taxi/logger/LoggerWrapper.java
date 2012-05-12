@@ -43,9 +43,9 @@ public class LoggerWrapper {
 		
 		FileHandler fileHandler;
 		try {
-			fileHandler = new FileHandler(String.format(LOG_CAB, cab.getNumer()));
+			fileHandler = new FileHandler(String.format(LOG_CAB, cab.getNumber()));
 			fileHandler.setFormatter(new TaxiFormatter());
-			fileHandler.setFilter(new CabFilter(cab.getNumer()));
+			fileHandler.setFilter(new CabFilter(cab.getNumber()));
 			sLogger.addHandler(fileHandler);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -73,7 +73,7 @@ public class LoggerWrapper {
 	 * @param message
 	 */
 	public static void logCab(Cab cab, String message) {
-		log(String.format(CabFilter.PATTERN, cab.getNumer()) + " " + message);
+		log(String.format(CabFilter.PATTERN, cab.getNumber()) + " " + message);
 	}
 	/**
 	 * Write a passenger action
