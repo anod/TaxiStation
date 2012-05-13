@@ -1,8 +1,8 @@
 package com.station.taxi;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import com.station.taxi.configuration.StationConfigStorage;
 import com.station.taxi.logger.LoggerWrapper;
 /**
  * Taxi cab station object
@@ -19,23 +19,23 @@ public class Station extends Thread implements IStationEventListener {
     /**
      * List of taxi cab in waiting state
      */
-	private ArrayList<Cab> mTaxiWaiting;
+	private List<Cab> mTaxiWaiting;
 	/**
 	 * List of taxi cab currently driving
 	 */
-	private ArrayList<Cab> mTaxiDriving;
+	private List<Cab> mTaxiDriving;
 	/**
 	 * List of taxi cab on break
 	 */
-	private ArrayList<Cab> mTaxiBreak;
+	private List<Cab> mTaxiBreak;
 	/**
 	 * List of passengers waiting in queue
 	 */
-	private ArrayList<Passenger> mPassengersList;
+	private List<Passenger> mPassengersList;
 	/**
 	 * List of passengers who exit the queue 
 	 */
-	private ArrayList<Passenger> mPassengerExit;
+	private List<Passenger> mPassengerExit;
 	
 	private String mStationName;
 	private int mMaxWaitingCount;
@@ -62,16 +62,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
-	public void run() {
-		for(Cab cab: mTaxiWaiting) {
-			cab.start();
-		}
-		for(Cab cab: mTaxiBreak) {
-			cab.start();
-		}
-		for(Passenger p: mPassengersList) {
-			p.start();
-		}		
+	public void run() {	
 		while ( mKeepRunning ) {
 			try {
 				fillTaxi();
@@ -85,9 +76,9 @@ public class Station extends Thread implements IStationEventListener {
 	 * Get all taxi cabs in station
 	 * @return
 	 */
-	public ArrayList<Cab> getCabs() {
+	public List<Cab> getCabs() {
 		synchronized (sLock) {		
-			ArrayList<Cab> allCabs = mTaxiDriving;
+			List<Cab> allCabs = mTaxiDriving;
 			allCabs.addAll(mTaxiWaiting);
 			allCabs.addAll(mTaxiBreak);
 			return allCabs;
@@ -97,9 +88,9 @@ public class Station extends Thread implements IStationEventListener {
 	 * 
 	 * @return All passengers in station
 	 */
-	public ArrayList<Passenger> getPassengers() {
+	public List<Passenger> getPassengers() {
 		synchronized (sLock) {	
-			ArrayList<Passenger> allPassengers = mPassengersList;
+			List<Passenger> allPassengers = mPassengersList;
 			allPassengers.addAll(mPassengerExit);
 			return allPassengers;
 		}
@@ -165,16 +156,8 @@ public class Station extends Thread implements IStationEventListener {
 		//Set taxi meter
 		cab.setMeter(createTaxiMeter());
 		cab.register(this);
-
-		if (mTaxiWaiting.size() >= mMaxWaitingCount) {
-			cab.goToBreak();
-			mTaxiBreak.add(cab);
-		} else {
-			cab.goToWaiting();
-			mTaxiWaiting.add(cab);
-		}
-		
-		LoggerWrapper.addCabLogger(cab);
+		LoggerWrapper.addCabLogger(cab);		
+		cab.start();
 	}
 	/**
 	 * Add a passenger to the station
@@ -182,9 +165,8 @@ public class Station extends Thread implements IStationEventListener {
 	 */
 	public void addPassenger(Passenger p) {
 		p.register(this);
-		mPassengersList.add(p);
-		p.enterWaitLine();
 		LoggerWrapper.addPassengerLogger(p);
+		p.start();
 	}	
 	/**
 	 * Creates new instance of taxi meter
@@ -218,31 +200,28 @@ public class Station extends Thread implements IStationEventListener {
 				e.printStackTrace();
 			}
 		}
+	
 	}
 	/**
 	 * @param cab
 	 */
 	private void addPassengersToCab(Cab cab) {
-		synchronized (cab) {
-			Passenger firstPassenger = mPassengersList.remove(0);
-			mPassengerExit.add(firstPassenger);
-			try {
-				cab.addPassanger(firstPassenger);
-				String dest = firstPassenger.getDestination();
-				for(int i=0; i<mPassengersList.size(); i++) {
-					Passenger p = mPassengersList.get(i);
-					if (p.getDestination().equals(dest)) {
-						cab.addPassanger(p);
-						mPassengersList.remove(i);
-						mPassengerExit.add(p);
-					}
-					if (cab.isFull()) {
-						break;
-					}					
+		Passenger firstPassenger = mPassengersList.remove(0);
+		try {
+			cab.addPassanger(firstPassenger);
+			String dest = firstPassenger.getDestination();
+			for(int i=0; i<mPassengersList.size(); i++) {
+				Passenger p = mPassengersList.get(i);
+				if (p.getDestination().equals(dest)) {
+					cab.addPassanger(p);
+					mPassengersList.remove(i);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+				if (cab.isFull()) {
+					break;
+				}					
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -283,12 +262,29 @@ public class Station extends Thread implements IStationEventListener {
 	public void onExitRequest(Passenger p)
 	{
 		synchronized (sLock) {
-			if(mPassengersList.contains(p))
-			{
-				mPassengersList.remove(p);
-			}
-			mPassengerExit.add(p);
+//			if(mPassengersList.contains(p))
+//			{
+//				mPassengersList.remove(p);
+//			}
+//			mPassengerExit.add(p);
 		}
+	}
+	@Override
+	public void onCabReady(Cab cab) {
+		synchronized (sLock) {
+			if (mTaxiWaiting.size() >= mMaxWaitingCount) {
+				cab.goToBreak();
+				mTaxiBreak.add(cab);
+			} else {
+				cab.goToWaiting();
+				mTaxiWaiting.add(cab);
+			}
+		}
+	}
+	@Override
+	public void onPassengerReady(Passenger p) {
+		mPassengersList.add(p);
+		p.enterWaitLine();
 	}
 
 }

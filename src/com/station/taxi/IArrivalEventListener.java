@@ -7,7 +7,7 @@ package com.station.taxi;
 public interface IArrivalEventListener {
 
 	/**
-	 * Passanger arrivede to destination
+	 * Passenger arrived to destination
 	 * @param cab
 	 * @param price
 	 */

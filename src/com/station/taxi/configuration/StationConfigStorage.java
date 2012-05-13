@@ -2,7 +2,7 @@ package com.station.taxi.configuration;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -62,7 +62,7 @@ public class StationConfigStorage {
 			station.getPassengers()
 		);
 	}	
-	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,ArrayList<Cab> taxis,ArrayList<Passenger> passengers)
+	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<Cab> taxis,List<Passenger> passengers)
 	{
 		root.setAttribute("pricePerSecond", String.valueOf(meter.getPricePerSecond()));
 		root.setAttribute("startPrice", String.valueOf(meter.getStartPrice()));
@@ -89,7 +89,7 @@ public class StationConfigStorage {
 			e.printStackTrace();
 		}
 	}
-	private Node writePassengerElements(ArrayList<Passenger> passengers) {
+	private Node writePassengerElements(List<Passenger> passengers) {
 		Element passengersRoot = doc.createElement("passengers");
 		for(Passenger p: passengers) {
 			Element pChild = doc.createElement("passenger");
@@ -99,7 +99,7 @@ public class StationConfigStorage {
 		}
 		return passengersRoot;
 	}
-	private Node writeTaxisElements(ArrayList<Cab> taxis) {
+	private Node writeTaxisElements(List<Cab> taxis) {
 		Element taxiRoot = doc.createElement("taxis");
 		for(Cab c: taxis) {
 			Element taxiChild = doc.createElement("taxi");

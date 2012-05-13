@@ -7,6 +7,11 @@ package com.station.taxi;
  */
 public interface IStationEventListener {
 	/**
+	 * Called when cab thread is ready
+	 * @param cab
+	 */
+	public void onCabReady(Cab cab);
+	/**
 	 * Cab request break event
 	 * @param cab
 	 */
@@ -21,4 +26,8 @@ public interface IStationEventListener {
 	 * @param p
 	 */
 	public void onExitRequest(Passenger p);
+	/**
+	 * @param p
+	 */
+	public void onPassengerReady(Passenger p);
 }

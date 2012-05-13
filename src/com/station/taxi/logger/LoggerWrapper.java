@@ -23,7 +23,7 @@ public class LoggerWrapper {
 	
 	static {
 		ConsoleHandler consoleHandler = new ConsoleHandler();
-		consoleHandler.setFormatter(new TaxiFormatter());
+		consoleHandler.setFormatter(new StationFormatter());
 		sLogger.setUseParentHandlers(false);
 		sLogger.addHandler(consoleHandler);
 		try {
@@ -44,7 +44,7 @@ public class LoggerWrapper {
 		FileHandler fileHandler;
 		try {
 			fileHandler = new FileHandler(String.format(LOG_CAB, cab.getNumber()));
-			fileHandler.setFormatter(new TaxiFormatter());
+			fileHandler.setFormatter(new StationFormatter());
 			fileHandler.setFilter(new CabFilter(cab.getNumber()));
 			sLogger.addHandler(fileHandler);
 		} catch (Exception e) {
@@ -60,7 +60,7 @@ public class LoggerWrapper {
 		FileHandler fileHandler;
 		try {
 			fileHandler = new FileHandler(String.format(LOG_PASSENGER, p.getPassangerName()));
-			fileHandler.setFormatter(new TaxiFormatter());
+			fileHandler.setFormatter(new StationFormatter());
 			fileHandler.setFilter(new PassengerFilter(p.getPassangerName()));
 			sLogger.addHandler(fileHandler);
 			

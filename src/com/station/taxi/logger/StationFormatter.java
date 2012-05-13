@@ -10,7 +10,7 @@ import java.util.logging.LogRecord;
  * @author alex
  *
  */
-class TaxiFormatter extends Formatter {
+class StationFormatter extends Formatter {
 	final private SimpleDateFormat mDateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	@Override
 	public String format(LogRecord record) {
