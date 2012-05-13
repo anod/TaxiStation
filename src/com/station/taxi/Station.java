@@ -15,21 +15,26 @@ public class Station extends Thread implements IStationEventListener {
      * Lock used when maintaining queue of requested updates.
      */
     public static Object sLock = new Object();
-    
-	/**
-	 * ArrayBlockingQueue is a queue of a fixed size. 
-	 * So if you set the size at 5, and attempt to insert an 6th element,
-	 * the insert statement will block until another thread removes an element. 
-	 *
-	 * The most important difference between LinkedBlockingQueue and ConcurrentLinkedQueue 
-	 * is that if you request an element from a LinkedBlockingQueue and the queue is empty,
-	 * your thread will wait until there is something there.
-	 * A ConcurrentLinkedQueue will return right away with the behavior of an empty queue.
-	 */
+
+    /**
+     * List of taxi cab in waiting state
+     */
 	private ArrayList<Cab> mTaxiWaiting;
+	/**
+	 * List of taxi cab currently driving
+	 */
 	private ArrayList<Cab> mTaxiDriving;
+	/**
+	 * List of taxi cab on break
+	 */
 	private ArrayList<Cab> mTaxiBreak;
+	/**
+	 * List of passengers waiting in queue
+	 */
 	private ArrayList<Passenger> mPassengersList;
+	/**
+	 * List of passengers who exit the queue 
+	 */
 	private ArrayList<Passenger> mPassengerExit;
 	
 	private String mStationName;
@@ -37,6 +42,12 @@ public class Station extends Thread implements IStationEventListener {
 	private TaxiMeter mDefaultTaxiMeter;
 	private boolean mKeepRunning = true;
 	
+	/**
+	 * 
+	 * @param name Station name
+	 * @param maxWaitingCount maximum number of waiting taxi cabs
+	 * @param defaultTaxiMeter taxi meter with defaults
+	 */
 	public Station(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
 		mStationName = name;
 		mMaxWaitingCount = maxWaitingCount;
@@ -70,15 +81,28 @@ public class Station extends Thread implements IStationEventListener {
 			}
 		}
 	}
-	public void save(String fileName){
-		ArrayList<Cab> totalC = mTaxiDriving;
-		totalC.addAll(mTaxiWaiting);
-		totalC.addAll(mTaxiBreak);
-		ArrayList<Passenger> totalP = mPassengersList;
-		totalP.addAll(mPassengerExit);
-		TaxiMeter meter = createTaxiMeter();
-		StationConfigStorage newConfig = new StationConfigStorage(fileName);
-		newConfig.SaveStation(meter, mStationName, mMaxWaitingCount, totalC, totalP);
+	/**
+	 * Get all taxi cabs in station
+	 * @return
+	 */
+	public ArrayList<Cab> getCabs() {
+		synchronized (sLock) {		
+			ArrayList<Cab> allCabs = mTaxiDriving;
+			allCabs.addAll(mTaxiWaiting);
+			allCabs.addAll(mTaxiBreak);
+			return allCabs;
+		}
+	}
+	/**
+	 * 
+	 * @return All passengers in station
+	 */
+	public ArrayList<Passenger> getPassengers() {
+		synchronized (sLock) {	
+			ArrayList<Passenger> allPassengers = mPassengersList;
+			allPassengers.addAll(mPassengerExit);
+			return allPassengers;
+		}
 	}
 	/**
 	 * @return Station name
@@ -86,6 +110,19 @@ public class Station extends Thread implements IStationEventListener {
 	public String getStationName() {
 		return mStationName;
 	}
+	/**
+	 * @return default TaxiMeter
+	 */
+	public TaxiMeter getDefaultTaxiMeter() {
+		return mDefaultTaxiMeter;		
+	}
+	/**
+	 * 
+	 * @return maximum number of waiting taxi cabs
+	 */
+	public int getMaxWaitingCount() {
+		return mMaxWaitingCount;
+	}		
 	/**
 	 * @return Number of taxi cabs in waiting state
 	 */
@@ -252,5 +289,6 @@ public class Station extends Thread implements IStationEventListener {
 			}
 			mPassengerExit.add(p);
 		}
-	}	
+	}
+
 }
