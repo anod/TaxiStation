@@ -31,6 +31,7 @@ public class StationFrame extends JFrame {
 		// TODO: add Taxi panel
 		// TODO: add Passenger panel
 		// TODO: add Driving Panel
+		// TODO: listen to station events: change status of tax and passenger
 		
 		setLocationRelativeTo(null);
 		setVisible(true);
