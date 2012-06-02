@@ -3,9 +3,11 @@ package com.station.taxi;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.SwingUtilities;
+
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
-import com.station.taxi.gui.MainFrame;
+import com.station.taxi.gui.StationFrame;
 
 
 public class Main {
@@ -23,36 +25,49 @@ public class Main {
 			return;
 		}
     	
-    	MainFrame window = new MainFrame();
-    	window.addWindowListener(new WindowAdapter() {
-
-
-			/* (non-Javadoc)
-			 * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
-			 */
+    	SwingUtilities.invokeLater(new Runnable() {
+			
 			@Override
-			public void windowClosing(WindowEvent e) {
-				//Stop the thread
-				station.interrupt();
-				//Save configuration
-				StationConfigStorage configStorage = new StationConfigStorage("configs/config2.xml");
-				configStorage.save(station);
-				super.windowClosing(e);				
+			public void run() {
+				StationFrame window = new StationFrame();
+		    	window.addWindowListener(new StationWindowAdapter(station));
 			}
-
-			/* (non-Javadoc)
-			 * @see java.awt.event.WindowAdapter#windowOpened(java.awt.event.WindowEvent)
-			 */
-			@Override
-			public void windowOpened(WindowEvent e) {
-				super.windowOpened(e);
-				//Start station thread
-				station.start();
-			}
-    		
 		});
     	
-		
-
     }
+    
+    private static class StationWindowAdapter extends WindowAdapter {
+    	private Station mStation;
+    	
+    	/* (non-Javadoc)
+		 * @see java.awt.event.WindowAdapter#windowClosing(java.awt.event.WindowEvent)
+		 */
+		public StationWindowAdapter(Station station) {
+			super();
+			mStation = station;
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			//Stop the thread
+			mStation.interrupt();
+			//mStation configuration
+			StationConfigStorage configStorage = new StationConfigStorage("configs/config2.xml");
+			configStorage.save(mStation);
+			super.windowClosing(e);				
+		}
+
+		/* (non-Javadoc)
+		 * @see java.awt.event.WindowAdapter#windowOpened(java.awt.event.WindowEvent)
+		 */
+		@Override
+		public void windowOpened(WindowEvent e) {
+			super.windowOpened(e);
+			//Start station thread
+			mStation.start();
+		}
+		
+    }
+    
+    
 }
