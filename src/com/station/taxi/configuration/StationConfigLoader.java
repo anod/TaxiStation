@@ -34,7 +34,7 @@ public class StationConfigLoader {
 	}
 	
 	/**
-	 * Load station from config
+	 * Load station from configuration file
 	 * @return
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
@@ -50,13 +50,8 @@ public class StationConfigLoader {
         TaxiMeter meter = readTaxiMeter(doc);
         Station station = readStation(doc, meter);
         ArrayList<Cab> taxis = readTaxiCabs(doc);
-        for(Cab cab: taxis) {
-        	station.addCab(cab);
-        }
         ArrayList<Passenger> passengers = readPassengers(doc);
-        for(Passenger passenger: passengers) {
-        	station.addPassenger(passenger);
-        }
+        station.init(taxis, passengers);
 		return station;
 	}
 

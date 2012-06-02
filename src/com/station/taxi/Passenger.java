@@ -21,7 +21,7 @@ public class Passenger extends Thread {
 	private int mExitTime = 0;
 	private String mName;
 	private String mDestination;
-	private boolean mKeepRunning = true;
+	private boolean mThreadRunning = false;
 	private int mState = STATE_INIT;
 	private int mTimeLeft = 0;
 	
@@ -57,13 +57,26 @@ public class Passenger extends Thread {
 	public void register(IStationEventListener stationListener) {
 		mStationListener = stationListener;
 	}
-	
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#interrupt()
+	 */
+	@Override
+	public void interrupt() {
+		LoggerWrapper.logPassenger(this, "Passanger interupt requested...");		
+		mThreadRunning = false;
+		super.interrupt();
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#run()
+	 */
 	@Override
 	public void run() {
 		// Tell station that Passenger thread is started and running
+		LoggerWrapper.logPassenger(this, "Passanger is ready and running...");
 		mStationListener.onPassengerReady(this);
+		mThreadRunning = true;
 		
-		while ( mKeepRunning  ) {
+		while ( mThreadRunning  ) {
 	        try {
 				if(mState == STATE_WAITING)
 				{
@@ -71,7 +84,7 @@ public class Passenger extends Thread {
 				}	        	
 	        	sleep(50); 
 	        } catch (InterruptedException e) {
-				e.printStackTrace();
+	        	/* Allow thread to exit */
 			}			
 		}
 	}

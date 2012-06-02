@@ -31,7 +31,7 @@ public class Cab extends Thread {
 	private int mCabStatus = STATUS_INIT;
 	private int mDrivingTime = 0;
 	private List<Receipt> mReciptsList;
-	private boolean mKeepRunning = true;
+	private boolean mThreadRunning = false;
 
 	private int mBreakTime;
 	
@@ -116,32 +116,40 @@ public class Cab extends Thread {
 	public boolean isFull() {
 		return mPassangers.size() == MAX_PASSANGERS;
 	}
-		
+
+	@Override
+	public void interrupt() {
+		LoggerWrapper.logCab(this, "Cab interupt requested...");		
+		mThreadRunning = false;
+		super.interrupt();
+	}	
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
 	public void run() {
 		// Tell station that cab thread is started and running
+		LoggerWrapper.logCab(this, "Cab is ready and running...");
 		mStationListener.onCabReady(this);
+		mThreadRunning = true;
 		
-		while ( mKeepRunning ) {
-			switch(mCabStatus) {
-				case STATUS_DRIVING:
-					driving();
-				break;
-				case STATUS_WAITING:
-					waiting();
-				break;
-				case STATUS_BREAK:
-					onBreak();
-				break;								
-			}
+		while ( mThreadRunning ) {
+	        try {			
+				switch(mCabStatus) {
+					case STATUS_DRIVING:
+						driving();
+					break;
+					case STATUS_WAITING:
+						waiting();
+					break;
+					case STATUS_BREAK:
+						onBreak();
+					break;								
+				}
 			
-	        try {
-	        	sleep(50); 
+				sleep(50); 
 	        } catch (InterruptedException e) {
-				e.printStackTrace();
+	        	/* Allow thread to exit */
 			}
 		}
 	}
@@ -155,22 +163,19 @@ public class Cab extends Thread {
 	}
 	/**
 	 * Do a whileWaiting action for mBreakTime 
+	 * @throws InterruptedException 
 	 */
-	private synchronized void onBreak() {
+	private synchronized void onBreak() throws InterruptedException {
 		LoggerWrapper.logCab(this,"Goto break for "+mBreakTime+" seconds to "+mWhileWaiting);
-		try {
-			sleep(ONE_SECOND * mBreakTime);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			return;
-		}
+		sleep(ONE_SECOND * mBreakTime);
 		LoggerWrapper.logCab(this,"Finished break");
 		mStationListener.onWaitingRequest(this);
 	}
 	/**
 	 * Drive to the destination
+	 * @throws InterruptedException 
 	 */
-	private synchronized void driving() {
+	private synchronized void driving() throws InterruptedException {
 		String destination = mPassangers.get(0).getDestination();
 		int size = mPassangers.size();
 		mMeter.start();
@@ -182,12 +187,8 @@ public class Cab extends Thread {
 		}
 		LoggerWrapper.logCab(this,"Start driving to '"+destination+"' with "+size+" passengers ("+sb.toString()+"). Estimated time: +"+mDrivingTime+" seconds");
 		
-		try {
-			sleep(ONE_SECOND * mDrivingTime);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			return;
-		}
+		sleep(ONE_SECOND * mDrivingTime);
+		
 		mMeter.calc(mDrivingTime); 
 		mReciptsList.add(mMeter.stop(size));
 		LoggerWrapper.logCab(this,"Arrived to desitnation '"+destination+"' with "+size+" passengers");		

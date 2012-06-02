@@ -40,8 +40,9 @@ public class Station extends Thread implements IStationEventListener {
 	private String mStationName;
 	private int mMaxWaitingCount;
 	private TaxiMeter mDefaultTaxiMeter;
-	private boolean mKeepRunning = true;
+	private boolean mThreadRunning = false;
 	
+	private List<Thread> mInitThreads;
 	/**
 	 * 
 	 * @param name Station name
@@ -57,18 +58,63 @@ public class Station extends Thread implements IStationEventListener {
 		mPassengersList = new ArrayList<Passenger>();
 		mPassengerExit = new ArrayList<Passenger>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
+		mInitThreads = new ArrayList<Thread>();
 	}
+	
+	/**
+	 * Initialize Station with cabs and passengers before station is running
+	 * @param initCabs
+	 * @param initPassengers
+	 */
+	public void init(List<Cab> initCabs, List<Passenger> initPassengers) {
+		for(Cab cab: initCabs) {
+			initCab(cab);
+			mInitThreads.add(cab);
+		}
+		for(Passenger p: initPassengers) {
+			initPassenger(p);
+			mInitThreads.add(p);
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Thread#start()
+	 */
+	@Override
+	public synchronized void start() {
+		for(Thread t: mInitThreads) {
+			t.start();
+		}
+		super.start();
+	}
+
+	@Override
+	public void interrupt() {
+		mThreadRunning = false;
+		List<Cab> cabs = getCabs();
+		for(Cab cab: cabs) {
+			cab.interrupt();
+		}
+		List<Passenger> passengers = getPassengers();
+		for(Passenger p: passengers) {
+			p.interrupt();
+		}
+		super.interrupt();
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
 	public void run() {	
-		while ( mKeepRunning ) {
+		mThreadRunning = true;
+		
+		while ( mThreadRunning ) {
 			try {
 				fillTaxi();
 	        	sleep(50); 
 	        } catch (InterruptedException e) {
-				e.printStackTrace();
+	        	/* Allow thread to exit */
 			}
 		}
 	}
@@ -153,20 +199,43 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param cab
 	 */
 	public void addCab(Cab cab) {
-		//Set taxi meter
-		cab.setMeter(createTaxiMeter());
-		cab.register(this);
-		LoggerWrapper.addCabLogger(cab);		
+		if (!mThreadRunning) {
+			throw new UnsupportedOperationException("Cab can by added only to running stataion");
+		}
+		initCab(cab);		
 		cab.start();
 	}
+
 	/**
 	 * Add a passenger to the station
 	 * @param cab
 	 */
 	public void addPassenger(Passenger p) {
+		if (!mThreadRunning) {
+			throw new UnsupportedOperationException("Passenger can by added only to running stataion");
+		}		
+		initPassenger(p);
+		p.start();
+	}
+	
+	/**
+	 * Init a new cab in the station
+	 * @param cab
+	 */
+	private void initCab(Cab cab) {
+		//Set taxi meter
+		cab.setMeter(createTaxiMeter());
+		cab.register(this);
+		LoggerWrapper.addCabLogger(cab);
+	}
+
+	/**
+	 * Init a new Passenger in the station
+	 * @param p
+	 */
+	private void initPassenger(Passenger p) {
 		p.register(this);
 		LoggerWrapper.addPassengerLogger(p);
-		p.start();
 	}	
 	/**
 	 * Creates new instance of taxi meter
@@ -262,13 +331,17 @@ public class Station extends Thread implements IStationEventListener {
 	public void onExitRequest(Passenger p)
 	{
 		synchronized (sLock) {
-//			if(mPassengersList.contains(p))
-//			{
-//				mPassengersList.remove(p);
-//			}
-//			mPassengerExit.add(p);
+			if(mPassengersList.contains(p))
+			{
+				mPassengersList.remove(p);
+			}
+			mPassengerExit.add(p);
 		}
 	}
+	
+	/**
+	 * Registered cab thread notify that it's readt
+	 */
 	@Override
 	public void onCabReady(Cab cab) {
 		synchronized (sLock) {
@@ -281,6 +354,9 @@ public class Station extends Thread implements IStationEventListener {
 			}
 		}
 	}
+	/**
+	 * Registered passenger thread notify that it's readt
+	 */
 	@Override
 	public void onPassengerReady(Passenger p) {
 		mPassengersList.add(p);
