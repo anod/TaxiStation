@@ -11,6 +11,16 @@ import com.station.taxi.logger.LoggerWrapper;
  * @version 0.1
  */
 public class Station extends Thread implements IStationEventListener {
+	
+	/**
+	 * TODO: Still not called
+	 * TODO: think how it will be used
+	 */
+	public interface IStateChangeListener {
+		public void onCabStatusChange(Cab cab, int oldStatus, int newStatus);
+		public void onPassengerStatusChange(Passenger p, int oldStatus, int newStatus);		
+	}
+	
     /**
      * Lock used when maintaining queue of requested updates.
      */
