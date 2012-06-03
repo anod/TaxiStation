@@ -17,6 +17,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * TODO: think how it will be used
 	 */
 	public interface IStateChangeListener {
+		public void onStationStart(Station station);
 		public void onCabStatusChange(Cab cab, int oldStatus, int newStatus);
 		public void onPassengerStatusChange(Passenger p, int oldStatus, int newStatus);		
 	}
@@ -24,7 +25,7 @@ public class Station extends Thread implements IStationEventListener {
     /**
      * Lock used when maintaining queue of requested updates.
      */
-    public static Object sLock = new Object();
+	private static Object sLock = new Object();
 
     /**
      * List of taxi cab in waiting state
@@ -53,6 +54,8 @@ public class Station extends Thread implements IStationEventListener {
 	private boolean mThreadRunning = false;
 	
 	private List<Thread> mInitThreads;
+	
+	private IStateChangeListener mStateListener;
 	/**
 	 * 
 	 * @param name Station name
@@ -365,7 +368,7 @@ public class Station extends Thread implements IStationEventListener {
 		}
 	}
 	/**
-	 * Registered passenger thread notify that it's readt
+	 * Registered passenger thread notify that it's ready
 	 */
 	@Override
 	public void onPassengerReady(Passenger p) {
@@ -373,4 +376,11 @@ public class Station extends Thread implements IStationEventListener {
 		p.enterWaitLine();
 	}
 
+	/**
+	 * 
+	 * @param listener
+	 */
+	public void registerStateListener(IStateChangeListener listener) {
+		mStateListener = listener;
+	}
 }

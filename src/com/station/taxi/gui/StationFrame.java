@@ -10,16 +10,15 @@ import javax.swing.UIManager;
 
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
+import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
 
-public class StationFrame extends JFrame {
+public class StationFrame extends JFrame implements IStateChangeListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private FrameStationEventAdapter mStationEventListener = null;
 	
 	public StationFrame() {
 		try {
@@ -42,36 +41,31 @@ public class StationFrame extends JFrame {
 		
 		setLocationRelativeTo(null);
 		setVisible(true);
-		
-		mStationEventListener = new FrameStationEventAdapter();
-	}
-	
-	public IStateChangeListener getStationEventListener() {
-		return mStationEventListener;
+
 	}
 	
 	private static Dimension getFrameDimension() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Dimension((int)(screenSize.width * 0.5), (int)(screenSize.height * 0.5));
 	}
-	
-	
-	private class FrameStationEventAdapter implements IStateChangeListener {
 
-		@Override
-		public void onCabStatusChange(Cab cab, int oldStatus, int newStatus) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onPassengerStatusChange(Passenger p, int oldStatus,
-				int newStatus) {
-			// TODO Auto-generated method stub
-			
-		}
-		
+	@Override
+	public void onStationStart(Station station) {
+		// TODO Auto-generated method stub
 		
 	}
-	
+
+	@Override
+	public void onCabStatusChange(Cab cab, int oldStatus, int newStatus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPassengerStatusChange(Passenger p, int oldStatus,
+			int newStatus) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -30,6 +30,7 @@ public class Main {
 			@Override
 			public void run() {
 				StationFrame window = new StationFrame();
+				station.registerStateListener(window);
 		    	window.addWindowListener(new StationWindowAdapter(station));
 			}
 		});
