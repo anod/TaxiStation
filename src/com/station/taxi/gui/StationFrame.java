@@ -4,7 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -12,13 +14,30 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
-
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
+import java.awt.GridLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+/**
+ * Main station frame
+ * @author alex
+ *
+ */
 public class StationFrame extends JFrame implements IStateChangeListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private CabsPanel mCabsPanel;
+	private PassengersPanel mPassegerPanel;
+	private DrivingPanel mDrivingPanel;
+	private JMenuBar mMenuBar;
+	private JMenuItem mItemStation;
 	
 	public StationFrame() {
 		try {
@@ -32,16 +51,39 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		
 		setSize(getFrameDimension());
 		getContentPane().setLayout(new BorderLayout());
-		
-		// TODO: add Taxi panel
-		// TODO: add Passenger panel
-		// TODO: add Driving Panel
 		// TODO: add MenuBar
 		// TODO: listen to station events: change status of tax and passenger
-		
+
+		setupViews();
 		setLocationRelativeTo(null);
+		
+		mMenuBar = new JMenuBar();
+		setJMenuBar(mMenuBar);
+		
+		mItemStation = new JMenuItem("Station");
+		mMenuBar.add(mItemStation);
 		setVisible(true);
 
+	}
+
+	/**
+	 * 
+	 */
+	private void setupViews() {
+
+		JPanel mainPanel = new JPanel();
+		getContentPane().add(mainPanel);
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+		
+		mCabsPanel = new CabsPanel();
+		mCabsPanel.setBorder(BorderFactory.createTitledBorder("Cabs Panel"));
+		mainPanel.add(mCabsPanel);
+		mDrivingPanel = new DrivingPanel();
+		mDrivingPanel.setBorder(BorderFactory.createTitledBorder("Driving Panel"));
+		mainPanel.add(mDrivingPanel);
+		mPassegerPanel = new PassengersPanel();
+		mPassegerPanel.setBorder(BorderFactory.createTitledBorder("Passenger Panel"));
+		mainPanel.add(mPassegerPanel);
 	}
 	
 	private static Dimension getFrameDimension() {
@@ -62,8 +104,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 
 	@Override
-	public void onPassengerStatusChange(Passenger p, int oldStatus,
-			int newStatus) {
+	public void onPassengerStatusChange(Passenger p, int oldStatus,	int newStatus) {
 		// TODO Auto-generated method stub
 		
 	}
