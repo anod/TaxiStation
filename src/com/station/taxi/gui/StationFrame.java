@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -14,14 +17,6 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 /**
  * Main station frame
  * @author alex
@@ -78,12 +73,12 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mCabsPanel = new CabsPanel();
 		mCabsPanel.setBorder(BorderFactory.createTitledBorder("Cabs Panel"));
 		mainPanel.add(mCabsPanel);
-		mDrivingPanel = new DrivingPanel();
-		mDrivingPanel.setBorder(BorderFactory.createTitledBorder("Driving Panel"));
-		mainPanel.add(mDrivingPanel);
 		mPassegerPanel = new PassengersPanel();
 		mPassegerPanel.setBorder(BorderFactory.createTitledBorder("Passenger Panel"));
 		mainPanel.add(mPassegerPanel);
+		mDrivingPanel = new DrivingPanel();
+		mDrivingPanel.setBorder(BorderFactory.createTitledBorder("Driving Panel"));
+		mainPanel.add(mDrivingPanel);
 	}
 	
 	private static Dimension getFrameDimension() {
