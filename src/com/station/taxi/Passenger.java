@@ -1,8 +1,12 @@
 package com.station.taxi;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-import com.station.taxi.logger.LoggerWrapper;
+import com.station.taxi.events.CabEventListener;
+import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.events.PassengerEventListener;
 
 /**
  * Represents passenger of taxi cab
@@ -25,6 +29,9 @@ public class Passenger extends Thread {
 	private int mState = STATE_INIT;
 	private int mTimeLeft = 0;
 	
+	private List<PassengerEventListener> mEventListeners = new ArrayList<>();
+	private double mPaidPrice = .0;
+
 	public Passenger(String name, String destination) {
 		mName = name;
 		mDestination = destination;
@@ -52,17 +59,24 @@ public class Passenger extends Thread {
 	}
 	/**
 	 * Register passenger at station listener
-	 * @param stationListener
+	 * @param listener
 	 */
-	public void register(IStationEventListener stationListener) {
-		mStationListener = stationListener;
+	public void setStationEventListener(IStationEventListener listener) {
+		mStationListener = listener;
+	}
+	/**
+	 * Register passenger event listener
+	 * @param listener
+	 */
+	public void addPassengerEventListener(PassengerEventListener listener) {
+		mEventListeners.add(listener);
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#interrupt()
 	 */
 	@Override
 	public void interrupt() {
-		LoggerWrapper.logPassenger(this, "Passanger interupt requested...");		
+		notify(PassengerEventListener.INTERRUPT);
 		mThreadRunning = false;
 		super.interrupt();
 	}
@@ -71,8 +85,8 @@ public class Passenger extends Thread {
 	 */
 	@Override
 	public void run() {
+		notify(PassengerEventListener.START);
 		// Tell station that Passenger thread is started and running
-		LoggerWrapper.logPassenger(this, "Passanger is ready and running...");
 		mStationListener.onPassengerReady(this);
 		mThreadRunning = true;
 		
@@ -98,8 +112,7 @@ public class Passenger extends Thread {
 			sleep(ONE_SECOND);
 			mTimeLeft--;
 		}else {
-			LoggerWrapper.logPassenger(this, "Waited too long leaving line angrily");
-			
+			notify(PassengerEventListener.EXIT_QUEUE);			
 			mState = STATE_EXIT;
 			mStationListener.onExitRequest(this);
 		}
@@ -126,10 +139,10 @@ public class Passenger extends Thread {
 	 * @param price
 	 * @param splitBy
 	 */
-	public void onArrival(Cab cab, double price,int splitBy) {
-		LoggerWrapper.logPassenger(this, "Arrived at " + mDestination + " with " + (splitBy-1) + " people paid " + price/splitBy);
+	public void onArrival(Cab cab, double price) {
+		mPaidPrice  = price;
+		notify(PassengerEventListener.ARRIVED);
 		mState = STATE_EXIT;
-		//mStationListener.onExitRequest(this);
 	}
 
 	/* (non-Javadoc)
@@ -140,4 +153,18 @@ public class Passenger extends Thread {
 		return "["+mName+","+mDestination+"]";
 	}
 	
+	/**
+	 * Notify event listeners
+	 * @param type
+	 */
+	private void notify(int type) {
+		for(PassengerEventListener listener: mEventListeners) {
+			listener.update(type, this);
+		}
+	}
+
+	public double getPaidPrice() {
+		return mPaidPrice;
+	}
+
 }

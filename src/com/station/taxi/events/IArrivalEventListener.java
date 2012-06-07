@@ -1,4 +1,7 @@
-package com.station.taxi;
+package com.station.taxi.events;
+
+import com.station.taxi.Cab;
+
 /**
  * Passage arrival event listener
  * @author alex

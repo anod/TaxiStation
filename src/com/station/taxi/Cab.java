@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import com.station.taxi.logger.LoggerWrapper;
+import com.station.taxi.events.CabEventListener;
+import com.station.taxi.events.IStationEventListener;
 
 /**
  * Tax cab object
@@ -34,6 +35,7 @@ public class Cab extends Thread {
 	private boolean mThreadRunning = false;
 
 	private int mBreakTime;
+	private List<CabEventListener> mEventListeners = new ArrayList<>();
 	
 	/**
 	 * 
@@ -67,10 +69,17 @@ public class Cab extends Thread {
 	}
 	/**
 	 * Register station listener
-	 * @param stationListener
+	 * @param listener
 	 */
-	public void register(IStationEventListener stationListener) {
-		mStationListener = stationListener;
+	public void setStationEventListener(IStationEventListener listener) {
+		mStationListener = listener;
+	}
+	/**
+	 * Register cab event listener
+	 * @param listener
+	 */
+	public void addCabEventListener(CabEventListener listener) {
+		mEventListeners.add(listener);
 	}
 	public double getTotalEarning(){
 		double total = 0;
@@ -102,6 +111,12 @@ public class Cab extends Thread {
 		mPassangers.add(passenger);
 		passenger.enterCab();
 	}
+	public List<Passenger> getPassegners() {
+		return mPassangers;
+	}
+	public int getBreakTime() {
+		return mBreakTime;
+	}
 	/**
 	 * Set TaxiMeter instance
 	 * @param meter
@@ -119,7 +134,7 @@ public class Cab extends Thread {
 
 	@Override
 	public void interrupt() {
-		LoggerWrapper.logCab(this, "Cab interupt requested...");		
+		notify(CabEventListener.INTERRUPT);
 		mThreadRunning = false;
 		super.interrupt();
 	}	
@@ -129,7 +144,7 @@ public class Cab extends Thread {
 	@Override
 	public void run() {
 		// Tell station that cab thread is started and running
-		LoggerWrapper.logCab(this, "Cab is ready and running...");
+		notify(CabEventListener.START);
 		mStationListener.onCabReady(this);
 		mThreadRunning = true;
 		
@@ -166,9 +181,9 @@ public class Cab extends Thread {
 	 * @throws InterruptedException 
 	 */
 	private synchronized void onBreak() throws InterruptedException {
-		LoggerWrapper.logCab(this,"Goto break for "+mBreakTime+" seconds to "+mWhileWaiting);
+		notify(CabEventListener.GOTO_BREAK);
 		sleep(ONE_SECOND * mBreakTime);
-		LoggerWrapper.logCab(this,"Finished break");
+		notify(CabEventListener.FINISH_BREAK);
 		mStationListener.onWaitingRequest(this);
 	}
 	/**
@@ -176,22 +191,14 @@ public class Cab extends Thread {
 	 * @throws InterruptedException 
 	 */
 	private synchronized void driving() throws InterruptedException {
-		String destination = mPassangers.get(0).getDestination();
 		int size = mPassangers.size();
 		mMeter.start();
-		// Create string of passenger names
-		StringBuffer sb = new StringBuffer(mPassangers.get(0).getPassangerName());
-		for(int i=1; i<size;i++) {
-			sb.append(",");
-			sb.append(mPassangers.get(i).getPassangerName());
-		}
-		LoggerWrapper.logCab(this,"Start driving to '"+destination+"' with "+size+" passengers ("+sb.toString()+"). Estimated time: +"+mDrivingTime+" seconds");
+		notify(CabEventListener.DRIVE_DESTINATION);		
 		
 		sleep(ONE_SECOND * mDrivingTime);
-		
+
 		mMeter.calc(mDrivingTime); 
 		mReciptsList.add(mMeter.stop(size));
-		LoggerWrapper.logCab(this,"Arrived to desitnation '"+destination+"' with "+size+" passengers");		
 		notifyArrival();
 		mPassangers.clear();
 	}
@@ -228,8 +235,9 @@ public class Cab extends Thread {
 	 * Notify passengers and station about end of the trip...
 	 */
 	private void notifyArrival() {
+		notify(CabEventListener.ARRIVED_DESTINATION);		
 		for(Passenger p: mPassangers) {
-			p.onArrival(this, mMeter.getCurrentValue(),mPassangers.size());
+			p.onArrival(this, mMeter.getCurrentValue() / mPassangers.size());
 		}
 		mStationListener.onWaitingRequest(this);
 	}
@@ -239,6 +247,16 @@ public class Cab extends Thread {
 	 */
 	private void requestBreak() {
 		mStationListener.onBreakRequest(this);
+	}
+
+	/**
+	 * Notify event listeners
+	 * @param type
+	 */
+	private void notify(int type) {
+		for(CabEventListener listener: mEventListeners) {
+			listener.update(type, this);
+		}
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#toString()

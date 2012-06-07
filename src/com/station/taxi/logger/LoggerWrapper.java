@@ -68,23 +68,6 @@ public class LoggerWrapper {
 		{ e.printStackTrace(); }
 	}
 	/**
-	 * Write a cab action
-	 * @param cab
-	 * @param message
-	 */
-	public static void logCab(Cab cab, String message) {
-		log(String.format(CabFilter.PATTERN, cab.getNumber()) + " " + message);
-	}
-	/**
-	 * Write a passenger action
-	 * @param p
-	 * @param message
-	 */
-	public static void logPassenger(Passenger p,String message)
-	{
-		log(String.format(PassengerFilter.PATTERN,p.getPassangerName()) + " " + message);
-	}
-	/**
 	 * Put a message into info log
 	 * @param message
 	 */

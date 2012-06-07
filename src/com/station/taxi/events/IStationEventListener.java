@@ -1,4 +1,8 @@
-package com.station.taxi;
+package com.station.taxi.events;
+
+import com.station.taxi.Cab;
+import com.station.taxi.Passenger;
+
 /**
  * 
  * @author alex

@@ -3,7 +3,10 @@ package com.station.taxi;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.logger.CabLogger;
 import com.station.taxi.logger.LoggerWrapper;
+import com.station.taxi.logger.PassengerLogger;
 /**
  * Taxi cab station object
  * @author alex
@@ -238,8 +241,8 @@ public class Station extends Thread implements IStationEventListener {
 	private void initCab(Cab cab) {
 		//Set taxi meter
 		cab.setMeter(createTaxiMeter());
-		cab.register(this);
-		LoggerWrapper.addCabLogger(cab);
+		cab.setStationEventListener(this);
+		cab.addCabEventListener(new CabLogger(cab));
 	}
 
 	/**
@@ -247,8 +250,8 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param p
 	 */
 	private void initPassenger(Passenger p) {
-		p.register(this);
-		LoggerWrapper.addPassengerLogger(p);
+		p.setStationEventListener(this);
+		p.addPassengerEventListener(new PassengerLogger(p));
 	}	
 	/**
 	 * Creates new instance of taxi meter
