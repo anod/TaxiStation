@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.station.taxi.events.IStationEventListener;
 import com.station.taxi.logger.CabLogger;
-import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.logger.PassengerLogger;
 /**
  * Taxi cab station object
@@ -22,7 +21,9 @@ public class Station extends Thread implements IStationEventListener {
 	public interface IStateChangeListener {
 		public void onStationStart(Station station);
 		public void onCabStatusChange(Cab cab, int oldStatus, int newStatus);
-		public void onPassengerStatusChange(Passenger p, int oldStatus, int newStatus);		
+		public void onPassengerStatusChange(Passenger p, int oldStatus, int newStatus);
+		public void onCabAdd(Cab cab);
+		public void onPassengerAdd(Passenger p);
 	}
 	
     /**
@@ -124,7 +125,7 @@ public class Station extends Thread implements IStationEventListener {
 	@Override
 	public void run() {	
 		mThreadRunning = true;
-		
+		mStateListener.onStationStart(this);	
 		while ( mThreadRunning ) {
 			try {
 				fillTaxi();

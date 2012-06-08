@@ -3,6 +3,7 @@ package com.station.taxi.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -33,6 +34,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private DrivingPanel mDrivingPanel;
 	private JMenuBar mMenuBar;
 	private JMenuItem mItemStation;
+	private Station mStation;
 	
 	public StationFrame() {
 		try {
@@ -46,17 +48,10 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		
 		setSize(getFrameDimension());
 		getContentPane().setLayout(new BorderLayout());
-		// TODO: add MenuBar
 		// TODO: listen to station events: change status of tax and passenger
 
 		setupViews();
 		setLocationRelativeTo(null);
-		
-		mMenuBar = new JMenuBar();
-		setJMenuBar(mMenuBar);
-		
-		mItemStation = new JMenuItem("Station");
-		mMenuBar.add(mItemStation);
 		setVisible(true);
 
 	}
@@ -79,6 +74,12 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mDrivingPanel = new DrivingPanel();
 		mDrivingPanel.setBorder(BorderFactory.createTitledBorder("Driving Panel"));
 		mainPanel.add(mDrivingPanel);
+		
+		mMenuBar = new JMenuBar();
+		setJMenuBar(mMenuBar);	
+		mItemStation = new JMenuItem("Station");
+		mMenuBar.add(mItemStation);
+		
 	}
 	
 	private static Dimension getFrameDimension() {
@@ -88,8 +89,11 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onStationStart(Station station) {
-		// TODO Auto-generated method stub
-		
+		mStation = station;
+		List<Cab> cabs = station.getCabs();
+		for(Cab cab: cabs) {
+			mCabsPanel.addCab(cab);
+		}
 	}
 
 	@Override
@@ -100,6 +104,17 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onPassengerStatusChange(Passenger p, int oldStatus,	int newStatus) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onCabAdd(Cab cab) {
+		mCabsPanel.addCab(cab);
+	}
+
+	@Override
+	public void onPassengerAdd(Passenger p) {
 		// TODO Auto-generated method stub
 		
 	}
