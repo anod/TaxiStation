@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
@@ -46,6 +47,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		
 		setTitle("Taxi Station");
 		
+    	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(getFrameDimension());
 		getContentPane().setLayout(new BorderLayout());
 		// TODO: listen to station events: change status of tax and passenger
