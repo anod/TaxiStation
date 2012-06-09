@@ -6,6 +6,8 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import com.station.taxi.Cab;
+import com.station.taxi.gui.CabView.AnimationCallback;
+import java.awt.GridLayout;
 /**
  * Panel contain cabs in waiting state
  * @author alex
@@ -20,7 +22,7 @@ public class CabsPanel extends JPanel {
 	private HashMap<Integer, CabView> mCabViews = new HashMap<Integer, CabView>();
 
 	public CabsPanel() {
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		setLayout(new GridLayout(0, 2, 2, 2));
 	}
 	
 	public synchronized void addCab(Cab cab) {
@@ -33,7 +35,8 @@ public class CabsPanel extends JPanel {
 	public synchronized boolean removeCab(Cab cab) {
 		int number = cab.getNumber();
 		if (mCabViews.containsKey(number)) {
-			remove(mCabViews.get(number));
+			final CabView view = mCabViews.get(number);
+			remove(view);
 			return true;
 		}
 		return false;

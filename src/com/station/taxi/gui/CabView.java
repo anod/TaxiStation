@@ -14,9 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
+import org.jdesktop.swingx.JXPanel;
 
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
@@ -39,6 +42,8 @@ public class CabView extends JPanel {
 	private Image mBgImage;
 	private JLabel lblNewLabel;
 
+	private Timer mAnimationTimer;
+
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
@@ -50,9 +55,36 @@ public class CabView extends JPanel {
 		setPassangers(cab);	
 		setArriveBtn(cab);
 		cab.addCabEventListener(new ViewCabEventListener());
+		
 	}
 
-
+	interface AnimationCallback {
+		void onFinish();
+	}
+	
+	public void animate(final AnimationCallback callback) {
+		
+		mAnimationTimer = new Timer(0, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int height = getHeight();
+				if (height <= 0) {
+					mAnimationTimer.stop();
+					callback.onFinish();
+					return;
+				}
+				height -= 1;
+				setSize(getWidth(), height);
+				repaint();
+			}
+		});
+		
+		mAnimationTimer.setDelay(1);
+		mAnimationTimer.start();
+	}
+	
+	
 	/**
 	 * 
 	 */
@@ -74,7 +106,14 @@ public class CabView extends JPanel {
 		mBtnArrive = new JButton("Arrive");
 		mBtnArrive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mCab.arrive();
+				animate(new AnimationCallback() {
+					
+					@Override
+					public void onFinish() {
+						mCab.arrive();
+						
+					}
+				});
 			}
 		});
 		panel.add(mBtnArrive);
@@ -164,6 +203,6 @@ public class CabView extends JPanel {
 		
 	}
 	
-
+	
 	
 }

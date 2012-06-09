@@ -23,9 +23,7 @@ public class StationMenuBar extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private StationFrame mStationFrame;
 
-	public StationMenuBar(StationFrame stationFrame) {
-		super();
-		
+	public StationMenuBar(StationFrame stationFrame) {	
 		mStationFrame = stationFrame;
 		
 		JMenu menuStation = new JMenu(TextsBundle.getString("menu_station"));

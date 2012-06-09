@@ -8,8 +8,6 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -19,6 +17,8 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
+import java.awt.FlowLayout;
+import java.awt.Component;
 /**
  * Main station frame
  * @author alex
@@ -33,7 +33,6 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private CabsPanel mCabsPanel;
 	private PassengersPanel mPassegerPanel;
 	private DrivingPanel mDrivingPanel;
-	private JMenuBar mMenuBar;
 	private Station mStation;
 	
 	public StationFrame() {
@@ -65,6 +64,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		
 		mCabsPanel = new CabsPanel();
+		mCabsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		mCabsPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("cabs_panel_title")));
 		mainPanel.add(mCabsPanel);
 		mPassegerPanel = new PassengersPanel();
@@ -74,8 +74,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mDrivingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("driving_panel_title")));
 		mainPanel.add(mDrivingPanel);
 		
-		mMenuBar = new StationMenuBar(this);
-		setJMenuBar(mMenuBar);		
+		//setJMenuBar(new StationMenuBar(this));		
 	}
 	
 	private static Dimension getFrameDimension() {
@@ -88,16 +87,13 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mStation = station;
 		List<Cab> cabs = station.getCabs();
 		for(Cab cab: cabs) {
-			addCabToPanel(cab);
+			placeCabInPanel(cab);
 		}
 	}
 
 	@Override
 	public void onCabUpdate(Cab cab) {
-		// TODO: remove only from one container
-		mCabsPanel.removeCab(cab);
-		mDrivingPanel.removeCab(cab);
-		addCabToPanel(cab);			
+		placeCabInPanel(cab);			
 	}
 
 	@Override
@@ -108,7 +104,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onCabAdd(Cab cab) {
-		addCabToPanel(cab);
+		placeCabInPanel(cab);
 	}
 
 	@Override
@@ -116,8 +112,12 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
-	private void addCabToPanel(Cab cab) {
+	private synchronized void placeCabInPanel(Cab cab) {
+		// TODO: remove only from one container
+		mCabsPanel.removeCab(cab);
+		mDrivingPanel.removeCab(cab);
 		if (cab.isDriving()) {
 			mDrivingPanel.addCab(cab);
 		} else {

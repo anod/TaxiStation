@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 import com.station.taxi.Cab;
+import java.awt.GridLayout;
 
 /**
  * Panel will contain cabs in driving state
@@ -21,7 +22,7 @@ public class DrivingPanel extends JPanel {
 	private HashMap<Integer, CabView> mCabViews = new HashMap<Integer, CabView>();
 	
 	public DrivingPanel() {
-		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		setLayout(new GridLayout(0, 2, 2, 2));
 	}	
 
 	public synchronized void addCab(Cab cab) {
