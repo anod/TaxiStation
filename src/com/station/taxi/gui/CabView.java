@@ -2,7 +2,11 @@ package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -18,8 +22,6 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.logger.LoggerWrapper;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class CabView extends JPanel {
 	/**
@@ -33,6 +35,9 @@ public class CabView extends JPanel {
 	private JLabel mStatusLabel;
 
 	private JButton mBtnArrive;
+
+	private Image mBgImage;
+	private JLabel lblNewLabel;
 
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
@@ -76,14 +81,15 @@ public class CabView extends JPanel {
 		
 		mStatusLabel = new JLabel("Waiting");
 		mStatusLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
-		mStatusLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		mStatusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		mStatusLabel.setVerticalAlignment(SwingConstants.TOP);
 		add(mStatusLabel, BorderLayout.NORTH);
 		
-		//JLabel lblNewLabel = new JLabel("");
-		//lblNewLabel.setIcon(Utils.createImageIcon("cab.png"));
-		//add(lblNewLabel, BorderLayout.CENTER);
-
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
+		add(lblNewLabel, BorderLayout.WEST);
+		
+		lblNewLabel.setIcon(ImageUtils.createImageIcon("ic_cab"));
 	}
 
 

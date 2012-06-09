@@ -280,11 +280,8 @@ public class Station extends Thread implements IStationEventListener {
 			Cab cab = mTaxiWaiting.remove(0);
 			addPassengersToCab(cab);
 			mTaxiDriving.add(cab);
-			try {
-				cab.drive();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			cab.drive();
+			mStateListener.onCabUpdate(cab);
 		}
 	
 	}

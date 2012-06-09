@@ -222,13 +222,12 @@ public class Cab extends Thread {
 		mPassangers.clear();
 	}
 	/**
+	 * Start Driving
 	 * 
-	 * @param drivingTime
-	 * @throws Exception 
 	 */
-	public void drive() throws Exception {
+	public void drive(){
 		if (mPassangers.size() == 0) {
-			throw new Exception("Empty cab");
+			throw new RuntimeException("Empty cab");
 		}
 		mMeter.reset();
 		mMeter.start();		

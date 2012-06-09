@@ -10,7 +10,7 @@ public class TextsBundle {
 		// do not instantiate
 	}
 
-	private static final String BUNDLE_NAME = "com.station.taxi.gui.TextsBundle"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "com.station.taxi.gui.resources.TextsBundle"; //$NON-NLS-1$
 	private static final ResourceBundle RESOURCE_BUNDLE = loadBundle();
 	private static ResourceBundle loadBundle() {
 		return ResourceBundle.getBundle(BUNDLE_NAME);

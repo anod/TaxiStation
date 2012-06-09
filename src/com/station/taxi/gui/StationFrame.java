@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -36,7 +34,6 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private PassengersPanel mPassegerPanel;
 	private DrivingPanel mDrivingPanel;
 	private JMenuBar mMenuBar;
-	private JMenuItem mItemStation;
 	private Station mStation;
 	
 	public StationFrame() {
@@ -97,11 +94,10 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onCabUpdate(Cab cab) {
-		
 		// TODO: remove only from one container
 		mCabsPanel.removeCab(cab);
 		mDrivingPanel.removeCab(cab);
-		addCabToPanel(cab);
+		addCabToPanel(cab);			
 	}
 
 	@Override
