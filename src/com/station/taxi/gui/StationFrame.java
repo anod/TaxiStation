@@ -38,7 +38,6 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private JMenuBar mMenuBar;
 	private JMenuItem mItemStation;
 	private Station mStation;
-	private ResourceBundle mResources;
 	
 	public StationFrame() {
 		try {
@@ -48,9 +47,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 			e.printStackTrace();
 		}
 		
-		mResources = Utils.getTextResourceBundle();		
-		
-		setTitle(mResources.getString("window_title"));
+		setTitle(TextsBundle.getString("window_title"));
 		
     	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(getFrameDimension());
@@ -71,20 +68,17 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		
 		mCabsPanel = new CabsPanel();
-		mCabsPanel.setBorder(BorderFactory.createTitledBorder(mResources.getString("cabs_panel_title")));
+		mCabsPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("cabs_panel_title")));
 		mainPanel.add(mCabsPanel);
 		mPassegerPanel = new PassengersPanel();
-		mPassegerPanel.setBorder(BorderFactory.createTitledBorder(mResources.getString("passengers_panel_title")));
+		mPassegerPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("passengers_panel_title")));
 		mainPanel.add(mPassegerPanel);
 		mDrivingPanel = new DrivingPanel();
-		mDrivingPanel.setBorder(BorderFactory.createTitledBorder(mResources.getString("driving_panel_title")));
+		mDrivingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("driving_panel_title")));
 		mainPanel.add(mDrivingPanel);
 		
-		mMenuBar = new JMenuBar();
-		setJMenuBar(mMenuBar);	
-		mItemStation = new JMenuItem("Station");
-		mMenuBar.add(mItemStation);
-		
+		mMenuBar = new StationMenuBar(this);
+		setJMenuBar(mMenuBar);		
 	}
 	
 	private static Dimension getFrameDimension() {
