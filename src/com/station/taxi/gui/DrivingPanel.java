@@ -1,12 +1,11 @@
 package com.station.taxi.gui;
 
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
 
 import com.station.taxi.Cab;
-import java.awt.GridLayout;
 
 /**
  * Panel will contain cabs in driving state

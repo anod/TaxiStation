@@ -1,9 +1,8 @@
 package com.station.taxi.gui;
 
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 import javax.swing.JPanel;
-import java.awt.GridLayout;
 /**
  * Panel will contain passengers in waiting state
  * @author alex

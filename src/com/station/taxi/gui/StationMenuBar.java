@@ -23,28 +23,33 @@ public class StationMenuBar extends JMenuBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private StationFrame mStationFrame;
 
-	public StationMenuBar(StationFrame stationFrame) {	
+	public StationMenuBar(StationFrame stationFrame) {
 		mStationFrame = stationFrame;
-		
+
 		JMenu menuStation = new JMenu(TextsBundle.getString("menu_station"));
 		add(menuStation);
-		
-		JMenuItem miAddCab = new JMenuItem(TextsBundle.getString("menu_item_addcab"));
-		miAddCab.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_MASK));
+
+		JMenuItem miAddCab = new JMenuItem(
+				TextsBundle.getString("menu_item_addcab"));
+		miAddCab.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C,
+				InputEvent.ALT_MASK));
 		miAddCab.addActionListener(this);
-		miAddCab.setActionCommand(ACTION_ADD_CAB);		
+		miAddCab.setActionCommand(ACTION_ADD_CAB);
 		menuStation.add(miAddCab);
-		
-		JMenuItem miAddPassenger = new JMenuItem(TextsBundle.getString("menu_item_addpassenger"));
-		miAddPassenger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
+
+		JMenuItem miAddPassenger = new JMenuItem(
+				TextsBundle.getString("menu_item_addpassenger"));
+		miAddPassenger.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+				InputEvent.ALT_MASK));
 		miAddPassenger.addActionListener(this);
-		miAddPassenger.setActionCommand(ACTION_ADD_PASSENGER);	
+		miAddPassenger.setActionCommand(ACTION_ADD_PASSENGER);
 		menuStation.add(miAddPassenger);
-		
+
 		menuStation.addSeparator();
-		
+
 		JMenuItem miExit = new JMenuItem(TextsBundle.getString("exit"));
-		miExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK));
+		miExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X,
+				InputEvent.ALT_MASK));
 		miExit.addActionListener(this);
 		miExit.setActionCommand(ACTION_EXIT);
 		menuStation.add(miExit);
@@ -53,10 +58,14 @@ public class StationMenuBar extends JMenuBar implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals(ACTION_EXIT)) {
-            WindowEvent wev = new WindowEvent(mStationFrame, WindowEvent.WINDOW_CLOSING);
-            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+			WindowEvent wev = new WindowEvent(mStationFrame,
+			WindowEvent.WINDOW_CLOSING);
+			Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+		} else if (e.getActionCommand().endsWith(ACTION_ADD_CAB)) {
+			NewCabDialog dialog = new NewCabDialog(mStationFrame);
+			dialog.setVisible(true);
 		}
-		
+
 	}
 
 }

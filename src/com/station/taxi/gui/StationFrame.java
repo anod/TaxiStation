@@ -1,6 +1,7 @@
 package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
@@ -17,8 +18,6 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
-import java.awt.FlowLayout;
-import java.awt.Component;
 /**
  * Main station frame
  * @author alex
@@ -74,7 +73,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mDrivingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("driving_panel_title")));
 		mainPanel.add(mDrivingPanel);
 		
-		//setJMenuBar(new StationMenuBar(this));		
+		setJMenuBar(new StationMenuBar(this));		
 	}
 	
 	private static Dimension getFrameDimension() {

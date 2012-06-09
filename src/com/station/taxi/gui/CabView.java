@@ -2,7 +2,6 @@ package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -18,8 +17,6 @@ import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-
-import org.jdesktop.swingx.JXPanel;
 
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
