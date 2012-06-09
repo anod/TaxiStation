@@ -18,6 +18,8 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.logger.LoggerWrapper;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class CabView extends JPanel {
 	/**
@@ -36,6 +38,20 @@ public class CabView extends JPanel {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
 		
+		mCab = cab;
+		setupViews();
+		
+		setStatus(cab);
+		setPassangers(cab);	
+		setArriveBtn(cab);
+		cab.addCabEventListener(new ViewCabEventListener());
+	}
+
+
+	/**
+	 * 
+	 */
+	private void setupViews() {
 		mPassangertable = new JTable();
 		mPassangertable.setBackground(SystemColor.control);
 		mPassangertable.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -51,6 +67,11 @@ public class CabView extends JPanel {
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		mBtnArrive = new JButton("Arrive");
+		mBtnArrive.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mCab.arrive();
+			}
+		});
 		panel.add(mBtnArrive);
 		
 		mStatusLabel = new JLabel("Waiting");
@@ -62,11 +83,7 @@ public class CabView extends JPanel {
 		//JLabel lblNewLabel = new JLabel("");
 		//lblNewLabel.setIcon(ImageUtils.createImageIcon("cab.png"));
 		//add(lblNewLabel, BorderLayout.CENTER);
-		mCab = cab;
-		setStatus(cab);
-		setPassangers(cab);	
-		setArriveBtn(cab);
-		cab.addCabEventListener(new ViewCabEventListener());
+
 	}
 
 

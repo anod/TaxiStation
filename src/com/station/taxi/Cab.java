@@ -205,12 +205,17 @@ public class Cab extends Thread {
 	 * @throws InterruptedException 
 	 */
 	private synchronized void driving() throws InterruptedException {
+		sleep(ONE_SECOND);
+		mDrivingTime += ONE_SECOND;
+	}
+	/**
+	 * Tells to cab that it arrived to destination
+	 */
+	public void arrive() {
+		if (mCabStatus != STATUS_DRIVING) {
+			throw new RuntimeException("Cab is not driving");
+		}
 		int size = mPassangers.size();
-		mMeter.start();
-		notify(CabEventListener.DRIVE_DESTINATION);		
-		
-		sleep(ONE_SECOND * mDrivingTime);
-
 		mMeter.calc(mDrivingTime); 
 		mReciptsList.add(mMeter.stop(size));
 		notifyArrival();
@@ -226,9 +231,9 @@ public class Cab extends Thread {
 			throw new Exception("Empty cab");
 		}
 		mMeter.reset();
-		Random rand = new Random();
-		mDrivingTime = rand.nextInt(10)+5;			
+		mMeter.start();		
 		mCabStatus = STATUS_DRIVING;
+		notify(CabEventListener.DRIVE_DESTINATION);		
 	}
 	/**
 	 * Go to waiting state

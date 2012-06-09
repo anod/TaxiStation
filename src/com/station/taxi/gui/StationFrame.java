@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -36,6 +38,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private JMenuBar mMenuBar;
 	private JMenuItem mItemStation;
 	private Station mStation;
+	private ResourceBundle mResources;
 	
 	public StationFrame() {
 		try {
@@ -45,12 +48,13 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 			e.printStackTrace();
 		}
 		
-		setTitle("Taxi Station");
+		mResources = ResourceBundle.getBundle("com.station.taxi.gui.TextsBundle", Locale.getDefault());		
+		
+		setTitle(mResources.getString("window_title"));
 		
     	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(getFrameDimension());
 		getContentPane().setLayout(new BorderLayout());
-		// TODO: listen to station events: change status of tax and passenger
 
 		setupViews();
 		setLocationRelativeTo(null);
@@ -62,19 +66,18 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 * 
 	 */
 	private void setupViews() {
-
 		JPanel mainPanel = new JPanel();
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 		
 		mCabsPanel = new CabsPanel();
-		mCabsPanel.setBorder(BorderFactory.createTitledBorder("Cabs Panel"));
+		mCabsPanel.setBorder(BorderFactory.createTitledBorder(mResources.getString("cabs_panel_title")));
 		mainPanel.add(mCabsPanel);
 		mPassegerPanel = new PassengersPanel();
-		mPassegerPanel.setBorder(BorderFactory.createTitledBorder("Passenger Panel"));
+		mPassegerPanel.setBorder(BorderFactory.createTitledBorder(mResources.getString("passengers_panel_title")));
 		mainPanel.add(mPassegerPanel);
 		mDrivingPanel = new DrivingPanel();
-		mDrivingPanel.setBorder(BorderFactory.createTitledBorder("Driving Panel"));
+		mDrivingPanel.setBorder(BorderFactory.createTitledBorder(mResources.getString("driving_panel_title")));
 		mainPanel.add(mDrivingPanel);
 		
 		mMenuBar = new JMenuBar();
@@ -94,25 +97,28 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mStation = station;
 		List<Cab> cabs = station.getCabs();
 		for(Cab cab: cabs) {
-			mCabsPanel.addCab(cab);
+			addCabToPanel(cab);
 		}
 	}
 
 	@Override
-	public void onCabStatusChange(Cab cab, int oldStatus, int newStatus) {
-		// TODO Auto-generated method stub
+	public void onCabUpdate(Cab cab) {
 		
+		// TODO: remove only from one container
+		mCabsPanel.removeCab(cab);
+		mDrivingPanel.removeCab(cab);
+		addCabToPanel(cab);
 	}
 
 	@Override
-	public void onPassengerStatusChange(Passenger p, int oldStatus,	int newStatus) {
+	public void onPassengerUpdate(Passenger p) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onCabAdd(Cab cab) {
-		mCabsPanel.addCab(cab);
+		addCabToPanel(cab);
 	}
 
 	@Override
@@ -121,4 +127,11 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		
 	}
 
+	private void addCabToPanel(Cab cab) {
+		if (cab.isDriving()) {
+			mDrivingPanel.addCab(cab);
+		} else {
+			mCabsPanel.addCab(cab);
+		}
+	}
 }

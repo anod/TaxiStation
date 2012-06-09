@@ -20,8 +20,8 @@ public class Station extends Thread implements IStationEventListener {
 	 */
 	public interface IStateChangeListener {
 		public void onStationStart(Station station);
-		public void onCabStatusChange(Cab cab, int oldStatus, int newStatus);
-		public void onPassengerStatusChange(Passenger p, int oldStatus, int newStatus);
+		public void onCabUpdate(Cab cab);
+		public void onPassengerUpdate(Passenger p);
 		public void onCabAdd(Cab cab);
 		public void onPassengerAdd(Passenger p);
 	}
@@ -325,6 +325,7 @@ public class Station extends Thread implements IStationEventListener {
 			}
 			mTaxiBreak.add(cab);
 			cab.goToBreak();
+			mStateListener.onCabUpdate(cab);
 		}
 	}
 
@@ -338,6 +339,7 @@ public class Station extends Thread implements IStationEventListener {
 			mTaxiDriving.remove(cab);
 			mTaxiWaiting.add(cab);
 			cab.goToWaiting();
+			mStateListener.onCabUpdate(cab);
 		}
 	}
 	
@@ -370,6 +372,7 @@ public class Station extends Thread implements IStationEventListener {
 				cab.goToWaiting();
 				mTaxiWaiting.add(cab);
 			}
+			mStateListener.onCabUpdate(cab);
 		}
 	}
 	/**
