@@ -1,9 +1,10 @@
 package com.station.taxi.gui;
 
+import java.awt.FlowLayout;
+
 import javax.swing.JPanel;
 
 import com.station.taxi.Cab;
-import java.awt.FlowLayout;
 /**
  * Panel contain cabs in waiting state
  * @author alex
@@ -12,13 +13,7 @@ import java.awt.FlowLayout;
 public class CabsPanel extends JPanel {
 	public CabsPanel() {
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		add(new CabLabel(new Cab(123, "test")));
-		add(new CabLabel(new Cab(123, "test")));
-		add(new CabLabel(new Cab(123, "test")));
-		add(new CabLabel(new Cab(123, "test")));
-		add(new CabLabel(new Cab(123, "test")));
-		//removeAll();
+
 	}
 	/**
 	 * 
@@ -30,7 +25,8 @@ public class CabsPanel extends JPanel {
 	 * @param cab
 	 */
 	public synchronized void addCab(Cab cab) {
-		add(new CabLabel(cab));
+		add(new CabView(cab));
+		validate();
 	}
 	
 }

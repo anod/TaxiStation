@@ -357,11 +357,12 @@ public class Station extends Thread implements IStationEventListener {
 	}
 	
 	/**
-	 * Registered cab thread notify that it's readt
+	 * Registered cab thread notify that it's ready
 	 */
 	@Override
 	public void onCabReady(Cab cab) {
 		synchronized (sLock) {
+			mStateListener.onCabAdd(cab);
 			if (mTaxiWaiting.size() >= mMaxWaitingCount) {
 				cab.goToBreak();
 				mTaxiBreak.add(cab);
