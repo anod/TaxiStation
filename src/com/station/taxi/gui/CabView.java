@@ -81,7 +81,7 @@ public class CabView extends JPanel {
 		add(mStatusLabel, BorderLayout.NORTH);
 		
 		//JLabel lblNewLabel = new JLabel("");
-		//lblNewLabel.setIcon(ImageUtils.createImageIcon("cab.png"));
+		//lblNewLabel.setIcon(Utils.createImageIcon("cab.png"));
 		//add(lblNewLabel, BorderLayout.CENTER);
 
 	}

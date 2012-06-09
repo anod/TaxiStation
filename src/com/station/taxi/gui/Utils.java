@@ -2,14 +2,21 @@ package com.station.taxi.gui;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.io.File;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 
-public class ImageUtils {
+public class Utils {
 
-    private static final String IMAGES_PATH = "../images/";
+    private static final String TEXTS_BUNDLE = "com.station.taxi.gui.TextsBundle";
+	private static final String IMAGES_PATH = "../images/";
 
+    
+    public static ResourceBundle getTextResourceBundle() {
+    	return ResourceBundle.getBundle(TEXTS_BUNDLE, Locale.getDefault());
+    }
+    
 	public static ImageIcon createImageIcon(String name) {
     	Image image = getImage(name);
     	return new ImageIcon(image);

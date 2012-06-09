@@ -48,7 +48,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 			e.printStackTrace();
 		}
 		
-		mResources = ResourceBundle.getBundle("com.station.taxi.gui.TextsBundle", Locale.getDefault());		
+		mResources = Utils.getTextResourceBundle();		
 		
 		setTitle(mResources.getString("window_title"));
 		
