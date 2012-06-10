@@ -10,7 +10,7 @@ import com.station.taxi.configuration.StationConfigStorage;
 import com.station.taxi.gui.StationFrame;
 
 
-public class Main {
+public class TaxiStationMain {
 	
     public static void main(String[] args) {
     	//Create configuration loader

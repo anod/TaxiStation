@@ -19,12 +19,15 @@ import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
 /**
- * Main station frame
+ * TaxiStationMain station frame
  * @author alex
  *
  */
 public class StationFrame extends JFrame implements IStateChangeListener {
-
+    /**
+     * Lock used when maintaining queue of requested updates.
+     */
+	private static Object sLock = new Object();
 	/**
 	 * 
 	 */
@@ -84,9 +87,11 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	@Override
 	public void onStationStart(Station station) {
 		mStation = station;
-		List<Cab> cabs = station.getCabs();
-		for(Cab cab: cabs) {
-			placeCabInPanel(cab);
+		synchronized (sLock) {
+			List<Cab> cabs = station.getCabs();
+			for(Cab cab: cabs) {
+				placeCabInPanel(cab);
+			}
 		}
 	}
 
@@ -103,7 +108,9 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onCabAdd(Cab cab) {
-		placeCabInPanel(cab);
+		synchronized (sLock) {
+			placeCabInPanel(cab);
+		}		
 	}
 
 	@Override
@@ -113,7 +120,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 	
 
-	private synchronized void placeCabInPanel(Cab cab) {
+	private void placeCabInPanel(Cab cab) {
 		// TODO: remove only from one container
 		mCabsPanel.removeCab(cab);
 		mDrivingPanel.removeCab(cab);
