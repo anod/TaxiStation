@@ -21,6 +21,9 @@ public class CabLogger extends CabEventListener {
 		case INTERRUPT:
 			logCab(cab, "Cab interupt requested...");		
 		break;
+		case WAITING:
+			logCab(cab, "Waiting for passengers...");		
+		break;		
 		case DRIVE_DESTINATION:
 			logDriveDestination(cab);
 		break;
