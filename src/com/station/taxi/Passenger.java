@@ -29,7 +29,7 @@ public class Passenger extends Thread {
 	private int mState = STATE_INIT;
 	private int mTimeLeft = 0;
 	
-	private List<PassengerEventListener> mEventListeners = new ArrayList<>();
+	private List<PassengerEventListener> mEventListeners = new ArrayList<PassengerEventListener>();
 	private double mPaidPrice = .0;
 
 	public Passenger(String name, String destination) {
@@ -43,7 +43,12 @@ public class Passenger extends Thread {
 	public String getPassangerName() {
 		return mName;
 	}
-
+	/**
+	 * @return Time left in line of passenger
+	 */
+	public int getTimeLeft() {
+		return mTimeLeft;
+	}
 	/**
 	 * @return destination of passenger
 	 */
@@ -122,7 +127,7 @@ public class Passenger extends Thread {
 	 */
 	public void enterWaitLine() {
 		Random rand = new Random();	
-		mExitTime  = rand.nextInt(5);
+		mExitTime  = rand.nextInt(25);
 		mTimeLeft = mExitTime;
 		mState = STATE_WAITING;
 	}

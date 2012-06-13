@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -87,12 +88,14 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	@Override
 	public void onStationStart(Station station) {
 		mStation = station;
-		synchronized (sLock) {
 			List<Cab> cabs = station.getCabs();
 			for(Cab cab: cabs) {
 				placeCabInPanel(cab);
 			}
-		}
+			List<Passenger> pmany = mStation.getPassengers();
+			for (Passenger p: pmany) {
+				addPassangerToLine(p);
+			}
 	}
 
 	@Override
@@ -115,8 +118,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onPassengerAdd(Passenger p) {
-		// TODO Auto-generated method stub
-		
+		addPassangerToLine(p);
 	}
 	
 
@@ -129,5 +131,13 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		} else {
 			mCabsPanel.addCab(cab);
 		}
+	}
+	private void addPassangerToLine(Passenger p) {
+		mPassegerPanel.addPassanger(p);
+		
+	}
+	private void removePassangerFromLine(Passenger p) {
+		mPassegerPanel.removePassanger(p);
+		
 	}
 }

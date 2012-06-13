@@ -35,7 +35,7 @@ public class Cab extends Thread {
 	private boolean mThreadRunning = false;
 
 	private int mBreakTime;
-	private List<CabEventListener> mEventListeners = new ArrayList<>();
+	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
 	
 	/**
 	 * 
