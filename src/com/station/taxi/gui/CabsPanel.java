@@ -23,17 +23,24 @@ public abstract class CabsPanel extends JPanel {
 		setLayout(new GridLayout(0, 2, 2, 2));
 	}	
 
-	public void addCab(Cab cab) {
-		CabView view = new CabView(cab);
-		mCabViews.put(cab.getNumber(), view);
-		add(view);
-		validate();
+	public void addOrUpdateCab(Cab cab) {
+		int num = cab.getNumber();
+		if (!mCabViews.containsKey(num)) {
+			CabView view = new CabView(cab);
+			mCabViews.put(cab.getNumber(), view);
+			add(view);
+			validate();
+		} else {
+			mCabViews.get(num).refresh();
+		}
 	}
+	
 	
 	public boolean removeCab(Cab cab) {
 		int number = cab.getNumber();
 		if (mCabViews.containsKey(number)) {
 			remove(mCabViews.get(number));
+			mCabViews.remove(number);
 			return true;
 		}
 		return false;

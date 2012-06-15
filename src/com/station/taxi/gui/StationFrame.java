@@ -82,7 +82,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	
 	private static Dimension getFrameDimension() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		return new Dimension((int)(screenSize.width * 0.5), (int)(screenSize.height * 0.5));
+		return new Dimension((int)(screenSize.width * 0.7), (int)(screenSize.height * 0.5));
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mStation = station;
 			List<Cab> cabs = station.getCabs();
 			for(Cab cab: cabs) {
-				placeCabInPanel(cab);
+				placeCabInPanel(cab, -1);
 			}
 			List<Passenger> pmany = mStation.getPassengers();
 			for (Passenger p: pmany) {
@@ -99,8 +99,8 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 
 	@Override
-	public void onCabUpdate(Cab cab) {
-		placeCabInPanel(cab);			
+	public void onCabUpdate(Cab cab, int newState) {
+		placeCabInPanel(cab, newState);			
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onCabAdd(Cab cab) {
-		placeCabInPanel(cab);
+		placeCabInPanel(cab, -1);
 	}
 
 	@Override
@@ -120,13 +120,16 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 	
 
-	private void placeCabInPanel(Cab cab) {
-		mWaitingPanel.removeCab(cab);
-		mDrivingPanel.removeCab(cab);
+	private void placeCabInPanel(Cab cab, int oldState) {
 		if (cab.isDriving()) {
-			mDrivingPanel.addCab(cab);
+			if (oldState == Station.CAB_DRIVE) {
+				throw new RuntimeException("Wrong state");
+			}
+			mWaitingPanel.removeCab(cab);
+			mDrivingPanel.addOrUpdateCab(cab);
 		} else {
-			mWaitingPanel.addCab(cab);
+			mDrivingPanel.removeCab(cab);
+			mWaitingPanel.addOrUpdateCab(cab);
 		}
 		sleep(300);
 	}

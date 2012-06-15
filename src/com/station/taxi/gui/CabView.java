@@ -1,6 +1,7 @@
 package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -20,7 +22,6 @@ import javax.swing.table.DefaultTableModel;
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
-import com.station.taxi.logger.LoggerWrapper;
 
 public class CabView extends JPanel {
 	/**
@@ -35,6 +36,8 @@ public class CabView extends JPanel {
 	private JLabel mIcon;
 	private Timer mAnimationTimer;
 
+	private JLayeredPane mIconLayerdPane;
+
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
@@ -48,38 +51,6 @@ public class CabView extends JPanel {
 		cab.addCabEventListener(new ViewCabEventListener());
 		
 	}
-
-	interface AnimationCallback {
-		void onFinish();
-	}
-	
-	public void animate(final AnimationCallback callback) {
-		if (mAnimationTimer!=null && mAnimationTimer.isRepeats()) {
-			for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-			    System.out.println(ste + "\n");
-			}
-			return;
-		}
-		mAnimationTimer = new Timer(0, new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int height = getHeight();
-				if (height <= 0) {
-					mAnimationTimer.stop();
-					callback.onFinish();
-					return;
-				}
-				height -= 1;
-				setSize(getWidth(), height);
-				repaint();
-			}
-		});
-		
-		mAnimationTimer.setDelay(1);
-		mAnimationTimer.start();
-	}
-	
 	
 	/**
 	 * 
@@ -102,14 +73,7 @@ public class CabView extends JPanel {
 		mBtnArrive = new JButton("Arrive");
 		mBtnArrive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				animate(new AnimationCallback() {
-					
-					@Override
-					public void onFinish() {
-						mCab.arrive();
-						
-					}
-				});
+				mCab.arrive();
 			}
 		});
 		panel.add(mBtnArrive);
@@ -120,9 +84,16 @@ public class CabView extends JPanel {
 		mStatusLabel.setVerticalAlignment(SwingConstants.TOP);
 		add(mStatusLabel, BorderLayout.NORTH);
 		
+		
+		mIconLayerdPane = new JLayeredPane();
+		mIconLayerdPane.setPreferredSize(new Dimension(72, 72));
+		add(mIconLayerdPane, BorderLayout.WEST);
+		
 		mIcon = new JLabel("");
+		mIcon.setSize(new Dimension(72, 72));
+		mIcon.setBounds(0, 0, 72, 76);
+		mIconLayerdPane.add(mIcon);
 		mIcon.setVerticalAlignment(SwingConstants.TOP);
-		add(mIcon, BorderLayout.WEST);
 		
 		mIcon.setIcon(ImageUtils.createImageIcon("ic_cab"));
 	}
@@ -168,11 +139,10 @@ public class CabView extends JPanel {
 	private void setStatus(Cab cab) {
 		
 		if (cab.isDriving()) {
-			mStatusLabel.setText("Driving [ " + (cab.getDrivingTime()/1000) + " seconds ]");
+			mStatusLabel.setText("Driving to "+cab.getDestination()+" [ " + (cab.getDrivingTime()/1000) + " sec ]");
 		} else if(cab.isOnBreak()) {
 			int sec = (cab.getBreakTime()/1000);
-			String secText = (sec == 1) ? "1 second" : sec + " seconds";
-			mStatusLabel.setText("Break [ " + secText + " ]");
+			mStatusLabel.setText("Break [ " + sec + " sec ]");
 		} else if(cab.isWaiting()) {
 			mStatusLabel.setText("Waiting, " + cab.getWhileWaiting());
 		} else {
@@ -186,11 +156,15 @@ public class CabView extends JPanel {
 
 		@Override
 		public void update(int type, Cab cab) {
-			setStatus(cab);
-			setPassangers(cab);
-			setArriveBtn(cab);			
+			refresh();
 		}
 		
+	}
+
+	public void refresh() {
+		setStatus(mCab);
+		setPassangers(mCab);
+		setArriveBtn(mCab);	
 	}
 	
 	

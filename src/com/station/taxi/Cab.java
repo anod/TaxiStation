@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.logger.LoggerWrapper;
 
 /**
  * Tax cab object
@@ -16,6 +17,11 @@ import com.station.taxi.events.IStationEventListener;
  * @version 0.1
  */
 public class Cab extends Thread {
+    /**
+     * Lock used when maintaining queue of requested updates.
+     */
+	private static Object sLock = new Object();
+	
 	public static final int MAX_PASSANGERS = 4;
 
 	private static final int ONE_SECOND = 1000;
@@ -70,7 +76,9 @@ public class Cab extends Thread {
 	 * @return
 	 */
 	public boolean isDriving() {
-		return mCabStatus == STATUS_DRIVING;
+		synchronized (sLock) {
+			return mCabStatus == STATUS_DRIVING;
+		}
 	}
 	/**
 	 * Get driving time in seconds
@@ -84,14 +92,18 @@ public class Cab extends Thread {
 	 * @return
 	 */
 	public boolean isOnBreak() {
-		return mCabStatus == STATUS_BREAK;
+		synchronized (sLock) {
+			return mCabStatus == STATUS_BREAK;
+		}
 	}
 	/**
 	 * Return true if cab waiting for passengers
 	 * @return
 	 */
 	public boolean isWaiting() {
-		return mCabStatus == STATUS_WAITING;
+		synchronized (sLock) {
+			return mCabStatus == STATUS_WAITING;
+		}
 	}
 	/**
 	 * Register station listener
@@ -138,6 +150,14 @@ public class Cab extends Thread {
 		mPassangers.add(passenger);
 		passenger.enterCab();
 	}
+	public String getDestination() {
+		synchronized (sLock) {
+			if (mCabStatus != STATUS_DRIVING) {
+				throw new RuntimeException("Cab is not driving anywhere");
+			}
+			return mPassangers.get(0).getDestination();
+		}
+	}
 	public List<Passenger> getPassegners() {
 		return mPassangers;
 	}
@@ -156,7 +176,9 @@ public class Cab extends Thread {
 	 * @return
 	 */
 	public boolean isFull() {
-		return mPassangers.size() == MAX_PASSANGERS;
+		synchronized (sLock) {
+			return mPassangers.size() == MAX_PASSANGERS;
+		}
 	}
 
 	@Override
@@ -200,8 +222,9 @@ public class Cab extends Thread {
 	 * Waiting in station for passengers
 	 * @throws InterruptedException
 	 */
-	private synchronized void waiting() throws InterruptedException {
+	private void waiting() throws InterruptedException {
 		sleep(ONE_SECOND);
+		LoggerWrapper.log("State :" + this);
 		Random rand = new Random();
 		int value = rand.nextInt(100);
 		if (value < 10) {
@@ -212,7 +235,7 @@ public class Cab extends Thread {
 	 * Do a whileWaiting action for mBreakTime 
 	 * @throws InterruptedException 
 	 */
-	private synchronized void onBreak() throws InterruptedException {
+	private void onBreak() throws InterruptedException {
 		sleep(ONE_SECOND);
 		mBreakTime -= ONE_SECOND;
 		notify(CabEventListener.INBREAK);
@@ -224,7 +247,7 @@ public class Cab extends Thread {
 	 * Drive to the destination
 	 * @throws InterruptedException 
 	 */
-	private synchronized void driving() throws InterruptedException {
+	private void driving() throws InterruptedException {
 		sleep(ONE_SECOND);
 		mDrivingTime += ONE_SECOND;
 		notify(CabEventListener.DRIVING);
@@ -232,45 +255,53 @@ public class Cab extends Thread {
 	/**
 	 * Tells to cab that it arrived to destination
 	 */
-	public synchronized void arrive() {
-		if (mCabStatus != STATUS_DRIVING) {
-			throw new RuntimeException("Cab is not driving");
+	public void arrive() {
+		synchronized (sLock) {
+			if (mCabStatus != STATUS_DRIVING) {
+				throw new RuntimeException("Cab is not driving");
+			}
+			int size = mPassangers.size();
+			mMeter.calc(mDrivingTime); 
+			mReciptsList.add(mMeter.stop(size));
+			notifyArrival();
+			mPassangers.clear();
+			mStationListener.onWaitingRequest(this);
 		}
-		int size = mPassangers.size();
-		mMeter.calc(mDrivingTime); 
-		mReciptsList.add(mMeter.stop(size));
-		notifyArrival();
-		mPassangers.clear();
-		mStationListener.onWaitingRequest(this);		
 	}
 	/**
 	 * Start Driving
 	 * 
 	 */
 	public void drive(){
-		if (mPassangers.size() == 0) {
-			throw new RuntimeException("Empty cab");
+		synchronized (sLock) {
+			if (mPassangers.size() == 0) {
+				throw new RuntimeException("Empty cab");
+			}
+			mMeter.reset();
+			mMeter.start();		
+			mCabStatus = STATUS_DRIVING;
+			notify(CabEventListener.DRIVE_DESTINATION);
 		}
-		mMeter.reset();
-		mMeter.start();		
-		mCabStatus = STATUS_DRIVING;
-		notify(CabEventListener.DRIVE_DESTINATION);		
 	}
 	/**
 	 * Go to waiting state
 	 */
 	public void goToWaiting() {
-		notify(CabEventListener.WAITING);		
-		mCabStatus = STATUS_WAITING;
+		synchronized (sLock) {		
+			mCabStatus = STATUS_WAITING;
+			notify(CabEventListener.WAITING);		
+		}
 	}
 	/**
 	 * Go to break
 	 */
 	public void goToBreak() {
-		Random rand = new Random();	
-		mBreakTime  = rand.nextInt(10)+5 * 1000;		
-		mCabStatus = STATUS_BREAK;
-		notify(CabEventListener.GOTO_BREAK);		
+		synchronized (sLock) {
+			Random rand = new Random();	
+			mBreakTime  = rand.nextInt(10)+5 * 1000;		
+			mCabStatus = STATUS_BREAK;
+			notify(CabEventListener.GOTO_BREAK);
+		}
 	}
 
 	/**

@@ -20,11 +20,15 @@ public class Station extends Thread implements IStationEventListener {
 	 */
 	public interface IStateChangeListener {
 		public void onStationStart(Station station);
-		public void onCabUpdate(Cab cab);
+		public void onCabUpdate(Cab cab, int oldState);
 		public void onPassengerUpdate(Passenger p);
 		public void onCabAdd(Cab cab);
 		public void onPassengerAdd(Passenger p);
 	}
+
+	public static final int CAB_DRIVE = 0;
+	public static final int CAB_BREAK = 1;
+	public static final int CAB_WAITING = 2;
 	
     /**
      * Lock used when maintaining queue of requested updates.
@@ -276,12 +280,13 @@ public class Station extends Thread implements IStationEventListener {
 		synchronized (sLock) {
 			if (mTaxiWaiting.isEmpty() || mPassengersList.isEmpty()) {
 				return;
-			}
+			}		
 			Cab cab = mTaxiWaiting.remove(0);
+			int oldState = detectCabState(cab);			
 			addPassengersToCab(cab);
 			mTaxiDriving.add(cab);
 			cab.drive();
-			mStateListener.onCabUpdate(cab);
+			mStateListener.onCabUpdate(cab, oldState);
 		}
 	
 	}
@@ -316,12 +321,13 @@ public class Station extends Thread implements IStationEventListener {
 	public void onBreakRequest(Cab cab) {
 		synchronized (sLock) {
 			if (cab.isDriving()) {
-				throw new RuntimeException("Invalid cab state while request break");
+				throw new RuntimeException("Invalid cab ["+ cab.getNumber() +"] state while request break");
 			}
+			int oldState = detectCabState(cab);
 			mTaxiWaiting.remove(cab);
 			mTaxiBreak.add(cab);
 			cab.goToBreak();
-			mStateListener.onCabUpdate(cab);
+			mStateListener.onCabUpdate(cab, oldState);
 		}
 	}
 
@@ -332,11 +338,26 @@ public class Station extends Thread implements IStationEventListener {
 	@Override
 	public void onWaitingRequest(Cab cab) {
 		synchronized (sLock) {
+			int oldState = detectCabState(cab); 
 			mTaxiDriving.remove(cab);
 			mTaxiWaiting.add(cab);
 			cab.goToWaiting();
-			mStateListener.onCabUpdate(cab);
+			mStateListener.onCabUpdate(cab, oldState);
 		}
+	}
+	/**
+	 * 
+	 * @param cab
+	 * @return
+	 */
+	private int detectCabState(Cab cab) {
+		if (cab.isDriving()) {
+			return CAB_DRIVE;
+		}
+		if (cab.isWaiting()) {
+			return CAB_WAITING;
+		}
+		return CAB_BREAK;
 	}
 	
 	/**
@@ -360,7 +381,6 @@ public class Station extends Thread implements IStationEventListener {
 	@Override
 	public void onCabReady(Cab cab) {
 		synchronized (sLock) {
-			mStateListener.onCabAdd(cab);
 			if (mTaxiWaiting.size() >= mMaxWaitingCount) {
 				cab.goToBreak();
 				mTaxiBreak.add(cab);
@@ -368,7 +388,7 @@ public class Station extends Thread implements IStationEventListener {
 				cab.goToWaiting();
 				mTaxiWaiting.add(cab);
 			}
-			mStateListener.onCabUpdate(cab);
+			mStateListener.onCabAdd(cab);
 		}
 	}
 	/**
