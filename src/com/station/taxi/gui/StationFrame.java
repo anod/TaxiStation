@@ -1,10 +1,9 @@
 package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,15 +24,11 @@ import com.station.taxi.Station.IStateChangeListener;
  *
  */
 public class StationFrame extends JFrame implements IStateChangeListener {
-    /**
-     * Lock used when maintaining queue of requested updates.
-     */
-	private static Object sLock = new Object();
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private CabsPanel mCabsPanel;
+	private WaitingPanel mWaitingPanel;
 	private PassengersPanel mPassegerPanel;
 	private DrivingPanel mDrivingPanel;
 	private Station mStation;
@@ -64,20 +59,25 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private void setupViews() {
 		JPanel mainPanel = new JPanel();
 		getContentPane().add(mainPanel);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
-		mCabsPanel = new CabsPanel();
-		mCabsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		mCabsPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("cabs_panel_title")));
-		mainPanel.add(mCabsPanel);
+		mWaitingPanel = new WaitingPanel();
+		GridLayout gridLayout = (GridLayout) mWaitingPanel.getLayout();
+		gridLayout.setColumns(5);
+		mWaitingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("cabs_panel_title")));
+		mainPanel.add(mWaitingPanel);
 		mPassegerPanel = new PassengersPanel();
+		GridLayout gridLayout_2 = (GridLayout) mPassegerPanel.getLayout();
+		gridLayout_2.setColumns(5);
 		mPassegerPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("passengers_panel_title")));
 		mainPanel.add(mPassegerPanel);
 		mDrivingPanel = new DrivingPanel();
+		GridLayout gridLayout_1 = (GridLayout) mDrivingPanel.getLayout();
+		gridLayout_1.setColumns(5);
 		mDrivingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("driving_panel_title")));
 		mainPanel.add(mDrivingPanel);
 		
-		setJMenuBar(new StationMenuBar(this));		
+		//setJMenuBar(new StationMenuBar(this));		
 	}
 	
 	private static Dimension getFrameDimension() {
@@ -111,9 +111,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onCabAdd(Cab cab) {
-		synchronized (sLock) {
-			placeCabInPanel(cab);
-		}		
+		placeCabInPanel(cab);
 	}
 
 	@Override
@@ -123,14 +121,14 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	
 
 	private void placeCabInPanel(Cab cab) {
-		// TODO: remove only from one container
-		mCabsPanel.removeCab(cab);
+		mWaitingPanel.removeCab(cab);
 		mDrivingPanel.removeCab(cab);
 		if (cab.isDriving()) {
 			mDrivingPanel.addCab(cab);
 		} else {
-			mCabsPanel.addCab(cab);
+			mWaitingPanel.addCab(cab);
 		}
+		sleep(300);
 	}
 	private void addPassangerToLine(Passenger p) {
 		mPassegerPanel.addPassanger(p);
@@ -139,5 +137,14 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private void removePassangerFromLine(Passenger p) {
 		mPassegerPanel.removePassanger(p);
 		
+	}
+	
+	private void sleep(int millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

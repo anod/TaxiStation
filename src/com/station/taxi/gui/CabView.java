@@ -2,7 +2,6 @@ package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,14 +30,9 @@ public class CabView extends JPanel {
 	
 	private Cab mCab;
 	private JTable mPassangertable;
-
 	private JLabel mStatusLabel;
-
 	private JButton mBtnArrive;
-
-	private Image mBgImage;
-	private JLabel lblNewLabel;
-
+	private JLabel mIcon;
 	private Timer mAnimationTimer;
 
 	public CabView(Cab cab) {
@@ -60,7 +54,12 @@ public class CabView extends JPanel {
 	}
 	
 	public void animate(final AnimationCallback callback) {
-		
+		if (mAnimationTimer!=null && mAnimationTimer.isRepeats()) {
+			for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+			    System.out.println(ste + "\n");
+			}
+			return;
+		}
 		mAnimationTimer = new Timer(0, new ActionListener() {
 			
 			@Override
@@ -121,11 +120,11 @@ public class CabView extends JPanel {
 		mStatusLabel.setVerticalAlignment(SwingConstants.TOP);
 		add(mStatusLabel, BorderLayout.NORTH);
 		
-		lblNewLabel = new JLabel("");
-		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
-		add(lblNewLabel, BorderLayout.WEST);
+		mIcon = new JLabel("");
+		mIcon.setVerticalAlignment(SwingConstants.TOP);
+		add(mIcon, BorderLayout.WEST);
 		
-		lblNewLabel.setIcon(ImageUtils.createImageIcon("ic_cab"));
+		mIcon.setIcon(ImageUtils.createImageIcon("ic_cab"));
 	}
 
 
@@ -169,20 +168,14 @@ public class CabView extends JPanel {
 	private void setStatus(Cab cab) {
 		
 		if (cab.isDriving()) {
-			LoggerWrapper.log("[CabView]["+cab.getNumber()+"] Status update: Driving");
-			LoggerWrapper.log(cab.toString());
-			mStatusLabel.setText("Driving");
+			mStatusLabel.setText("Driving [ " + (cab.getDrivingTime()/1000) + " seconds ]");
 		} else if(cab.isOnBreak()) {
-			LoggerWrapper.log("[CabView]["+cab.getNumber()+"] Status update: Break");
-			LoggerWrapper.log(cab.toString());
-			mStatusLabel.setText("Break");
+			int sec = (cab.getBreakTime()/1000);
+			String secText = (sec == 1) ? "1 second" : sec + " seconds";
+			mStatusLabel.setText("Break [ " + secText + " ]");
 		} else if(cab.isWaiting()) {
-			LoggerWrapper.log("[CabView]["+cab.getNumber()+"] Status update: Waiting");
-			LoggerWrapper.log(cab.toString());
-			mStatusLabel.setText("Waiting");
+			mStatusLabel.setText("Waiting, " + cab.getWhileWaiting());
 		} else {
-			LoggerWrapper.log("[CabView]["+cab.getNumber()+"] Status update: Init");
-			LoggerWrapper.log(cab.toString());
 			mStatusLabel.setText("Init");
 		}
 		mStatusLabel.validate();

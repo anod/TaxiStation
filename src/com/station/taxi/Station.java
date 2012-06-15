@@ -128,7 +128,7 @@ public class Station extends Thread implements IStationEventListener {
 		mStateListener.onStationStart(this);	
 		while ( mThreadRunning ) {
 			try {
-				fillTaxi();
+				fillCab();
 	        	sleep(50); 
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
@@ -270,7 +270,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Fill cab with passengers
 	 * @throws InterruptedException 
 	 */
-	private void fillTaxi() throws InterruptedException {
+	private void fillCab() throws InterruptedException {
 		// Get first cab in queue, if there is no cabs in waiting queue
 		// waits until new cab will be added
 		synchronized (sLock) {
@@ -291,12 +291,12 @@ public class Station extends Thread implements IStationEventListener {
 	private void addPassengersToCab(Cab cab) {
 		Passenger firstPassenger = mPassengersList.remove(0);
 		try {
-			cab.addPassanger(firstPassenger);
+			cab.addPassenger(firstPassenger);
 			String dest = firstPassenger.getDestination();
 			for(int i=0; i<mPassengersList.size(); i++) {
 				Passenger p = mPassengersList.get(i);
 				if (p.getDestination().equals(dest)) {
-					cab.addPassanger(p);
+					cab.addPassenger(p);
 					mPassengersList.remove(i);
 				}
 				if (cab.isFull()) {
@@ -316,10 +316,9 @@ public class Station extends Thread implements IStationEventListener {
 	public void onBreakRequest(Cab cab) {
 		synchronized (sLock) {
 			if (cab.isDriving()) {
-				mTaxiDriving.remove(cab);
-			} else {
-				mTaxiWaiting.remove(cab);
+				throw new RuntimeException("Invalid cab state while request break");
 			}
+			mTaxiWaiting.remove(cab);
 			mTaxiBreak.add(cab);
 			cab.goToBreak();
 			mStateListener.onCabUpdate(cab);
@@ -388,4 +387,5 @@ public class Station extends Thread implements IStationEventListener {
 	public void registerStateListener(IStateChangeListener listener) {
 		mStateListener = listener;
 	}
+
 }

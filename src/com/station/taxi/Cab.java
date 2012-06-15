@@ -30,10 +30,15 @@ public class Cab extends Thread {
 	private int mNumber;
 	private TaxiMeter mMeter;
 	private int mCabStatus = STATUS_INIT;
+	/**
+	 * Time in milliseconds
+	 */
 	private int mDrivingTime = 0;
 	private List<Receipt> mReciptsList;
 	private boolean mThreadRunning = false;
-
+	/**
+	 * Time in milliseconds
+	 */
 	private int mBreakTime;
 	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
 	
@@ -68,6 +73,13 @@ public class Cab extends Thread {
 		return mCabStatus == STATUS_DRIVING;
 	}
 	/**
+	 * Get driving time in seconds
+	 * @return
+	 */
+	public int getDrivingTime() {
+		return mDrivingTime;
+	}
+	/**
 	 * Return true if cab on break
 	 * @return
 	 */
@@ -95,6 +107,7 @@ public class Cab extends Thread {
 	public void addCabEventListener(CabEventListener listener) {
 		mEventListeners.add(listener);
 	}
+	
 	public double getTotalEarning(){
 		double total = 0;
 		for (Receipt r : mReciptsList) { //a map function like in most scripting and functional lanugage would be great here
@@ -111,11 +124,11 @@ public class Cab extends Thread {
 		return total;
 	}
 	/**
-	 * Add passanger to Cab
+	 * Add passenger to Cab
 	 * @param passenger
 	 * @throws Exception
 	 */
-	public void addPassanger(Passenger passenger) throws Exception {
+	public void addPassenger(Passenger passenger) throws Exception {
 		if (mPassangers.size() > 0) {
 			Passenger first = mPassangers.get(0);
 			if (!first.getDestination().equals(passenger.getDestination())) {
@@ -173,7 +186,7 @@ public class Cab extends Thread {
 					break;
 					case STATUS_BREAK:
 						onBreak();
-					break;								
+					break;
 				}
 			
 				sleep(50); 
@@ -183,11 +196,16 @@ public class Cab extends Thread {
 		}
 	}
 
-	private synchronized void waiting() {
+	/**
+	 * Waiting in station for passengers
+	 * @throws InterruptedException
+	 */
+	private synchronized void waiting() throws InterruptedException {
+		sleep(ONE_SECOND);
 		Random rand = new Random();
 		int value = rand.nextInt(100);
-		if (value < 5) {
-			requestBreak();
+		if (value < 10) {
+			mStationListener.onBreakRequest(this);
 		}
 	}
 	/**
@@ -195,10 +213,12 @@ public class Cab extends Thread {
 	 * @throws InterruptedException 
 	 */
 	private synchronized void onBreak() throws InterruptedException {
-		notify(CabEventListener.GOTO_BREAK);
-		sleep(ONE_SECOND * mBreakTime);
-		notify(CabEventListener.FINISH_BREAK);
-		mStationListener.onWaitingRequest(this);
+		sleep(ONE_SECOND);
+		mBreakTime -= ONE_SECOND;
+		notify(CabEventListener.INBREAK);
+		if (mBreakTime <=0) {
+			mStationListener.onWaitingRequest(this);
+		}
 	}
 	/**
 	 * Drive to the destination
@@ -207,11 +227,12 @@ public class Cab extends Thread {
 	private synchronized void driving() throws InterruptedException {
 		sleep(ONE_SECOND);
 		mDrivingTime += ONE_SECOND;
+		notify(CabEventListener.DRIVING);
 	}
 	/**
 	 * Tells to cab that it arrived to destination
 	 */
-	public void arrive() {
+	public synchronized void arrive() {
 		if (mCabStatus != STATUS_DRIVING) {
 			throw new RuntimeException("Cab is not driving");
 		}
@@ -220,6 +241,7 @@ public class Cab extends Thread {
 		mReciptsList.add(mMeter.stop(size));
 		notifyArrival();
 		mPassangers.clear();
+		mStationListener.onWaitingRequest(this);		
 	}
 	/**
 	 * Start Driving
@@ -246,8 +268,9 @@ public class Cab extends Thread {
 	 */
 	public void goToBreak() {
 		Random rand = new Random();	
-		mBreakTime  = rand.nextInt(10)+5;		
-		mCabStatus = STATUS_BREAK;	
+		mBreakTime  = rand.nextInt(10)+5 * 1000;		
+		mCabStatus = STATUS_BREAK;
+		notify(CabEventListener.GOTO_BREAK);		
 	}
 
 	/**
@@ -258,16 +281,8 @@ public class Cab extends Thread {
 		for(Passenger p: mPassangers) {
 			p.onArrival(this, mMeter.getCurrentValue() / mPassangers.size());
 		}
-		mStationListener.onWaitingRequest(this);
 	}
 	
-	/**
-	 * Request break from station
-	 */
-	private void requestBreak() {
-		mStationListener.onBreakRequest(this);
-	}
-
 	/**
 	 * Notify event listeners
 	 * @param type

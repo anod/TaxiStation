@@ -33,9 +33,6 @@ public class CabLogger extends CabEventListener {
 		case GOTO_BREAK:
 			logCab(cab,"Goto break for "+cab.getBreakTime()+" seconds to "+cab.getWhileWaiting());
 		break;
-		case FINISH_BREAK:
-			logCab(cab,"Finished break");
-		break;
 		}
 		
 	}
