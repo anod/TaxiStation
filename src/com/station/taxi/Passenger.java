@@ -27,7 +27,7 @@ public class Passenger extends Thread {
 	private String mDestination;
 	private boolean mThreadRunning = false;
 	private int mState = STATE_INIT;
-	private int mTimeLeft = 0;
+	private int mTimeLeft = 25;
 	
 	private List<PassengerEventListener> mEventListeners = new ArrayList<PassengerEventListener>();
 	private double mPaidPrice = .0;
@@ -127,7 +127,8 @@ public class Passenger extends Thread {
 	 */
 	public void enterWaitLine() {
 		Random rand = new Random();	
-		mExitTime  = rand.nextInt(25);
+		mExitTime = rand.nextInt(25)+5;
+		//mExitTime = 300; 
 		mTimeLeft = mExitTime;
 		mState = STATE_WAITING;
 	}
@@ -137,6 +138,7 @@ public class Passenger extends Thread {
 	public void enterCab() {
 		mState = STATE_TRANSIT;
 		mExitTime -= mTimeLeft; 
+		notify(PassengerEventListener.TRANSIT);
 	}
 	/**
 	 * Passaenger arrived to destination
@@ -170,6 +172,17 @@ public class Passenger extends Thread {
 
 	public double getPaidPrice() {
 		return mPaidPrice;
+	}
+
+	public boolean leftLine() {
+		if(mState == STATE_EXIT || mState == STATE_TRANSIT)
+		{
+		return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 }

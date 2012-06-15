@@ -9,6 +9,7 @@ abstract public class PassengerEventListener {
 	public static final int INTERRUPT = 1;
 	public static final int START = 2;
 	public static final int EXIT_QUEUE = 3;
+	public static final int TRANSIT = 4;
 
 	abstract public void update(int type, Passenger passenger);
 

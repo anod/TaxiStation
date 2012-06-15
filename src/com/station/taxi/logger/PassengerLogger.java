@@ -26,6 +26,9 @@ public class PassengerLogger extends PassengerEventListener {
 		case EXIT_QUEUE:
 			logPassenger(passenger, "Waited too long leaving line angrily");
 			break;
+		case TRANSIT:
+			logPassenger(passenger, "Took cab starting transit");
+			break;
 		default:
 			break;
 		}

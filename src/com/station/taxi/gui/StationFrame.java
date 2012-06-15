@@ -29,7 +29,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private WaitingPanel mWaitingPanel;
-	private PassengersPanel mPassegerPanel;
+	private PassengersPanel mPassangerPanel;
 	private DrivingPanel mDrivingPanel;
 	private Station mStation;
 	
@@ -66,11 +66,11 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		gridLayout.setColumns(5);
 		mWaitingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("cabs_panel_title")));
 		mainPanel.add(mWaitingPanel);
-		mPassegerPanel = new PassengersPanel();
-		GridLayout gridLayout_2 = (GridLayout) mPassegerPanel.getLayout();
+		mPassangerPanel = new PassengersPanel();
+		GridLayout gridLayout_2 = (GridLayout) mPassangerPanel.getLayout();
 		gridLayout_2.setColumns(5);
-		mPassegerPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("passengers_panel_title")));
-		mainPanel.add(mPassegerPanel);
+		mPassangerPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("passengers_panel_title")));
+		mainPanel.add(mPassangerPanel);
 		mDrivingPanel = new DrivingPanel();
 		GridLayout gridLayout_1 = (GridLayout) mDrivingPanel.getLayout();
 		gridLayout_1.setColumns(5);
@@ -95,8 +95,9 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 			List<Passenger> pmany = mStation.getPassengers();
 			for (Passenger p: pmany) {
 				addPassangerToLine(p);
-			}
+			}	
 	}
+	
 
 	@Override
 	public void onCabUpdate(Cab cab, int newState) {
@@ -105,8 +106,13 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onPassengerUpdate(Passenger p) {
-		// TODO Auto-generated method stub
-		
+		addPassangerToLine(p);
+		// the only reason for an update on a passanger is him leaving the queue
+		// will be changed to allow for colors for angry passangers
+		if(p.leftLine())
+		{
+			removePassangerFromLine(p);
+		}
 	}
 
 	@Override
@@ -134,11 +140,12 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		sleep(300);
 	}
 	private void addPassangerToLine(Passenger p) {
-		mPassegerPanel.addPassanger(p);
+		mPassangerPanel.removePassanger(p);
+		mPassangerPanel.addPassanger(p);
 		
 	}
 	private void removePassangerFromLine(Passenger p) {
-		mPassegerPanel.removePassanger(p);
+		mPassangerPanel.removePassanger(p);
 		
 	}
 	

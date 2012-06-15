@@ -297,11 +297,13 @@ public class Station extends Thread implements IStationEventListener {
 		Passenger firstPassenger = mPassengersList.remove(0);
 		try {
 			cab.addPassenger(firstPassenger);
+			mStateListener.onPassengerUpdate(firstPassenger);
 			String dest = firstPassenger.getDestination();
 			for(int i=0; i<mPassengersList.size(); i++) {
 				Passenger p = mPassengersList.get(i);
 				if (p.getDestination().equals(dest)) {
 					cab.addPassenger(p);
+					mStateListener.onPassengerUpdate(p);
 					mPassengersList.remove(i);
 				}
 				if (cab.isFull()) {
@@ -372,6 +374,7 @@ public class Station extends Thread implements IStationEventListener {
 				mPassengersList.remove(p);
 			}
 			mPassengerExit.add(p);
+			mStateListener.onPassengerUpdate(p);
 		}
 	}
 	
@@ -397,6 +400,7 @@ public class Station extends Thread implements IStationEventListener {
 	@Override
 	public void onPassengerReady(Passenger p) {
 		mPassengersList.add(p);
+		mStateListener.onPassengerAdd(p);
 		p.enterWaitLine();
 	}
 
