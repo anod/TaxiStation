@@ -20,7 +20,7 @@ import com.station.taxi.TaxiMeter;
 /**
  * Parse configuration xml and load station
  * @author alex
- *
+ * @version 0.2
  */
 public class StationConfigLoader {
 	private String mFileName;

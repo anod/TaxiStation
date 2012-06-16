@@ -11,7 +11,7 @@ import com.station.taxi.logger.PassengerLogger;
  * Taxi cab station object
  * @author alex
  * @author Eran Zimbler
- * @version 0.1
+ * @version 0.2
  */
 public class Station extends Thread implements IStationEventListener {
 	/**
@@ -159,7 +159,7 @@ public class Station extends Thread implements IStationEventListener {
 		while ( mThreadRunning ) {
 			try {
 				fillCab();
-	        	sleep(1000); 
+	        	sleep(300); 
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}

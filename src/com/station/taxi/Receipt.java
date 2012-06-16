@@ -5,7 +5,7 @@ import java.util.Date;
  * Receipt is used to keep the receipts in the cab object.
  * @author alex
  * @author Eran Zimbler
- * @version 0.1
+ * @version 0.2
  *
  */
 public class Receipt {

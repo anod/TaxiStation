@@ -25,7 +25,7 @@ import com.station.taxi.Station;
 /**
  * Add new cab dialog
  * @author alex
- *
+ * @version 0.2
  */
 public class NewCabDialog extends JDialog {
 	/**

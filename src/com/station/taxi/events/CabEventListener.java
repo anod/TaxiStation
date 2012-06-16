@@ -2,7 +2,7 @@ package com.station.taxi.events;
 
 import com.station.taxi.Cab;
 /**
- * Event listner interface
+ * Cab Event listener interface
  * @author alex
  * @author Eran Zimbler
  * @version 0.2
