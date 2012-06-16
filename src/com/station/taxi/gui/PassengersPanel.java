@@ -33,6 +33,7 @@ public class PassengersPanel extends JPanel {
 			remove(view);
 			mPassViews.remove(p.getPassangerName());
 			repaint(); //Sometimes view stays on the screen
+
 			return true;
 		}
 		return false;
