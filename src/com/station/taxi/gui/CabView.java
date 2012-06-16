@@ -21,6 +21,8 @@ import javax.swing.table.DefaultTableModel;
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 /**
  * Represents cab on the panel
  * @author alex
@@ -43,6 +45,8 @@ public class CabView extends JPanel {
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
+		
+		setPreferredSize(new Dimension(240, 140));
 		
 		mCab = cab;
 		setupViews();
@@ -68,27 +72,30 @@ public class CabView extends JPanel {
 	 * Initialize inner components 
 	 */
 	private void setupViews() {
+		
+		JPanel mInfoPanel = new JPanel();
+		FlowLayout fl_mInfoPanel = (FlowLayout) mInfoPanel.getLayout();
+		fl_mInfoPanel.setHgap(0);
+		mInfoPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+		add(mInfoPanel, BorderLayout.CENTER);
 		mPassangertable = new JTable();
+		mInfoPanel.add(mPassangertable);
 		mPassangertable.setBackground(SystemColor.control);
-		mPassangertable.setBorder(new EmptyBorder(0, 10, 0, 10));
+		mPassangertable.setBorder(new EmptyBorder(0,0,0,0));
 		mPassangertable.setShowVerticalLines(false);
 		mPassangertable.setShowHorizontalLines(false);
 		mPassangertable.setShowGrid(false);
 		mPassangertable.setRowSelectionAllowed(false);
 		mPassangertable.setEnabled(false);
-		add(mPassangertable, BorderLayout.CENTER);
-		
-		JPanel panel = new JPanel();
-		add(panel, BorderLayout.SOUTH);
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		mPassangertable.setPreferredSize(new Dimension(140, 40));
 		
 		mBtnArrive = new JButton(TextsBundle.getString("btn_arrive"));
+		mInfoPanel.add(mBtnArrive);
 		mBtnArrive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mCab.arrive();
 			}
 		});
-		panel.add(mBtnArrive);
 		
 		mStatusLabel = new JLabel("StatusLablel");
 		mStatusLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -111,7 +118,7 @@ public class CabView extends JPanel {
 		
 		mWaitingIcon = new JLabel("");
 		mWaitingIcon.setVisible(false);
-		mWaitingIcon.setSize(new Dimension(32, 32));
+		mWaitingIcon.setSize(new Dimension(76, 76));
 		mWaitingIcon.setBounds(0, 0, 72, 76);
 		mWaitingIcon.setVerticalAlignment(SwingConstants.BOTTOM);
 		mWaitingIcon.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -126,17 +133,9 @@ public class CabView extends JPanel {
 	 */
 	private void setArriveBtn(Cab cab) {
 		if (cab.isDriving()) {
-			//mBtnArrive.setVisible(true);
-			mBtnArrive.setOpaque(true);
-			mBtnArrive.setContentAreaFilled(true);
-			mBtnArrive.setBorderPainted(true);
-			mBtnArrive.setEnabled(true);			
+			mBtnArrive.setVisible(true);
 		} else {
-			//mBtnArrive.setVisible(false);
-			mBtnArrive.setOpaque(false);
-			mBtnArrive.setContentAreaFilled(false);
-			mBtnArrive.setBorderPainted(false);
-			mBtnArrive.setEnabled(false);
+			mBtnArrive.setVisible(false);
 		}
 	}
 
@@ -153,7 +152,8 @@ public class CabView extends JPanel {
 		data[1][0] = (size>2) ? passengers.get(2).getPassangerName() : "";
 		data[1][1] = (size>3) ? passengers.get(3).getPassangerName() : "";		
 		mPassangertable.setModel(new DefaultTableModel(
-			data, new String[] {"", ""}
+			data,
+			new String[] { "", "" }
 		));
 		mPassangertable.validate();
 	}
@@ -193,6 +193,4 @@ public class CabView extends JPanel {
 		}
 		
 	}
-
-	
 }
