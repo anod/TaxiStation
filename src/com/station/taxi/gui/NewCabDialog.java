@@ -1,18 +1,24 @@
 package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.GridLayout;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
 import javax.swing.border.EmptyBorder;
 
 public class NewCabDialog extends JDialog {
@@ -59,6 +65,7 @@ public class NewCabDialog extends JDialog {
 		JLabel lblNewLabel_1 = new JLabel(TextsBundle.getString("dialog_addcab_num")); //$NON-NLS-1$
 		panel.add(lblNewLabel_1);
 		mNumber = new JTextField(32);
+		mNumber.setInputVerifier(new CabNumberInputVerifier(this, mNumber));
 		panel.add(mNumber);
 		
 		JLabel lblNewLabel = new JLabel(TextsBundle.getString("dialog_addcab_waiting")); //$NON-NLS-1$
@@ -75,7 +82,10 @@ public class NewCabDialog extends JDialog {
 		getContentPane().add(btnPanel, BorderLayout.SOUTH);
 	}
 	
-	private void okButton() {   
+	private void okButton() {
+		if (!mNumber.getInputVerifier().verify(mNumber)){
+			return;
+		}
 		setVisible(false);  
 	}
 
@@ -83,4 +93,79 @@ public class NewCabDialog extends JDialog {
 		setVisible(false);  
 	}
 
+	private class CabNumberInputVerifier extends InputVerifier implements KeyListener {
+		private static final int NUM_MIN_LEN = 3;
+		private static final int NUM_MAX_LEN = 5;
+		private JDialog mPopup;
+		private Color mColor;
+		private JLabel mImage;
+		private JLabel mMessageLabel;
+		
+		public CabNumberInputVerifier(JDialog parent, JComponent component) {
+			mPopup = new JDialog(parent);
+			mColor = new Color(243, 255, 159);
+			mImage = new JLabel(ImageUtils.createImageIcon("error"));
+			mMessageLabel = new JLabel("Error msessage");
+			component.addKeyListener(this);
+	        initComponents();
+		}
+
+		private void initComponents() {
+			mPopup.getContentPane().setLayout(new FlowLayout());
+			mPopup.setUndecorated(true);
+			mPopup.getContentPane().setBackground(mColor);
+			mPopup.add(mImage);
+			mPopup.add(mMessageLabel);
+			mPopup.setFocusableWindowState(false);
+	    }
+		
+		private boolean validateCabNumber(JTextField input) {
+			String numberStr = input.getText();
+			
+			if (numberStr.length() < NUM_MIN_LEN || numberStr.length() > NUM_MAX_LEN) {
+				String errText = String.format(TextsBundle.getString("dialog_addcab_num_err_length"), NUM_MIN_LEN, NUM_MAX_LEN);
+				mMessageLabel.setText(errText);
+				return false;
+			}
+			
+			for (char c: numberStr.toCharArray()){
+				if(!Character.isDigit(c)){
+					mMessageLabel.setText(TextsBundle.getString("dialog_addcab_num_err_chars"));
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		@Override
+		public boolean verify(JComponent component) {
+			if (!validateCabNumber((JTextField)component)) {
+				component.setBackground(Color.PINK);
+				mPopup.setSize(0, 0);
+				mPopup.setLocationRelativeTo(component);
+				Point point = mPopup.getLocation();
+				Dimension cDim = component.getSize();
+				mPopup.setLocation(point.x-(int)cDim.getWidth()/2, point.y+(int)cDim.getHeight()/2);
+				mPopup.pack();
+				mPopup.setVisible(true);
+				return false;
+			}
+		
+			component.setBackground(Color.WHITE);
+			return true;
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) { }
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			mPopup.setVisible(false);
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {}
+		
+	}
 }

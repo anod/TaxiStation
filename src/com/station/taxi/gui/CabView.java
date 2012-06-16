@@ -169,7 +169,6 @@ public class CabView extends JPanel {
 	
 	
 	class ViewCabEventListener extends CabEventListener {
-
 		@Override
 		public void update(int type, Cab cab) {
 			refresh();
