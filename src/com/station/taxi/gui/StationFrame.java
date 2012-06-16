@@ -18,7 +18,6 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
-import com.station.taxi.logger.LoggerWrapper;
 /**
  * TaxiStationMain station frame
  * @author alex
@@ -58,6 +57,8 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 * Initialize frame components
 	 */
 	private void setupViews() {
+		 
+		getContentPane().add( new StationToolBar() , BorderLayout.NORTH);
 		JPanel mainPanel = new JPanel();
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));

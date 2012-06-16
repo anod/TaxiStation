@@ -159,7 +159,7 @@ public class Station extends Thread implements IStationEventListener {
 		while ( mThreadRunning ) {
 			try {
 				fillCab();
-	        	sleep(300); 
+	        	sleep(1000); 
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}
