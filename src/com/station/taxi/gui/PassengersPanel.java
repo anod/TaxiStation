@@ -25,7 +25,8 @@ public class PassengersPanel extends JPanel {
 		PassengerView curr = new PassengerView(p);
 		mPassViews.put(p.getPassangerName(), curr);
 		add(curr);
-		repaint(); //Sometimes view stays on the screen
+		//Sometimes view stays on the screen
+		repaint(); 
 	}
 	public boolean removePassanger(Passenger p) {
 		if (mPassViews.containsKey(p.getPassangerName())) {
@@ -38,5 +39,15 @@ public class PassengersPanel extends JPanel {
 		}
 		return false;
 		
+	}
+	public void updatePassenger(Passenger p)
+	{
+		String passengerName = p.getPassangerName();
+		if(mPassViews.containsKey(passengerName))
+		{
+			PassengerView curr = mPassViews.get(passengerName);
+			curr.updateSelf();
+		}
+		repaint();
 	}
 }

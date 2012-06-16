@@ -43,7 +43,7 @@ public class NewPassengerDialog extends JDialog {
 
 		});
 		btnPanel.add(noBtn);
-		content.setLayout(new GridLayout(0, 2, 0, 0));
+		content.setLayout(new GridLayout(0, 2, 2, 1));
 		
 		content.add(lblName);
 		content.add(mNameField);
