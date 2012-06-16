@@ -14,7 +14,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -34,7 +33,6 @@ public class CabView extends JPanel {
 	private JLabel mStatusLabel;
 	private JButton mBtnArrive;
 	private JLabel mIcon;
-	private Timer mAnimationTimer;
 
 	private JLayeredPane mIconLayerdPane;
 
@@ -70,7 +68,7 @@ public class CabView extends JPanel {
 		add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		mBtnArrive = new JButton("Arrive");
+		mBtnArrive = new JButton(TextsBundle.getString("btn_arrive"));
 		mBtnArrive.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mCab.arrive();
@@ -78,7 +76,7 @@ public class CabView extends JPanel {
 		});
 		panel.add(mBtnArrive);
 		
-		mStatusLabel = new JLabel("Waiting");
+		mStatusLabel = new JLabel("StatusLablel");
 		mStatusLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
 		mStatusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		mStatusLabel.setVerticalAlignment(SwingConstants.TOP);
@@ -137,17 +135,18 @@ public class CabView extends JPanel {
 	 * @param cab
 	 */
 	private void setStatus(Cab cab) {
-		
+
+		String text;
 		if (cab.isDriving()) {
-			mStatusLabel.setText("Driving to "+cab.getDestination()+" [ " + (cab.getDrivingTime()/1000) + " sec ]");
+			text = String.format(TextsBundle.getString("cab_status_driving"), cab.getDestination(), (cab.getDrivingTime()/1000));
 		} else if(cab.isOnBreak()) {
-			int sec = (cab.getBreakTime()/1000);
-			mStatusLabel.setText("Break [ " + sec + " sec ]");
+			text = String.format(TextsBundle.getString("cab_status_onbreak"), (cab.getBreakTime()/1000));			
 		} else if(cab.isWaiting()) {
-			mStatusLabel.setText("Waiting, " + cab.getWhileWaiting());
+			text = String.format(TextsBundle.getString("cab_status_waiting"), cab.getWhileWaiting());
 		} else {
-			mStatusLabel.setText("Init");
+			text = TextsBundle.getString("cab_status_init");
 		}
+		mStatusLabel.setText(text);
 		mStatusLabel.validate();
 	}
 	
