@@ -18,6 +18,7 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
+import com.station.taxi.logger.LoggerWrapper;
 /**
  * TaxiStationMain station frame
  * @author alex
@@ -152,7 +153,6 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 			mDrivingPanel.removeCab(cab);
 			mWaitingPanel.addOrUpdateCab(cab);
 		}
-		sleep(300);
 	}
 	
 	/**
@@ -162,7 +162,6 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private void addPassangerToLine(Passenger p) {
 		mPassangerPanel.removePassanger(p);
 		mPassangerPanel.addPassanger(p);
-		sleep(300);
 	}
 	/**
 	 * 
@@ -172,17 +171,5 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mPassangerPanel.removePassanger(p);
 		
 	}
-	
-	/**
-	 * Wrapper for sleep
-	 * @param millis
-	 */
-	private void sleep(int millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 }

@@ -25,13 +25,14 @@ public class PassengersPanel extends JPanel {
 		PassengerView curr = new PassengerView(p);
 		mPassViews.put(p.getPassangerName(), curr);
 		add(curr);
-		validate();
+		repaint(); //Sometimes view stays on the screen
 	}
 	public boolean removePassanger(Passenger p) {
 		if (mPassViews.containsKey(p.getPassangerName())) {
 			final PassengerView view = mPassViews.get(p.getPassangerName());
 			remove(view);
 			mPassViews.remove(p.getPassangerName());
+			repaint(); //Sometimes view stays on the screen
 			return true;
 		}
 		return false;

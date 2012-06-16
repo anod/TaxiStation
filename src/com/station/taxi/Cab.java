@@ -8,7 +8,6 @@ import java.util.Random;
 
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.IStationEventListener;
-import com.station.taxi.logger.LoggerWrapper;
 
 /**
  * Tax cab object
@@ -50,6 +49,7 @@ public class Cab extends Thread {
 	private int mDrivingTime = 0;
 	private List<Receipt> mReciptsList;
 	private boolean mThreadRunning = false;
+	private String mDestination;	
 	/**
 	 * Time in milliseconds
 	 */
@@ -163,7 +163,7 @@ public class Cab extends Thread {
 			if (mCabStatus != STATUS_DRIVING) {
 				throw new RuntimeException("Cab is not driving anywhere");
 			}
-			return mPassangers.get(0).getDestination();
+			return mDestination;
 		}
 	}
 	public List<Passenger> getPassegners() {
@@ -206,7 +206,7 @@ public class Cab extends Thread {
 		mThreadRunning = true;
 		
 		while ( mThreadRunning ) {
-	        try {			
+			try {
 				switch(mCabStatus) {
 					case STATUS_DRIVING:
 						driving();
@@ -219,7 +219,7 @@ public class Cab extends Thread {
 					break;
 				}
 			
-				sleep(50); 
+				sleep(ONE_SECOND);
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}
@@ -231,11 +231,9 @@ public class Cab extends Thread {
 	 * @throws InterruptedException
 	 */
 	private void waiting() throws InterruptedException {
-		sleep(ONE_SECOND);
-		LoggerWrapper.log("State :" + this);
 		Random rand = new Random();
 		int value = rand.nextInt(100);
-		if (value < 10) {
+		if (value < 10) {		
 			mStationListener.onBreakRequest(this);
 		}
 	}
@@ -244,7 +242,6 @@ public class Cab extends Thread {
 	 * @throws InterruptedException 
 	 */
 	private void onBreak() throws InterruptedException {
-		sleep(ONE_SECOND);
 		mBreakTime -= ONE_SECOND;
 		notify(CabEventListener.INBREAK);
 		if (mBreakTime <=0) {
@@ -256,7 +253,6 @@ public class Cab extends Thread {
 	 * @throws InterruptedException 
 	 */
 	private void driving() throws InterruptedException {
-		sleep(ONE_SECOND);
 		mDrivingTime += ONE_SECOND;
 		notify(CabEventListener.DRIVING);
 	}
@@ -285,6 +281,7 @@ public class Cab extends Thread {
 			if (mPassangers.size() == 0) {
 				throw new RuntimeException("Empty cab");
 			}
+			mDestination = mPassangers.get(0).getDestination();
 			mMeter.reset();
 			mMeter.start();		
 			mCabStatus = STATUS_DRIVING;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.station.taxi.events.IStationEventListener;
 import com.station.taxi.logger.CabLogger;
+import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.logger.PassengerLogger;
 /**
  * Taxi cab station object
@@ -158,7 +159,7 @@ public class Station extends Thread implements IStationEventListener {
 		while ( mThreadRunning ) {
 			try {
 				fillCab();
-	        	sleep(50); 
+	        	sleep(300); 
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}
@@ -313,7 +314,6 @@ public class Station extends Thread implements IStationEventListener {
 			cab.drive();
 			mStateListener.onCabUpdate(cab, oldState);
 		}
-	
 	}
 	/**
 	 * @param cab
@@ -352,10 +352,10 @@ public class Station extends Thread implements IStationEventListener {
 			}
 			int oldState = detectCabState(cab);
 			mTaxiWaiting.remove(cab);
-			mTaxiBreak.add(cab);
 			cab.goToBreak();
+			mTaxiBreak.add(cab);
 			mStateListener.onCabUpdate(cab, oldState);
-		}
+		}		
 	}
 
 	/**
@@ -365,12 +365,13 @@ public class Station extends Thread implements IStationEventListener {
 	@Override
 	public void onWaitingRequest(Cab cab) {
 		synchronized (sLock) {
-			int oldState = detectCabState(cab); 
-			mTaxiDriving.remove(cab);
-			mTaxiWaiting.add(cab);
+			int oldState = detectCabState(cab);
+			mTaxiDriving.remove(cab);		
 			cab.goToWaiting();
+			mTaxiWaiting.add(cab);
 			mStateListener.onCabUpdate(cab, oldState);
 		}
+	
 	}
 	/**
 	 * 

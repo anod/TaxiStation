@@ -101,7 +101,7 @@ public class Passenger extends Thread {
 				{
 					inWaitQueue();
 				}	        	
-	        	sleep(50); 
+				sleep(ONE_SECOND);
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}			
@@ -114,7 +114,6 @@ public class Passenger extends Thread {
 	 */
 	private synchronized void inWaitQueue() throws InterruptedException {
 		if(mTimeLeft >=0) { // using >= since it is possible the passenger is picked up when he is about to leave
-			sleep(ONE_SECOND);
 			mTimeLeft--;
 			mStationListener.onPassengerUpdate(this);
 		}else {

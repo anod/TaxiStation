@@ -32,7 +32,7 @@ public abstract class CabsPanel extends JPanel {
 			CabView view = new CabView(cab);
 			mCabViews.put(cab.getNumber(), view);
 			add(view);
-			validate();
+			repaint(); //Sometimes view stays on the screen
 		} else {
 			mCabViews.get(num).refresh();
 		}
@@ -47,6 +47,7 @@ public abstract class CabsPanel extends JPanel {
 		if (mCabViews.containsKey(number)) {
 			remove(mCabViews.get(number));
 			mCabViews.remove(number);
+			repaint(); //Sometimes view stays on the screen
 			return true;
 		}
 		return false;
