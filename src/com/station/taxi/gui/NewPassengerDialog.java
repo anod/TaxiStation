@@ -9,6 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 
 import com.station.taxi.Passenger;
 /**
@@ -23,12 +24,30 @@ public class NewPassengerDialog extends JDialog {
 	private StationFrame mOwner;
 	public NewPassengerDialog(StationFrame owner) {
 		new JDialog(owner, TextsBundle.getString("dialog_title_addpassenger"));
-		JPanel content = new JPanel();
+		
 		mOwner = owner;
-		JLabel lblName = new JLabel("Passenger Name:");
-		JLabel lblDestination = new JLabel("Passenger Destination:");
+		setupViews();
+		pack();
+		setLocationRelativeTo(null);
+	}
+
+	private void okButton() {
+		setVisible(false);
+		Passenger p = new Passenger(mNameField.getText(), mDestField.getText());
+		mOwner.getStation().addPassenger(p);
+	}
+
+	private void noButton() {
+		setVisible(false);
 		
-		
+	}
+	private void setupViews()
+	{
+		JPanel content = new JPanel();
+		content.setBorder(new EmptyBorder(5, 5, 5, 5));
+		content.setLayout(new GridLayout(0, 2, 5, 5));
+		JLabel lblName = new JLabel(TextsBundle.getString("dialog_addPassenger_name"));
+		JLabel lblDestination = new JLabel(TextsBundle.getString("dialog_addPassenger_destination"));
 		JPanel btnPanel = new JPanel();
 		JButton okBtn = new JButton(TextsBundle.getString("dialog_add"));
 		JButton noBtn = new JButton(TextsBundle.getString("dialog_cancel"));
@@ -47,7 +66,7 @@ public class NewPassengerDialog extends JDialog {
 
 		});
 		btnPanel.add(noBtn);
-		content.setLayout(new GridLayout(0, 2, 2, 1));
+		
 		
 		content.add(lblName);
 		content.add(mNameField);
@@ -55,17 +74,7 @@ public class NewPassengerDialog extends JDialog {
 		content.add(mDestField);
 		getContentPane().add(content,BorderLayout.CENTER);
 		getContentPane().add(btnPanel, BorderLayout.SOUTH);
-		pack();
-	}
 
-	private void okButton() {
-		setVisible(false);
-		Passenger p = new Passenger(mNameField.getText(), mDestField.getText());
-		mOwner.getStation().addPassenger(p);
 	}
-
-	private void noButton() {
-		setVisible(false);
-		
-	}
+	
 }

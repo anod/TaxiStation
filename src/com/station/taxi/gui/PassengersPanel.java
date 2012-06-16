@@ -14,9 +14,6 @@ import com.station.taxi.Passenger;
  */
 public class PassengersPanel extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private HashMap<String, PassengerView> mPassViews = new HashMap<String, PassengerView>();
 	public PassengersPanel() {
@@ -49,6 +46,5 @@ public class PassengersPanel extends JPanel {
 			PassengerView curr = mPassViews.get(passengerName);
 			curr.updateSelf();
 		}
-		repaint();
 	}
 }
