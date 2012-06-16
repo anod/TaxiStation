@@ -34,4 +34,5 @@ public interface IStationEventListener {
 	 * @param p
 	 */
 	public void onPassengerReady(Passenger p);
+	public void onPassengerUpdate(Passenger passenger);
 }

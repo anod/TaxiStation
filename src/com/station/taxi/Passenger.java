@@ -116,6 +116,7 @@ public class Passenger extends Thread {
 		if(mTimeLeft >=0) { // using >= since it is possible the passenger is picked up when he is about to leave
 			sleep(ONE_SECOND);
 			mTimeLeft--;
+			mStationListener.onPassengerUpdate(this);
 		}else {
 			notify(PassengerEventListener.EXIT_QUEUE);			
 			mState = STATE_EXIT;
