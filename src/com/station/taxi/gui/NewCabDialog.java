@@ -41,12 +41,12 @@ public class NewCabDialog extends JDialog {
 		pack();
 	}
 	
-	 private void okButton() {   
+	private void okButton() {   
 	      setVisible(false);  
 	   }  
-	  
-	   private void noButton() {  
+
+	private void noButton() {  
 	      setVisible(false);  
-	   }  	
+	}
 
 }

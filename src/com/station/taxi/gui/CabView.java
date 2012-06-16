@@ -36,6 +36,8 @@ public class CabView extends JPanel {
 
 	private JLayeredPane mIconLayerdPane;
 
+	private JLabel mWaitingIcon;
+
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
@@ -90,10 +92,20 @@ public class CabView extends JPanel {
 		mIcon = new JLabel("");
 		mIcon.setSize(new Dimension(72, 72));
 		mIcon.setBounds(0, 0, 72, 76);
-		mIconLayerdPane.add(mIcon);
 		mIcon.setVerticalAlignment(SwingConstants.TOP);
-		
 		mIcon.setIcon(ImageUtils.createImageIcon("ic_cab"));
+		mIconLayerdPane.add(mIcon);
+		mIconLayerdPane.setLayer(mIcon, 0);
+		
+		mWaitingIcon = new JLabel("");
+		mWaitingIcon.setVisible(false);
+		mWaitingIcon.setSize(new Dimension(32, 32));
+		mWaitingIcon.setBounds(0, 0, 72, 76);
+		mWaitingIcon.setVerticalAlignment(SwingConstants.BOTTOM);
+		mWaitingIcon.setHorizontalAlignment(SwingConstants.RIGHT);
+		mWaitingIcon.setIcon(ImageUtils.createImageIcon("ic_waiting_drink"));
+		mIconLayerdPane.add(mWaitingIcon);
+		mIconLayerdPane.setLayer(mWaitingIcon, 1);
 	}
 
 
@@ -139,12 +151,17 @@ public class CabView extends JPanel {
 		String text;
 		if (cab.isDriving()) {
 			text = String.format(TextsBundle.getString("cab_status_driving"), cab.getDestination(), (cab.getDrivingTime()/1000));
+			mWaitingIcon.setVisible(false);
 		} else if(cab.isOnBreak()) {
-			text = String.format(TextsBundle.getString("cab_status_onbreak"), (cab.getBreakTime()/1000));			
+			text = String.format(TextsBundle.getString("cab_status_onbreak"), (cab.getBreakTime()/1000));
+			mWaitingIcon.setVisible(false);
 		} else if(cab.isWaiting()) {
 			text = String.format(TextsBundle.getString("cab_status_waiting"), cab.getWhileWaiting());
+			mWaitingIcon.setIcon(ImageUtils.createImageIcon("ic_waiting_"+cab.getWhileWaiting()));
+			mWaitingIcon.setVisible(true);
 		} else {
 			text = TextsBundle.getString("cab_status_init");
+			mWaitingIcon.setVisible(false);
 		}
 		mStatusLabel.setText(text);
 		mStatusLabel.validate();
