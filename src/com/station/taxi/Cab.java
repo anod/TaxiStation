@@ -125,7 +125,9 @@ public class Cab extends Thread {
 	 * @param listener
 	 */
 	public void addCabEventListener(CabEventListener listener) {
-		mEventListeners.add(listener);
+		synchronized (sLock) {
+			mEventListeners.add(listener);
+		}
 	}
 	
 	public double getTotalEarning(){
@@ -324,8 +326,10 @@ public class Cab extends Thread {
 	 * @param type
 	 */
 	private void notify(int type) {
-		for(CabEventListener listener: mEventListeners) {
-			listener.update(type, this);
+		synchronized (sLock) {		
+			for(CabEventListener listener: mEventListeners) {
+				listener.update(type, this);
+			}
 		}
 	}
 	/* (non-Javadoc)
