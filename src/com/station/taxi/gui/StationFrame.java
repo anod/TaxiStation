@@ -106,13 +106,14 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onPassengerUpdate(Passenger p) {
-		addPassangerToLine(p);
 		// the only reason for an update on a passanger is him leaving the queue
 		// will be changed to allow for colors for angry passangers
+		addPassangerToLine(p);
 		if(p.leftLine())
 		{
 			removePassangerFromLine(p);
 		}
+		
 	}
 
 	@Override

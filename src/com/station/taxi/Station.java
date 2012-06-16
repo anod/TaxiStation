@@ -412,4 +412,9 @@ public class Station extends Thread implements IStationEventListener {
 		mStateListener = listener;
 	}
 
+	@Override
+	public void onPassengerUpdate(Passenger passenger) {
+		mStateListener.onPassengerUpdate(passenger);
+	}
+
 }
