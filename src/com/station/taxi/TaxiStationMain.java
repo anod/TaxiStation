@@ -8,8 +8,12 @@ import javax.swing.SwingUtilities;
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
 import com.station.taxi.gui.StationFrame;
-
-
+/**
+ * Main entry point for the graphical taxiStation program
+ * @author alex
+ * @author Eran Zimbler
+ * @version 0.2
+ */
 public class TaxiStationMain {
 	
     public static void main(String[] args) {

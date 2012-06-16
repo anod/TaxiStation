@@ -1,7 +1,12 @@
 package com.station.taxi.events;
 
 import com.station.taxi.Passenger;
-
+/**
+ * Passenger Event listener interface
+ * @author alex
+ * @author Eran Zimbler
+ * @version 0.2
+ */
 abstract public class PassengerEventListener {
 
 

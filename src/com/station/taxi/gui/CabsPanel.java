@@ -9,7 +9,7 @@ import com.station.taxi.Cab;
 /**
  * Panel contain cabs in waiting state
  * @author alex
- *
+ * @version 0.2
  */
 public abstract class CabsPanel extends JPanel {
 	/**

@@ -14,16 +14,14 @@ import javax.swing.KeyStroke;
 /**
  * Menu bar of the station frame
  * @author alex
- *
+ * @author Eran Zimbler
+ * @version 0.2
  */
 public class StationMenuBar extends JMenuBar implements ActionListener {
 
 	private static final String ACTION_EXIT = "act_exit";
 	private static final String ACTION_ADD_CAB = "act_add_cab";
 	private static final String ACTION_ADD_PASSENGER = "act_add_passenger";
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private StationFrame mStationFrame;
 

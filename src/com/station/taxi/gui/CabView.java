@@ -26,7 +26,7 @@ import java.awt.Color;
 /**
  * Represents cab on the panel
  * @author alex
- *
+ * @version 0.2
  */
 public class CabView extends JPanel {
 	/**

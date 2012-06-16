@@ -7,7 +7,12 @@ package com.station.taxi;
  *
  */
 import java.util.Date;
-
+/**
+ * TaxiMeter object
+ * @author alex
+ * @author Eran Zimbler
+ * @version 0.2
+ */
 public class TaxiMeter implements Cloneable {
 	final private double mStartPrice;
 	final private double mOneSecPrice;

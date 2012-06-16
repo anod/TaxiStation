@@ -1,7 +1,12 @@
 package com.station.taxi.events;
 
 import com.station.taxi.Cab;
-
+/**
+ * Event listner interface
+ * @author alex
+ * @author Eran Zimbler
+ * @version 0.2
+ */
 abstract public class CabEventListener {
 
 	public static final int INTERRUPT = 0;

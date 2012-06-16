@@ -23,7 +23,11 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.TaxiMeter;
-
+/**
+ * 
+ * @author Eran Zimbler
+ * @version 0.2
+ */
 public class StationConfigStorage {
 	private String mConfigFile;
 	private Element root = null;

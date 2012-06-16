@@ -11,7 +11,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import com.station.taxi.Passenger;
-
+/**
+ * The new Passenger dialog panel
+ * @author Eran Zimbler
+ * @version 0.2
+ */
 public class NewPassengerDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JTextArea mNameField = new JTextArea(1, 30);

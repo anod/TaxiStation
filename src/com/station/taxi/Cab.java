@@ -13,7 +13,7 @@ import com.station.taxi.events.IStationEventListener;
  * Tax cab object
  * @author alex
  * @author Eran Zimbler
- * @version 0.1
+ * @version 0.2
  */
 public class Cab extends Thread {
     /**

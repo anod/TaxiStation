@@ -12,7 +12,7 @@ import com.station.taxi.events.PassengerEventListener;
  * Represents passenger of taxi cab
  * @author alex  
  * @author Eran Zimbler
- * @version 0.1 
+ * @version 0.2 
  */
 public class Passenger extends Thread {
 	private static final int STATE_INIT = 0;
@@ -64,14 +64,14 @@ public class Passenger extends Thread {
 	}
 	/**
 	 * Register passenger at station listener
-	 * @param listener
+	 * @param IStationEventListener
 	 */
 	public void setStationEventListener(IStationEventListener listener) {
 		mStationListener = listener;
 	}
 	/**
 	 * Register passenger event listener
-	 * @param listener
+	 * @param PassengerEventListener
 	 */
 	public void addPassengerEventListener(PassengerEventListener listener) {
 		mEventListeners.add(listener);
@@ -123,7 +123,7 @@ public class Passenger extends Thread {
 		}
 	}
 	/**
-	 * Change state of passanger to waiting
+	 * Changes the state of passenger to waiting
 	 */
 	public void enterWaitLine() {
 		Random rand = new Random();	
@@ -141,10 +141,9 @@ public class Passenger extends Thread {
 		notify(PassengerEventListener.TRANSIT);
 	}
 	/**
-	 * Passaenger arrived to destination
-	 * @param cab
-	 * @param price
-	 * @param splitBy
+	 * Passenger arrived to destination
+	 * @param (Cab)cab
+	 * @param (double)price
 	 */
 	public void onArrival(Cab cab, double price) {
 		mPaidPrice  = price;
@@ -162,18 +161,23 @@ public class Passenger extends Thread {
 	
 	/**
 	 * Notify event listeners
-	 * @param type
+	 * @param (int)type
 	 */
 	private void notify(int type) {
 		for(PassengerEventListener listener: mEventListeners) {
 			listener.update(type, this);
 		}
 	}
-
+	/**
+	 * @return Price passenger paid for drive
+	 */
 	public double getPaidPrice() {
 		return mPaidPrice;
 	}
-
+	/**
+	 * Checks whether the passenger is still in line 
+	 * @return true if the passenger is not in line 
+	 */
 	public boolean leftLine() {
 		if(mState == STATE_EXIT || mState == STATE_TRANSIT)
 		{

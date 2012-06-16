@@ -21,7 +21,8 @@ import com.station.taxi.Station.IStateChangeListener;
 /**
  * TaxiStationMain station frame
  * @author alex
- *
+ * @author Eran Zimbler
+ * @version 0.2
  */
 public class StationFrame extends JFrame implements IStateChangeListener {
 	/**

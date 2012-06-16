@@ -9,7 +9,8 @@ import com.station.taxi.Passenger;
 /**
  * Panel will contain passengers in waiting state
  * @author alex
- *
+ * @author Eran Zimbler
+ * @version 0.2
  */
 public class PassengersPanel extends JPanel {
 

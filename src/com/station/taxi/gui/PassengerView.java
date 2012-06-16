@@ -12,7 +12,12 @@ import javax.swing.border.TitledBorder;
 
 import com.station.taxi.Passenger;
 import javax.swing.JLabel;
-
+/**
+ * The graphical represantation for a single 
+ * passenger
+ * @author Eran Zimbler
+ * @version 0.2
+ */
 public class PassengerView extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
