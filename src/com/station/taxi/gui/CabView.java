@@ -21,7 +21,11 @@ import javax.swing.table.DefaultTableModel;
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
-
+/**
+ * Represents cab on the panel
+ * @author alex
+ *
+ */
 public class CabView extends JPanel {
 	/**
 	 * 
@@ -33,9 +37,7 @@ public class CabView extends JPanel {
 	private JLabel mStatusLabel;
 	private JButton mBtnArrive;
 	private JLabel mIcon;
-
 	private JLayeredPane mIconLayerdPane;
-
 	private JLabel mWaitingIcon;
 
 	public CabView(Cab cab) {
@@ -52,8 +54,18 @@ public class CabView extends JPanel {
 		
 	}
 	
+
 	/**
-	 * 
+	 * Refresh cab ui
+	 */
+	public void refresh() {
+		setStatus(mCab);
+		setPassangers(mCab);
+		setArriveBtn(mCab);	
+	}
+	
+	/**
+	 * Initialize inner components 
 	 */
 	private void setupViews() {
 		mPassangertable = new JTable();
@@ -108,7 +120,10 @@ public class CabView extends JPanel {
 		mIconLayerdPane.setLayer(mWaitingIcon, 1);
 	}
 
-
+	/**
+	 * Change arrive button according to cab state
+	 * @param cab
+	 */
 	private void setArriveBtn(Cab cab) {
 		if (cab.isDriving()) {
 			//mBtnArrive.setVisible(true);
@@ -127,7 +142,7 @@ public class CabView extends JPanel {
 
 
 	/**
-	 * 
+	 * Add passengers to the table component
 	 */
 	private void setPassangers(Cab cab) {
 		List<Passenger> passengers = cab.getPassegners();
@@ -144,6 +159,7 @@ public class CabView extends JPanel {
 	}
 
 	/**
+	 * Update status text and icon
 	 * @param cab
 	 */
 	private void setStatus(Cab cab) {
@@ -156,7 +172,7 @@ public class CabView extends JPanel {
 			text = String.format(TextsBundle.getString("cab_status_onbreak"), (cab.getBreakTime()/1000));
 			mWaitingIcon.setVisible(false);
 		} else if(cab.isWaiting()) {
-			text = String.format(TextsBundle.getString("cab_status_waiting"), cab.getWhileWaiting());
+			text = TextsBundle.getString("cab_status_waiting");
 			mWaitingIcon.setIcon(ImageUtils.createImageIcon("ic_waiting_"+cab.getWhileWaiting()));
 			mWaitingIcon.setVisible(true);
 		} else {
@@ -167,7 +183,9 @@ public class CabView extends JPanel {
 		mStatusLabel.validate();
 	}
 	
-	
+	/**
+	 * Listener of cab state changes and update the UI
+	 */
 	class ViewCabEventListener extends CabEventListener {
 		@Override
 		public void update(int type, Cab cab) {
@@ -176,12 +194,5 @@ public class CabView extends JPanel {
 		
 	}
 
-	public void refresh() {
-		setStatus(mCab);
-		setPassangers(mCab);
-		setArriveBtn(mCab);	
-	}
-	
-	
 	
 }

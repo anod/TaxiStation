@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionListener;
@@ -23,7 +22,11 @@ import javax.swing.border.EmptyBorder;
 
 import com.station.taxi.Cab;
 import com.station.taxi.Station;
-
+/**
+ * Add new cab dialog
+ * @author alex
+ *
+ */
 public class NewCabDialog extends JDialog {
 	/**
 	 * 
@@ -31,7 +34,7 @@ public class NewCabDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private Station mStation;
 	private JTextField mNumber;
-	private JComboBox mWhileWaiting;
+	private JComboBox<String> mWhileWaiting;
 	private String[] mWhileWaitingValues;
 
 	public NewCabDialog(StationFrame stationFrame) {
@@ -44,7 +47,7 @@ public class NewCabDialog extends JDialog {
 	}
 
 	/**
-	 * 
+	 * Initialize inner components
 	 */
 	private void setupViews() {
 		JPanel btnPanel = new JPanel();
@@ -54,12 +57,12 @@ public class NewCabDialog extends JDialog {
 		btnPanel.add(okBtn);
 		okBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent ae) {
-				okButton();
+				addButton();
 			}
 		});
 		noBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent ae) {
-				noButton();
+				cancelButton();
 			}
 		});
 		btnPanel.add(noBtn);
@@ -104,7 +107,10 @@ public class NewCabDialog extends JDialog {
 		return waitingStrings;
 	}
 	
-	private void okButton() {
+	/**
+	 * Click on add button
+	 */
+	private void addButton() {
 		if (!mNumber.getInputVerifier().verify(mNumber)){
 			return;
 		}
@@ -116,10 +122,17 @@ public class NewCabDialog extends JDialog {
 		setVisible(false);  
 	}
 
-	private void noButton() {  
+	/**
+	 * Click on cancel button
+	 */
+	private void cancelButton() {  
 		setVisible(false);  
 	}
 
+	/**
+	 * Input verifier for Cab number
+	 * On errro highlight red and show popup message 
+	 */
 	private class CabNumberInputVerifier extends InputVerifier implements KeyListener {
 		private static final int NUM_MIN_LEN = 3;
 		private static final int NUM_MAX_LEN = 5;

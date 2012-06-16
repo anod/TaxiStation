@@ -11,7 +11,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-
+/**
+ * Menu bar of the station frame
+ * @author alex
+ *
+ */
 public class StationMenuBar extends JMenuBar implements ActionListener {
 
 	private static final String ACTION_EXIT = "act_exit";

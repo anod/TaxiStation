@@ -31,6 +31,7 @@ public class PassengersPanel extends JPanel {
 		if (mPassViews.containsKey(p.getPassangerName())) {
 			final PassengerView view = mPassViews.get(p.getPassangerName());
 			remove(view);
+			mPassViews.remove(p.getPassangerName());
 			return true;
 		}
 		return false;

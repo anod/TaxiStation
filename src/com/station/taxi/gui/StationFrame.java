@@ -54,7 +54,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 
 	/**
-	 * 
+	 * Initialize frame components
 	 */
 	private void setupViews() {
 		JPanel mainPanel = new JPanel();
@@ -79,12 +79,19 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		
 		setJMenuBar(new StationMenuBar(this));		
 	}
-	
+	/**
+	 * Calculate frame dimensions based on screen size
+	 * @return
+	 */
 	private static Dimension getFrameDimension() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		return new Dimension((int)(screenSize.width * 0.7), (int)(screenSize.height * 0.7));
 	}
 
+	/**
+	 * Get station instance
+	 * @return
+	 */
 	public Station getStation() {
 		return mStation;
 	}
@@ -92,14 +99,14 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	@Override
 	public void onStationStart(Station station) {
 		mStation = station;
-			List<Cab> cabs = station.getCabs();
-			for(Cab cab: cabs) {
-				placeCabInPanel(cab, -1);
-			}
-			List<Passenger> pmany = mStation.getPassengers();
-			for (Passenger p: pmany) {
-				addPassangerToLine(p);
-			}	
+		List<Cab> cabs = station.getCabs();
+		for(Cab cab: cabs) {
+			placeCabInPanel(cab, -1);
+		}
+		List<Passenger> pmany = mStation.getPassengers();
+		for (Passenger p: pmany) {
+			addPassangerToLine(p);
+		}	
 	}
 	
 
@@ -110,14 +117,13 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	@Override
 	public void onPassengerUpdate(Passenger p) {
-		// the only reason for an update on a passanger is him leaving the queue
-		// will be changed to allow for colors for angry passangers
+		// the only reason for an update on a passenger is him leaving the queue
+		// will be changed to allow for colors for angry passengers
 		addPassangerToLine(p);
 		if(p.leftLine())
 		{
 			removePassangerFromLine(p);
 		}
-		
 	}
 
 	@Override
@@ -129,8 +135,12 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	public void onPassengerAdd(Passenger p) {
 		addPassangerToLine(p);
 	}
-	
 
+	/**
+	 * Put car into appropriate panel if it's already there update will be performed
+	 * @param cab
+	 * @param oldState
+	 */
 	private void placeCabInPanel(Cab cab, int oldState) {
 		if (cab.isDriving()) {
 			if (oldState == Station.CAB_DRIVE) {
@@ -144,16 +154,29 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		}
 		sleep(300);
 	}
+	
+	/**
+	 * Add passenger to the panel with passengers that are waiting for taxi
+	 * @param p
+	 */
 	private void addPassangerToLine(Passenger p) {
 		mPassangerPanel.removePassanger(p);
 		mPassangerPanel.addPassanger(p);
-		
+		sleep(300);
 	}
+	/**
+	 * 
+	 * @param p
+	 */
 	private void removePassangerFromLine(Passenger p) {
 		mPassangerPanel.removePassanger(p);
 		
 	}
 	
+	/**
+	 * Wrapper for sleep
+	 * @param millis
+	 */
 	private void sleep(int millis) {
 		try {
 			Thread.sleep(millis);

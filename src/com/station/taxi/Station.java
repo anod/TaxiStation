@@ -13,22 +13,47 @@ import com.station.taxi.logger.PassengerLogger;
  * @version 0.1
  */
 public class Station extends Thread implements IStationEventListener {
-	
 	/**
-	 * TODO: Still not called
-	 * TODO: think how it will be used
+	 * Cab states
 	 */
-	public interface IStateChangeListener {
-		public void onStationStart(Station station);
-		public void onCabUpdate(Cab cab, int oldState);
-		public void onPassengerUpdate(Passenger p);
-		public void onCabAdd(Cab cab);
-		public void onPassengerAdd(Passenger p);
-	}
-
 	public static final int CAB_DRIVE = 0;
 	public static final int CAB_BREAK = 1;
 	public static final int CAB_WAITING = 2;
+
+	/**
+	 * Events of station state change:
+	 * 	Initialization
+	 *  Adding or changing state of cabs
+	 *  Adding or cahnging state of passengers
+	 */
+	public interface IStateChangeListener {
+		/**
+		 * Station is initialized and running
+		 * @param station
+		 */
+		public void onStationStart(Station station);
+		/**
+		 * Cab update its state
+		 * @param cab
+		 * @param oldState
+		 */
+		public void onCabUpdate(Cab cab, int oldState);
+		/**
+		 * Passenger update its state
+		 * @param p
+		 */
+		public void onPassengerUpdate(Passenger p);
+		/**
+		 * New cab added to the station
+		 * @param cab
+		 */
+		public void onCabAdd(Cab cab);
+		/**
+		 * New passenger added to the station
+		 * @param p
+		 */
+		public void onPassengerAdd(Passenger p);
+	}
 	
     /**
      * Lock used when maintaining queue of requested updates.

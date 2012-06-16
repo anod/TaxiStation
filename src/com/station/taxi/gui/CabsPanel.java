@@ -22,7 +22,10 @@ public abstract class CabsPanel extends JPanel {
 	public CabsPanel() {
 		setLayout(new GridLayout(0, 2, 2, 2));
 	}	
-
+	/**
+	 * Adds new view and if it's already there refresh it
+	 * @param cab
+	 */
 	public void addOrUpdateCab(Cab cab) {
 		int num = cab.getNumber();
 		if (!mCabViews.containsKey(num)) {
@@ -34,8 +37,11 @@ public abstract class CabsPanel extends JPanel {
 			mCabViews.get(num).refresh();
 		}
 	}
-	
-	
+	/**
+	 * Remove cab from panel
+	 * @param cab
+	 * @return
+	 */
 	public boolean removeCab(Cab cab) {
 		int number = cab.getNumber();
 		if (mCabViews.containsKey(number)) {
