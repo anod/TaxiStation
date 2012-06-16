@@ -82,7 +82,11 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	
 	private static Dimension getFrameDimension() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		return new Dimension((int)(screenSize.width * 0.7), (int)(screenSize.height * 0.5));
+		return new Dimension((int)(screenSize.width * 0.7), (int)(screenSize.height * 0.7));
+	}
+
+	public Station getStation() {
+		return mStation;
 	}
 
 	@Override
@@ -157,9 +161,5 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	public void AddPassengerToStation(Passenger p)
-	{
-		mStation.addPassenger(p);
 	}
 }

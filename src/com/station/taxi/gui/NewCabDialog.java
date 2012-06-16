@@ -21,16 +21,23 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.station.taxi.Cab;
+import com.station.taxi.Station;
+
 public class NewCabDialog extends JDialog {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Station mStation;
 	private JTextField mNumber;
+	private JComboBox mWhileWaiting;
+	private String[] mWhileWaitingValues;
 
-	public NewCabDialog(Frame owner) {
+	public NewCabDialog(StationFrame stationFrame) {
 		setTitle(TextsBundle.getString("dialog_addcab_title")); //$NON-NLS-1$
-		new JDialog(owner, TextsBundle.getString("dialog_title_addcab"));
+		mStation = stationFrame.getStation();
+		new JDialog(stationFrame, TextsBundle.getString("dialog_title_addcab"));
 		setupViews();
 		pack();
 		setLocationRelativeTo(null);		
@@ -70,22 +77,42 @@ public class NewCabDialog extends JDialog {
 		
 		JLabel lblNewLabel = new JLabel(TextsBundle.getString("dialog_addcab_waiting")); //$NON-NLS-1$
 		panel.add(lblNewLabel);
+
+		String[] waitingStrings = initWaitingStrings();
+		mWhileWaiting = new JComboBox<String>(waitingStrings);
+		panel.add(mWhileWaiting);
+		getContentPane().add(btnPanel, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * Init values for waiting combobox
+	 * @return
+	 */
+	private String[] initWaitingStrings() {
 		
 		String[] waitingStrings = { 
 			TextsBundle.getString("cab_waiting_eat"),
 			TextsBundle.getString("cab_waiting_drink"),
 			TextsBundle.getString("cab_waiting_read_news_papper")
 		};
-
-		JComboBox comboBox = new JComboBox(waitingStrings);
-		panel.add(comboBox);
-		getContentPane().add(btnPanel, BorderLayout.SOUTH);
+		
+		mWhileWaitingValues = new String[3];
+		mWhileWaitingValues[0]=Cab.WAIT_EAT;
+		mWhileWaitingValues[1]=Cab.WAIT_DRINK;
+		mWhileWaitingValues[2]=Cab.WAIT_NEWSPAPPER;
+		
+		return waitingStrings;
 	}
 	
 	private void okButton() {
 		if (!mNumber.getInputVerifier().verify(mNumber)){
 			return;
 		}
+
+		String whileWaiting = mWhileWaitingValues[mWhileWaiting.getSelectedIndex()];
+		int num = Integer.valueOf(mNumber.getText());
+		Cab cab = new Cab(num, whileWaiting);
+		mStation.addCab(cab);
 		setVisible(false);  
 	}
 
@@ -117,8 +144,8 @@ public class NewCabDialog extends JDialog {
 			mPopup.add(mImage);
 			mPopup.add(mMessageLabel);
 			mPopup.setFocusableWindowState(false);
-	    }
-		
+		}
+ 
 		private boolean validateCabNumber(JTextField input) {
 			String numberStr = input.getText();
 			

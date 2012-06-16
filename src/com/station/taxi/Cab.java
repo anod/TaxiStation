@@ -23,13 +23,21 @@ public class Cab extends Thread {
 	private static Object sLock = new Object();
 	
 	public static final int MAX_PASSANGERS = 4;
-
 	private static final int ONE_SECOND = 1000;
+	/**
+	 * Status constants
+	 */
 	private static final int STATUS_INIT=0;
 	private static final int STATUS_BREAK=1;
 	private static final int STATUS_DRIVING=2;
 	private static final int STATUS_WAITING=3;
-
+	/**
+	 * Wait status possible actions
+	 */
+	public static final String WAIT_NEWSPAPPER = "readNewsPaper";
+	public static final String WAIT_EAT = "eat";	
+	public static final String WAIT_DRINK = "drink";
+	
 	private IStationEventListener mStationListener;
 	private List<Passenger> mPassangers;
 	private String mWhileWaiting;

@@ -1,11 +1,9 @@
 package com.station.taxi.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
-import javax.security.auth.login.Configuration;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -13,11 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import com.station.taxi.Passenger;
-import com.station.taxi.Station;
-import com.station.taxi.configuration.PersonGenerator;
-
-import java.awt.GridLayout;
-import java.security.acl.Owner;
 
 public class NewPassengerDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
@@ -64,7 +57,7 @@ public class NewPassengerDialog extends JDialog {
 	private void okButton() {
 		setVisible(false);
 		Passenger p = new Passenger(mNameField.getText(), mDestField.getText());
-		mOwner.AddPassengerToStation(p);
+		mOwner.getStation().addPassenger(p);
 	}
 
 	private void noButton() {
