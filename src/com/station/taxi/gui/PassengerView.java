@@ -25,6 +25,7 @@ public class PassengerView extends JPanel{
 	private void setupViews() {
 		
 		JLabel lblDestination = new JLabel(mPassenger.getDestination());
+		add(new JLabel("Destination:"),BorderLayout.CENTER);
 		add(lblDestination, BorderLayout.CENTER);
 		JLabel lblTimeLeft = new JLabel(mPassenger.getTimeLeft()+"");
 		add(lblTimeLeft, BorderLayout.CENTER);

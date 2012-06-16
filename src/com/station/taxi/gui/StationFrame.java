@@ -77,7 +77,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		mDrivingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("driving_panel_title")));
 		mainPanel.add(mDrivingPanel);
 		
-		//setJMenuBar(new StationMenuBar(this));		
+		setJMenuBar(new StationMenuBar(this));		
 	}
 	
 	private static Dimension getFrameDimension() {
@@ -156,5 +156,9 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public void AddPassengerToStation(Passenger p)
+	{
+		mStation.addPassenger(p);
 	}
 }

@@ -64,6 +64,9 @@ public class StationMenuBar extends JMenuBar implements ActionListener {
 		} else if (e.getActionCommand().endsWith(ACTION_ADD_CAB)) {
 			NewCabDialog dialog = new NewCabDialog(mStationFrame);
 			dialog.setVisible(true);
+		} else if (e.getActionCommand().endsWith(ACTION_ADD_PASSENGER)) {
+			NewPassengerDialog d= new NewPassengerDialog(mStationFrame);
+			d.setVisible(true);
 		}
 
 	}
