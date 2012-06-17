@@ -214,8 +214,8 @@ public class Cab extends Thread {
 
 	@Override
 	public void interrupt() {
-		notify(CabEventListener.INTERRUPT);
 		mThreadRunning = false;
+		notify(CabEventListener.INTERRUPT);
 		super.interrupt();
 	}	
 	/* (non-Javadoc)

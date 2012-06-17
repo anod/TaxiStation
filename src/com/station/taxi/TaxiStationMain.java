@@ -16,9 +16,11 @@ import com.station.taxi.gui.StationFrame;
  */
 public class TaxiStationMain {
 	
-    public static void main(String[] args) {
+    private static final String CONFIG_XML = "configs/config1.xml";
+
+	public static void main(String[] args) {
     	//Create configuration loader
-    	StationConfigLoader configLoader = new StationConfigLoader("configs/config1.xml");
+    	StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML);
 
     	final Station station;
     	try {
@@ -28,7 +30,7 @@ public class TaxiStationMain {
 			e.printStackTrace();
 			return;
 		}
-    	
+
     	SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
@@ -57,7 +59,7 @@ public class TaxiStationMain {
 			//Stop the thread
 			mStation.interrupt();
 			//mStation configuration
-			StationConfigStorage configStorage = new StationConfigStorage("configs/config2.xml");
+			StationConfigStorage configStorage = new StationConfigStorage(CONFIG_XML);
 			configStorage.save(mStation);
 			super.windowClosing(e);				
 		}
