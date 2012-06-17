@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.station.taxi.events.IStationEventListener;
 import com.station.taxi.logger.CabLogger;
-import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.logger.PassengerLogger;
 /**
  * Taxi cab station object

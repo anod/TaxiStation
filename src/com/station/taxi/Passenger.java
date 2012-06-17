@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.IStationEventListener;
 import com.station.taxi.events.PassengerEventListener;
 
@@ -57,7 +56,7 @@ public class Passenger extends Thread {
 	}
 	/**
 	 * 
-	 * @return time to wait in queueupdatePassenger(p)
+	 * @return time to wait in queue
 	 */
 	public int getExitTime() {
 		return mExitTime;
