@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
+
+import com.station.taxi.Passenger;
+import com.station.taxi.configuration.PassengerGenerator;
 /**
  * Represents toolbar of station
  * @author alex
@@ -22,6 +25,7 @@ public class StationToolBar extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static final String ADD_CAB = "add_cab";
 	private static final String ADD_PASSENGER = "add_passenger";
+	private static final String GENERATE_PASSENGER = "generate_passenger";	
 	private static final String SAVE_EXIT = "save_exit";
 	
 	private StationFrame mStationFrame;
@@ -50,13 +54,15 @@ public class StationToolBar extends JPanel implements ActionListener {
 
 		// second button
 		button = makeNavigationButton(null, ADD_PASSENGER, TextsBundle.getString("toolbar_add_passenger"));
-
 		toolbar.add(button);
 		
-		button = makeNavigationButton(null, SAVE_EXIT, TextsBundle.getString("toolbar_exit"));
+		button = makeNavigationButton(null, GENERATE_PASSENGER, TextsBundle.getString("toolbar_generate_passenger"));		
+		toolbar.add(button);
 		
+		button = makeNavigationButton(null, SAVE_EXIT, TextsBundle.getString("toolbar_exit"));		
 		toolbar.add(button);
 
+		
 	}
 
 	/**
@@ -92,6 +98,10 @@ public class StationToolBar extends JPanel implements ActionListener {
 			mStationFrame.showAddPassengerDialog();
 		} else if (e.getActionCommand().equals(SAVE_EXIT)) {
 			mStationFrame.closeWindow();
+		} else if (e.getActionCommand().equals(GENERATE_PASSENGER)) {
+			PassengerGenerator gen = new PassengerGenerator();
+			Passenger p = gen.generateRandomPassenger();
+			mStationFrame.getStation().addPassenger(p);
 		}
 
 	}

@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.Array;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -66,7 +65,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
-		mWaitingPanel = new WaitingPanel();
+		mWaitingPanel = new WaitingPanel(this);
 		GridLayout gridLayout = (GridLayout) mWaitingPanel.getLayout();
 		gridLayout.setColumns(5);
 		mWaitingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("cabs_panel_title")));
