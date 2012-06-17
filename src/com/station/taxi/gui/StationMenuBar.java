@@ -1,11 +1,9 @@
 package com.station.taxi.gui;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -60,15 +58,11 @@ public class StationMenuBar extends JMenuBar implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals(ACTION_EXIT)) {
-			WindowEvent wev = new WindowEvent(mStationFrame,
-			WindowEvent.WINDOW_CLOSING);
-			Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+			mStationFrame.closeWindow();
 		} else if (e.getActionCommand().endsWith(ACTION_ADD_CAB)) {
-			NewCabDialog dialog = new NewCabDialog(mStationFrame);
-			dialog.setVisible(true);
+			mStationFrame.showAddCabDialog();
 		} else if (e.getActionCommand().endsWith(ACTION_ADD_PASSENGER)) {
-			NewPassengerDialog d= new NewPassengerDialog(mStationFrame);
-			d.setVisible(true);
+			mStationFrame.showAddPassengerDialog();
 		}
 
 	}

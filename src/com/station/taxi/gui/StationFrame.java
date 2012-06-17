@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -59,7 +60,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 */
 	private void setupViews() {
 		 
-		getContentPane().add( new StationToolBar() , BorderLayout.NORTH);
+		getContentPane().add( new StationToolBar(this) , BorderLayout.NORTH);
 		JPanel mainPanel = new JPanel();
 		getContentPane().add(mainPanel);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -176,6 +177,30 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private void updatePassenger(Passenger p) {
 		mPassangerPanel.updatePassenger(p);
 		
+	}
+
+	/**
+	 * Send event to exit from application
+	 */
+	public void closeWindow() {
+		WindowEvent wev = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+		Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+	}
+
+	/**
+	 * Shows Add new cab dialog 
+	 */
+	public void showAddCabDialog() {
+		NewCabDialog dialog = new NewCabDialog(this);
+		dialog.setVisible(true);	
+	}
+
+	/**
+	 * Shows Add new passenger dialog 
+	 */
+	public void showAddPassengerDialog() {
+		NewPassengerDialog d= new NewPassengerDialog(this);
+		d.setVisible(true);
 	}
 
 }
