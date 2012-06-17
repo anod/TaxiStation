@@ -170,7 +170,8 @@ public class Station extends Thread implements IStationEventListener {
 	 */
 	public List<Cab> getCabs() {
 		synchronized (sLock) {		
-			List<Cab> allCabs = mTaxiDriving;
+			List<Cab> allCabs = new ArrayList<Cab>();
+			allCabs.addAll(mTaxiDriving);
 			allCabs.addAll(mTaxiWaiting);
 			allCabs.addAll(mTaxiBreak);
 			return allCabs;
@@ -297,9 +298,8 @@ public class Station extends Thread implements IStationEventListener {
 	}
 	/**
 	 * Fill cab with passengers
-	 * @throws InterruptedException 
 	 */
-	private void fillCab() throws InterruptedException {
+	private void fillCab() {
 		// Get first cab in queue, if there is no cabs in waiting queue
 		// waits until new cab will be added
 		synchronized (sLock) {
@@ -362,7 +362,11 @@ public class Station extends Thread implements IStationEventListener {
 	public void onWaitingRequest(Cab cab) {
 		synchronized (sLock) {
 			int oldState = detectCabState(cab);
-			mTaxiDriving.remove(cab);		
+			if (oldState == CAB_DRIVE) {
+				mTaxiDriving.remove(cab);
+			} else {
+				mTaxiBreak.remove(cab);
+			}
 			cab.goToWaiting();
 			mTaxiWaiting.add(cab);
 			mStateListener.onCabUpdate(cab, oldState);
