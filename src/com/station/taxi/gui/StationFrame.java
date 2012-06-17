@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.Array;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -201,6 +202,12 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	public void showAddPassengerDialog() {
 		NewPassengerDialog d= new NewPassengerDialog(this);
 		d.setVisible(true);
+	}
+	/**
+	 *  gets the keys from the passangerPanel 
+	 */
+	public boolean checkPassangerViewExists(String name) {
+		return mPassangerPanel.checkPassengerExist(name);
 	}
 
 }

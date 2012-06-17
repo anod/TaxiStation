@@ -51,4 +51,8 @@ public class PassengersPanel extends JPanel {
 			curr.updateSelf();
 		}
 	}
+	public boolean checkPassengerExist(String name) {
+		return mPassViews.containsKey(name);
+		
+	}
 }
