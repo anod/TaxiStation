@@ -71,7 +71,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		gridLayout.setColumns(5);
 		mWaitingPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("cabs_panel_title")));
 		mainPanel.add(mWaitingPanel);
-		mPassangerPanel = new PassengersPanel();
+		mPassangerPanel = new PassengersPanel(this);
 		GridLayout gridLayout_2 = (GridLayout) mPassangerPanel.getLayout();
 		gridLayout_2.setColumns(5);
 		mPassangerPanel.setBorder(BorderFactory.createTitledBorder(TextsBundle.getString("passengers_panel_title")));
