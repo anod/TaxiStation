@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -21,8 +23,6 @@ import javax.swing.table.DefaultTableModel;
 import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
 /**
  * Represents cab on the panel
  * @author alex
@@ -42,21 +42,37 @@ public class CabView extends JPanel {
 	private JLayeredPane mIconLayerdPane;
 	private JLabel mWaitingIcon;
 	private JLabel mTotalEarningsLabel;
-
+	private MouseAdapter mClickAdapter;
+	
+	
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
 		
 		setPreferredSize(new Dimension(240, 140));
-		
 		mCab = cab;
+		mClickAdapter = initClickAdpater();
+		
 		setupViews();
 		
 		setStatus(cab);
 		setPassangers(cab);	
 		setArriveBtn(cab);
 		cab.addCabEventListener(new ViewCabEventListener());
-		
+		addMouseListener(mClickAdapter);
+	}
+
+
+	private MouseAdapter initClickAdpater() {
+		return new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				if (e.getClickCount() == 2 && mCab.isDriving()) {
+					mCab.arrive();
+				}
+			}			
+		};
 	}
 	
 
@@ -89,6 +105,7 @@ public class CabView extends JPanel {
 		mPassangertable.setRowSelectionAllowed(false);
 		mPassangertable.setEnabled(false);
 		mPassangertable.setPreferredSize(new Dimension(140, 40));
+		mPassangertable.addMouseListener(mClickAdapter);
 		
 		mBtnArrive = new JButton(TextsBundle.getString("btn_arrive"));
 		mInfoPanel.add(mBtnArrive);
@@ -102,11 +119,13 @@ public class CabView extends JPanel {
 		mStatusLabel.setBorder(new EmptyBorder(0, 10, 0, 10));
 		mStatusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		mStatusLabel.setVerticalAlignment(SwingConstants.TOP);
+		mStatusLabel.addMouseListener(mClickAdapter);
 		add(mStatusLabel, BorderLayout.NORTH);
 		
 		
 		mIconLayerdPane = new JLayeredPane();
 		mIconLayerdPane.setPreferredSize(new Dimension(72, 72));
+		mIconLayerdPane.addMouseListener(mClickAdapter);
 		add(mIconLayerdPane, BorderLayout.WEST);
 		
 		mIcon = new JLabel("");
@@ -116,7 +135,6 @@ public class CabView extends JPanel {
 		mIcon.setIcon(ImageUtils.createImageIcon("ic_cab"));
 		mIconLayerdPane.add(mIcon);
 		mIconLayerdPane.setLayer(mIcon, 0);
-		
 		mWaitingIcon = new JLabel("");
 		mWaitingIcon.setVisible(false);
 		mWaitingIcon.setSize(new Dimension(76, 76));
@@ -199,4 +217,6 @@ public class CabView extends JPanel {
 		}
 		
 	}
+	
+	
 }
