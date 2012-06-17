@@ -20,11 +20,15 @@ public class PassengersPanel extends JPanel {
 		setLayout(new GridLayout(0, 1, 2, 2));
 	}
 	public void addPassanger(Passenger p) {
-		PassengerView curr = new PassengerView(p);
-		mPassViews.put(p.getPassangerName(), curr);
-		add(curr);
-		//Sometimes view stays on the screen
-		repaint(); 
+		String passengerName = p.getPassangerName();
+		if (!mPassViews.containsKey(passengerName))
+		{
+			PassengerView curr = new PassengerView(p);
+			mPassViews.put(passengerName, curr);
+			add(curr);
+			//Sometimes view stays on the screen
+			repaint();
+		}
 	}
 	public boolean removePassanger(Passenger p) {
 		if (mPassViews.containsKey(p.getPassangerName())) {

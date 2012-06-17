@@ -347,9 +347,6 @@ public class Station extends Thread implements IStationEventListener {
 	@Override
 	public void onBreakRequest(Cab cab) {
 		synchronized (sLock) {
-			if (cab.isDriving()) {
-				throw new RuntimeException("Invalid cab ["+ cab.getNumber() +"] state while request break");
-			}
 			int oldState = detectCabState(cab);
 			mTaxiWaiting.remove(cab);
 			cab.goToBreak();

@@ -57,7 +57,7 @@ public class Passenger extends Thread {
 	}
 	/**
 	 * 
-	 * @return time to wait in queue
+	 * @return time to wait in queueupdatePassenger(p)
 	 */
 	public int getExitTime() {
 		return mExitTime;
