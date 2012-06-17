@@ -160,6 +160,10 @@ public class Cab extends Thread {
 		mPassangers.add(passenger);
 		passenger.enterCab();
 	}
+	/**
+	 * Drving destination
+	 * @return
+	 */
 	public String getDestination() {
 		synchronized (sLock) {
 			if (mCabStatus != STATUS_DRIVING) {
@@ -168,12 +172,29 @@ public class Cab extends Thread {
 			return mDestination;
 		}
 	}
+	/**
+	 * List of passangers inside the cab
+	 * @return
+	 */
 	public List<Passenger> getPassegners() {
 		return mPassangers;
 	}
+	/**
+	 * Current break time
+	 * @return
+	 */
 	public int getBreakTime() {
 		return mBreakTime;
 	}
+	/**
+	 * Return instance of current TaxiMeter
+	 * @return
+	 */
+	public TaxiMeter getMeter() {
+		synchronized (mMeter) {
+			return mMeter;			
+		}
+	}	
 	/**
 	 * Set TaxiMeter instance
 	 * @param meter
@@ -256,6 +277,9 @@ public class Cab extends Thread {
 	 */
 	private void driving() throws InterruptedException {
 		mDrivingTime += ONE_SECOND;
+		synchronized (mMeter) {
+			mMeter.increase();
+		}
 		notify(CabEventListener.DRIVING);
 	}
 	/**
@@ -267,8 +291,7 @@ public class Cab extends Thread {
 				throw new RuntimeException("Cab is not driving");
 			}
 			int size = mPassangers.size();
-			mMeter.calc(mDrivingTime); 
-			mReciptsList.add(mMeter.stop(size));
+			mReciptsList.add(mMeter.reciept(size));
 			notifyArrival();
 			mPassangers.clear();
 			mStationListener.onWaitingRequest(this);

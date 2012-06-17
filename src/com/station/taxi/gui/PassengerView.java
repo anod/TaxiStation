@@ -1,17 +1,15 @@
 package com.station.taxi.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import com.station.taxi.Passenger;
-import javax.swing.JLabel;
 /**
  * The graphical represantation for a single 
  * passenger

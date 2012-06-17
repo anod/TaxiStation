@@ -41,6 +41,7 @@ public class CabView extends JPanel {
 	private JLabel mIcon;
 	private JLayeredPane mIconLayerdPane;
 	private JLabel mWaitingIcon;
+	private JLabel mTotalEarningsLabel;
 
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
@@ -125,6 +126,10 @@ public class CabView extends JPanel {
 		mWaitingIcon.setIcon(ImageUtils.createImageIcon("ic_waiting_drink"));
 		mIconLayerdPane.add(mWaitingIcon);
 		mIconLayerdPane.setLayer(mWaitingIcon, 1);
+		
+		mTotalEarningsLabel = new JLabel(String.format(TextsBundle.getString("cab_total_earnings"), 0.0f)); //$NON-NLS-1$
+		mTotalEarningsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		add(mTotalEarningsLabel, BorderLayout.SOUTH);
 	}
 
 	/**
@@ -166,7 +171,7 @@ public class CabView extends JPanel {
 
 		String text;
 		if (cab.isDriving()) {
-			text = String.format(TextsBundle.getString("cab_status_driving"), cab.getDestination(), (cab.getDrivingTime()/1000));
+			text = String.format(TextsBundle.getString("cab_status_driving"), cab.getDestination(), (cab.getDrivingTime()/1000), cab.getMeter().getCurrentValue());
 			mWaitingIcon.setVisible(false);
 		} else if(cab.isOnBreak()) {
 			text = String.format(TextsBundle.getString("cab_status_onbreak"), (cab.getBreakTime()/1000));
@@ -179,6 +184,7 @@ public class CabView extends JPanel {
 			text = TextsBundle.getString("cab_status_init");
 			mWaitingIcon.setVisible(false);
 		}
+		mTotalEarningsLabel.setText(String.format(TextsBundle.getString("cab_total_earnings"), cab.getTotalEarning()));
 		mStatusLabel.setText(text);
 		mStatusLabel.validate();
 	}
