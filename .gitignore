@@ -8,3 +8,5 @@
 # Project files
 logs/
 /bin
+/nbproject/private/
+/build/

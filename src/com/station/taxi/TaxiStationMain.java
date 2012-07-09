@@ -1,9 +1,8 @@
 package com.station.taxi;
 
-import javax.swing.SwingUtilities;
-
 import com.station.taxi.gui.StationFrame;
 import com.station.taxi.gui.StationWindowAdapter;
+import javax.swing.SwingUtilities;
 /**
  * Main entry point
  * @author alex
