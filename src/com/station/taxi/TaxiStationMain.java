@@ -30,5 +30,7 @@ public class TaxiStationMain {
 			}
 		});
 
+		//clean the context
+		((ClassPathXmlApplicationContext) context).close();
 	}
 }
