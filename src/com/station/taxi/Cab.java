@@ -55,7 +55,7 @@ public class Cab extends Thread {
 	 */
 	private int mBreakTime;
 	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
-	
+
 	/**
 	 * 
 	 * @param num Cab number
@@ -161,7 +161,7 @@ public class Cab extends Thread {
 		passenger.enterCab();
 	}
 	/**
-	 * Drving destination
+	 * Driving destination
 	 * @return
 	 */
 	public String getDestination() {
@@ -173,7 +173,7 @@ public class Cab extends Thread {
 		}
 	}
 	/**
-	 * List of passangers inside the cab
+	 * List of passengers inside the cab
 	 * @return
 	 */
 	public List<Passenger> getPassegners() {
