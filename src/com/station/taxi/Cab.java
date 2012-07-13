@@ -19,7 +19,7 @@ public class Cab extends Thread {
     /**
      * Lock used when maintaining queue of requested updates.
      */
-	private static Object sLock = new Object();
+	final private static Object sLock = new Object();
 	
 	public static final int MAX_PASSANGERS = 4;
 	private static final int ONE_SECOND = 1000;
@@ -54,7 +54,7 @@ public class Cab extends Thread {
 	 * Time in milliseconds
 	 */
 	private int mBreakTime;
-	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
+	private List<CabEventListener> mEventListeners = new ArrayList<>();
 
 	/**
 	 * 

@@ -19,6 +19,7 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
+import com.station.taxi.spring.StationContext;
 /**
  * TaxiStationMain station frame
  * @author alex
@@ -34,14 +35,18 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private PassengersPanel mPassangerPanel;
 	private DrivingPanel mDrivingPanel;
 	private Station mStation;
+	private StationContext mContext;
 	
-	public StationFrame() {
+	
+	public StationFrame(StationContext context) {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			SwingUtilities.updateComponentTreeUI(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		mContext = context;
 		
 		setTitle(TextsBundle.getString("window_title"));
 		
@@ -55,6 +60,10 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 
 	}
 
+	public StationContext getContext() {
+		return mContext;
+	}
+	
 	/**
 	 * Initialize frame components
 	 */

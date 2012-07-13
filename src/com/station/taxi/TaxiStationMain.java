@@ -2,6 +2,7 @@ package com.station.taxi;
 
 import com.station.taxi.gui.StationFrame;
 import com.station.taxi.gui.StationWindowAdapter;
+import com.station.taxi.spring.StationContext;
 import javax.swing.SwingUtilities;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,18 +20,18 @@ public class TaxiStationMain {
 
 	public static void main(String[] args) {
 
-		ApplicationContext context = new ClassPathXmlApplicationContext(CONFIG_PATH);
-
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH);
+		final StationContext context = new StationContext(applicationContext);
+		
+		
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				StationFrame window = new StationFrame();
+				StationFrame window = new StationFrame(context);
 				window.addWindowListener(new StationWindowAdapter(window));
 			}
 		});
 
-		//clean the context
-		((ClassPathXmlApplicationContext) context).close();
 	}
 }

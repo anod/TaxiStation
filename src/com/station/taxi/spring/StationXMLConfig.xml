@@ -10,6 +10,9 @@
 
 <aop:aspectj-autoproxy />
 
+<bean id="cab" class="com.station.taxi.Cab" scope="prototype" />
+	
+
 <!-- Aspect -->
 <bean id="cabLogAspect" class="com.station.taxi.spring.aop.CabLogAspect"/>
 

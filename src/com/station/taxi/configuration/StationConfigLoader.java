@@ -17,20 +17,23 @@ import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.TaxiMeter;
+import com.station.taxi.spring.StationContext;
 /**
  * Parse configuration xml and load station
  * @author alex
  * @version 0.2
  */
 public class StationConfigLoader {
-	private String mFileName;
+	private final String mFileName;
+	private final StationContext mContext;
 
 	/**
 	 * 
 	 * @param fileName path to configuration file
 	 */
-	public StationConfigLoader(String fileName) {
+	public StationConfigLoader(String fileName, StationContext context) {
 		mFileName = fileName;
+		mContext = context;
 	}
 	
 	/**
@@ -61,7 +64,7 @@ public class StationConfigLoader {
 	 * @return
 	 */
 	private ArrayList<Passenger> readPassengers(Document doc) {
-		ArrayList<Passenger> result = new ArrayList<Passenger>();
+		ArrayList<Passenger> result = new ArrayList<>();
 		
         NodeList taxis = doc.getElementsByTagName("passenger");
         for(int i=0; i<taxis.getLength() ; i++){
@@ -79,14 +82,14 @@ public class StationConfigLoader {
 	 * @return
 	 */
 	private ArrayList<Cab> readTaxiCabs(Document doc) {
-		ArrayList<Cab> result = new ArrayList<Cab>();
+		ArrayList<Cab> result = new ArrayList<>();
 
         NodeList taxis = doc.getElementsByTagName("taxi");
         for(int i=0; i<taxis.getLength() ; i++){
         	 NamedNodeMap attrs = taxis.item(i).getAttributes();
              String cabNum = attrs.getNamedItem("number").getNodeValue();
              String whileWaiting = attrs.getNamedItem("whileWaiting").getNodeValue();
-        	 result.add(new Cab(Integer.valueOf(cabNum), whileWaiting));
+        	 result.add(mContext.createCab(Integer.valueOf(cabNum), whileWaiting));
         }
 		return result;
 	}

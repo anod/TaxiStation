@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import com.station.taxi.Station;
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * StationFrame window adapter - initialize and stop station thread
@@ -38,6 +39,10 @@ public class StationWindowAdapter extends WindowAdapter {
 		//mStation configuration
 		StationConfigStorage configStorage = new StationConfigStorage(CONFIG_XML);
 		configStorage.save(mStation);
+		
+		ClassPathXmlApplicationContext applicationContext = (ClassPathXmlApplicationContext)mStationFrame.getContext().getApplicationContext();
+		applicationContext.close();
+		
 		super.windowClosing(event);
 	}
 
@@ -48,7 +53,7 @@ public class StationWindowAdapter extends WindowAdapter {
 	public void windowOpened(WindowEvent event) {
 		super.windowOpened(event);
 		//Create configuration loader
-		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML);
+		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML, mStationFrame.getContext());
 
 		try {
 			//Load station from configuration
