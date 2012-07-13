@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531818</millis>
+  <sequence>5</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>16</thread>
+  <message>[cab888] Cab is ready and running...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531820</millis>
+  <sequence>6</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>22</thread>
+  <message>[cab333] Cab is ready and running...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531821</millis>
+  <sequence>7</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>21</thread>
+  <message>[cab222] Cab is ready and running...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531821</millis>
+  <sequence>8</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>20</thread>
+  <message>[cab111] Cab is ready and running...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531822</millis>
+  <sequence>9</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>[cab777] Cab is ready and running...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531823</millis>
+  <sequence>10</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>18</thread>
+  <message>[cab444] Cab is ready and running...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531824</millis>
+  <sequence>11</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>17</thread>
+  <message>[cab555] Cab is ready and running...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531825</millis>
+  <sequence>12</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>16</thread>
+  <message>[cab888] Waiting for passengers...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531883</millis>
+  <sequence>13</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>17</thread>
+  <message>[cab555] Waiting for passengers...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531920</millis>
+  <sequence>14</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>18</thread>
+  <message>[cab444] Waiting for passengers...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531943</millis>
+  <sequence>15</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>19</thread>
+  <message>[cab777] Waiting for passengers...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:51</date>
+  <millis>1342170531974</millis>
+  <sequence>16</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>20</thread>
+  <message>[cab111] Waiting for passengers...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:52</date>
+  <millis>1342170532017</millis>
+  <sequence>17</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>21</thread>
+  <message>[cab222] Goto break for 5 seconds to eat
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:52</date>
+  <millis>1342170532064</millis>
+  <sequence>18</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>22</thread>
+  <message>[cab333] Goto break for 5 seconds to drink
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:53</date>
+  <millis>1342170533918</millis>
+  <sequence>19</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab888] Cab interupt requested...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:53</date>
+  <millis>1342170533922</millis>
+  <sequence>20</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab555] Cab interupt requested...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:53</date>
+  <millis>1342170533925</millis>
+  <sequence>21</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab444] Cab interupt requested...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:53</date>
+  <millis>1342170533928</millis>
+  <sequence>22</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab777] Cab interupt requested...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:53</date>
+  <millis>1342170533931</millis>
+  <sequence>23</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab111] Cab interupt requested...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:53</date>
+  <millis>1342170533944</millis>
+  <sequence>24</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab222] Cab interupt requested...
+</message>
+</record>
+<record>
+  <date>2012-07-13T12:08:53</date>
+  <millis>1342170533950</millis>
+  <sequence>25</sequence>
+  <logger>logs/TaxiStation</logger>
+  <level>INFO</level>
+  <class>com.station.taxi.logger.LoggerWrapper</class>
+  <method>log</method>
+  <thread>11</thread>
+  <message>[cab333] Cab interupt requested...
+</message>
+</record>
+</log>
