@@ -37,7 +37,7 @@ public class Station extends Thread implements IStationEventListener {
 		 * @param cab
 		 * @param oldState
 		 */
-		public void onCabUpdate(Cab cab, int oldState);
+		public void onCabUpdate(CabImpl cab, int oldState);
 		/**
 		 * Passenger update its state
 		 * @param p
@@ -47,7 +47,7 @@ public class Station extends Thread implements IStationEventListener {
 		 * New cab added to the station
 		 * @param cab
 		 */
-		public void onCabAdd(Cab cab);
+		public void onCabAdd(CabImpl cab);
 		/**
 		 * New passenger added to the station
 		 * @param p
@@ -63,15 +63,15 @@ public class Station extends Thread implements IStationEventListener {
     /**
      * List of taxi cab in waiting state
      */
-	private List<Cab> mTaxiWaiting;
+	private List<CabImpl> mTaxiWaiting;
 	/**
 	 * List of taxi cab currently driving
 	 */
-	private List<Cab> mTaxiDriving;
+	private List<CabImpl> mTaxiDriving;
 	/**
 	 * List of taxi cab on break
 	 */
-	private List<Cab> mTaxiBreak;
+	private List<CabImpl> mTaxiBreak;
 	/**
 	 * List of passengers waiting in queue
 	 */
@@ -86,7 +86,7 @@ public class Station extends Thread implements IStationEventListener {
 	private TaxiMeter mDefaultTaxiMeter;
 	private boolean mThreadRunning = false;
 	
-	private List<Thread> mInitThreads;
+	private List<Runnable> mInitThreads;
 	
 	private IStateChangeListener mStateListener;
 	/**
@@ -98,13 +98,13 @@ public class Station extends Thread implements IStationEventListener {
 	public Station(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
 		mStationName = name;
 		mMaxWaitingCount = maxWaitingCount;
-		mTaxiWaiting = new ArrayList<Cab>();
-		mTaxiBreak = new ArrayList<Cab>();
-		mTaxiDriving = new ArrayList<Cab>();
+		mTaxiWaiting = new ArrayList<CabImpl>();
+		mTaxiBreak = new ArrayList<CabImpl>();
+		mTaxiDriving = new ArrayList<CabImpl>();
 		mPassengersList = new ArrayList<Passenger>();
 		mPassengerExit = new ArrayList<Passenger>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
-		mInitThreads = new ArrayList<Thread>();
+		mInitThreads = new ArrayList<Runnable>();
 	}
 	
 	/**
@@ -112,8 +112,8 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param initCabs
 	 * @param initPassengers
 	 */
-	public void init(List<Cab> initCabs, List<Passenger> initPassengers) {
-		for(Cab cab: initCabs) {
+	public void init(List<ICab> initCabs, List<Passenger> initPassengers) {
+		for(ICab cab: initCabs) {
 			initCab(cab);
 			mInitThreads.add(cab);
 		}
@@ -128,8 +128,8 @@ public class Station extends Thread implements IStationEventListener {
 	 */
 	@Override
 	public synchronized void start() {
-		for(Thread t: mInitThreads) {
-			t.start();
+		for(Runnable t: mInitThreads) {
+			new Thread(t).start();
 		}
 		super.start();
 	}
@@ -137,8 +137,8 @@ public class Station extends Thread implements IStationEventListener {
 	@Override
 	public void interrupt() {
 		mThreadRunning = false;
-		List<Cab> cabs = getCabs();
-		for(Cab cab: cabs) {
+		List<CabImpl> cabs = getCabs();
+		for(CabImpl cab: cabs) {
 			cab.interrupt();
 		}
 		List<Passenger> passengers = getPassengers();
@@ -168,9 +168,9 @@ public class Station extends Thread implements IStationEventListener {
 	 * Get all taxi cabs in station
 	 * @return
 	 */
-	public List<Cab> getCabs() {
+	public List<CabImpl> getCabs() {
 		synchronized (sLock) {		
-			List<Cab> allCabs = new ArrayList<Cab>();
+			List<CabImpl> allCabs = new ArrayList<CabImpl>();
 			allCabs.addAll(mTaxiDriving);
 			allCabs.addAll(mTaxiWaiting);
 			allCabs.addAll(mTaxiBreak);
@@ -245,12 +245,12 @@ public class Station extends Thread implements IStationEventListener {
 	 * Add a cab to the station
 	 * @param cab
 	 */
-	public void addCab(Cab cab) {
+	public void addCab(ICab cab) {
 		if (!mThreadRunning) {
 			throw new UnsupportedOperationException("Cab can by added only to running stataion");
 		}
-		initCab(cab);		
-		cab.start();
+		initCab(cab);
+		new Thread(cab).start();
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Init a new cab in the station
 	 * @param cab
 	 */
-	private void initCab(Cab cab) {
+	private void initCab(ICab cab) {
 		//Set taxi meter
 		cab.setMeter(createTaxiMeter());
 		cab.setStationEventListener(this);
@@ -306,7 +306,7 @@ public class Station extends Thread implements IStationEventListener {
 			if (mTaxiWaiting.isEmpty() || mPassengersList.isEmpty()) {
 				return;
 			}		
-			Cab cab = mTaxiWaiting.remove(0);
+			CabImpl cab = mTaxiWaiting.remove(0);
 			int oldState = detectCabState(cab);			
 			addPassengersToCab(cab);
 			mTaxiDriving.add(cab);
@@ -317,7 +317,7 @@ public class Station extends Thread implements IStationEventListener {
 	/**
 	 * @param cab
 	 */
-	private void addPassengersToCab(Cab cab) {
+	private void addPassengersToCab(CabImpl cab) {
 		Passenger firstPassenger = mPassengersList.remove(0);
 		try {
 			cab.addPassenger(firstPassenger);
@@ -344,7 +344,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param Cab instance of Cab
 	 */
 	@Override
-	public void onBreakRequest(Cab cab) {
+	public void onBreakRequest(CabImpl cab) {
 		synchronized (sLock) {
 			int oldState = detectCabState(cab);
 			mTaxiWaiting.remove(cab);
@@ -359,7 +359,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param Cab instance of cab 
 	 */
 	@Override
-	public void onWaitingRequest(Cab cab) {
+	public void onWaitingRequest(CabImpl cab) {
 		synchronized (sLock) {
 			int oldState = detectCabState(cab);
 			if (oldState == CAB_DRIVE) {
@@ -378,7 +378,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param cab
 	 * @return
 	 */
-	private int detectCabState(Cab cab) {
+	private int detectCabState(CabImpl cab) {
 		if (cab.isDriving()) {
 			return CAB_DRIVE;
 		}
@@ -408,7 +408,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Registered cab thread notify that it's ready
 	 */
 	@Override
-	public void onCabReady(Cab cab) {
+	public void onCabReady(CabImpl cab) {
 		synchronized (sLock) {
 			if (mTaxiWaiting.size() >= mMaxWaitingCount) {
 				cab.goToBreak();

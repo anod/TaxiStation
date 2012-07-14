@@ -1,13 +1,8 @@
 package com.station.taxi;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.IStationEventListener;
+import java.util.*;
 
 /**
  * Tax cab object
@@ -15,7 +10,7 @@ import com.station.taxi.events.IStationEventListener;
  * @author Eran Zimbler
  * @version 0.2
  */
-public class Cab extends Thread {
+public class CabImpl implements ICab { 
     /**
      * Lock used when maintaining queue of requested updates.
      */
@@ -55,13 +50,15 @@ public class Cab extends Thread {
 	 */
 	private int mBreakTime;
 	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
-
+	
+	public CabImpl() { }
+	
 	/**
 	 * 
 	 * @param num Cab number
 	 * @param whileWaiting action while waiting?
 	 */
-	public Cab(int num, String whileWaiting) {
+	public CabImpl(int num, String whileWaiting) {
 		mNumber = num;
 		mWhileWaiting = whileWaiting;
 		// safe for threads
@@ -72,9 +69,15 @@ public class Cab extends Thread {
 	 * Cab Id Number
 	 * @return
 	 */
+	@Override
 	public int getNumber() {
 		return mNumber;
 	}
+	/**
+	 * While waiting action
+	 * @return 
+	 */
+	@Override
 	public String getWhileWaiting()
 	{
 		return mWhileWaiting;
@@ -83,6 +86,7 @@ public class Cab extends Thread {
 	 * Return true if cab driving
 	 * @return
 	 */
+	@Override
 	public boolean isDriving() {
 		synchronized (sLock) {
 			return mCabStatus == STATUS_DRIVING;
@@ -92,6 +96,7 @@ public class Cab extends Thread {
 	 * Get driving time in seconds
 	 * @return
 	 */
+	@Override
 	public int getDrivingTime() {
 		return mDrivingTime;
 	}
@@ -99,6 +104,7 @@ public class Cab extends Thread {
 	 * Return true if cab on break
 	 * @return
 	 */
+	@Override
 	public boolean isOnBreak() {
 		synchronized (sLock) {
 			return mCabStatus == STATUS_BREAK;
@@ -108,6 +114,7 @@ public class Cab extends Thread {
 	 * Return true if cab waiting for passengers
 	 * @return
 	 */
+	@Override
 	public boolean isWaiting() {
 		synchronized (sLock) {
 			return mCabStatus == STATUS_WAITING;
@@ -117,6 +124,7 @@ public class Cab extends Thread {
 	 * Register station listener
 	 * @param listener
 	 */
+	@Override
 	public void setStationEventListener(IStationEventListener listener) {
 		mStationListener = listener;
 	}
@@ -124,12 +132,14 @@ public class Cab extends Thread {
 	 * Register cab event listener
 	 * @param listener
 	 */
+	@Override
 	public void addCabEventListener(CabEventListener listener) {
 		synchronized (sLock) {
 			mEventListeners.add(listener);
 		}
 	}
 	
+	@Override
 	public double getTotalEarning(){
 		double total = 0;
 		for (Receipt r : mReciptsList) { //a map function like in most scripting and functional lanugage would be great here
@@ -137,6 +147,7 @@ public class Cab extends Thread {
 		}
 		return total;
 	}
+	@Override
 	public double getTotalEarning(Date start,Date end){
 		double total =0;
 		for (Receipt r : mReciptsList) {
@@ -150,6 +161,7 @@ public class Cab extends Thread {
 	 * @param passenger
 	 * @throws Exception
 	 */
+	@Override
 	public void addPassenger(Passenger passenger) throws Exception {
 		if (mPassangers.size() > 0) {
 			Passenger first = mPassangers.get(0);
@@ -164,6 +176,7 @@ public class Cab extends Thread {
 	 * Driving destination
 	 * @return
 	 */
+	@Override
 	public String getDestination() {
 		synchronized (sLock) {
 			if (mCabStatus != STATUS_DRIVING) {
@@ -176,6 +189,7 @@ public class Cab extends Thread {
 	 * List of passengers inside the cab
 	 * @return
 	 */
+	@Override
 	public List<Passenger> getPassegners() {
 		return mPassangers;
 	}
@@ -183,6 +197,7 @@ public class Cab extends Thread {
 	 * Current break time
 	 * @return
 	 */
+	@Override
 	public int getBreakTime() {
 		return mBreakTime;
 	}
@@ -190,6 +205,7 @@ public class Cab extends Thread {
 	 * Return instance of current TaxiMeter
 	 * @return
 	 */
+	@Override
 	public TaxiMeter getMeter() {
 		synchronized (mMeter) {
 			return mMeter;			
@@ -199,6 +215,7 @@ public class Cab extends Thread {
 	 * Set TaxiMeter instance
 	 * @param meter
 	 */
+	@Override
 	public void setMeter(TaxiMeter meter) {
 		mMeter = meter;
 	}
@@ -206,6 +223,7 @@ public class Cab extends Thread {
 	 * Check if cab is full
 	 * @return
 	 */
+	@Override
 	public boolean isFull() {
 		synchronized (sLock) {
 			return mPassangers.size() == MAX_PASSANGERS;
@@ -216,13 +234,22 @@ public class Cab extends Thread {
 	public void interrupt() {
 		mThreadRunning = false;
 		notify(CabEventListener.INTERRUPT);
-		super.interrupt();
+	//	super.interrupt();
 	}	
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
 	public void run() {
+		running();
+	}
+
+	/**
+	 * Cab thread loop
+	 */
+	@Override
+	public void running() {
+		System.out.println("ALEXALEXALEX!");
 		// Tell station that cab thread is started and running
 		notify(CabEventListener.START);
 		mStationListener.onCabReady(this);
@@ -242,13 +269,13 @@ public class Cab extends Thread {
 					break;
 				}
 			
-				sleep(ONE_SECOND);
+				Thread.sleep(ONE_SECOND);
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}
 		}
 	}
-
+	
 	/**
 	 * Waiting in station for passengers
 	 * @throws InterruptedException
@@ -285,6 +312,7 @@ public class Cab extends Thread {
 	/**
 	 * Tells to cab that it arrived to destination
 	 */
+	@Override
 	public void arrive() {
 		synchronized (sLock) {
 			if (mCabStatus != STATUS_DRIVING) {
@@ -301,9 +329,10 @@ public class Cab extends Thread {
 	 * Start Driving
 	 * 
 	 */
+	@Override
 	public void drive(){
 		synchronized (sLock) {
-			if (mPassangers.size() == 0) {
+			if (mPassangers.isEmpty()) {
 				throw new RuntimeException("Empty cab");
 			}
 			mDestination = mPassangers.get(0).getDestination();
@@ -316,6 +345,7 @@ public class Cab extends Thread {
 	/**
 	 * Go to waiting state
 	 */
+	@Override
 	public void goToWaiting() {
 		synchronized (sLock) {		
 			mCabStatus = STATUS_WAITING;
@@ -325,6 +355,7 @@ public class Cab extends Thread {
 	/**
 	 * Go to break
 	 */
+	@Override
 	public void goToBreak() {
 		synchronized (sLock) {
 			Random rand = new Random();	
@@ -360,7 +391,7 @@ public class Cab extends Thread {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("[");
+		StringBuilder sb = new StringBuilder("[");
 		sb.append(mNumber);
 		sb.append(": ");
 		switch(mCabStatus) {

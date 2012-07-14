@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
-import com.station.taxi.Cab;
+import com.station.taxi.CabImpl;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.Station.IStateChangeListener;
@@ -112,8 +112,8 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	@Override
 	public void onStationStart(Station station) {
 		mStation = station;
-		List<Cab> cabs = station.getCabs();
-		for(Cab cab: cabs) {
+		List<CabImpl> cabs = station.getCabs();
+		for(CabImpl cab: cabs) {
 			placeCabInPanel(cab, -1);
 		}
 		List<Passenger> pmany = mStation.getPassengers();
@@ -124,7 +124,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	
 
 	@Override
-	public void onCabUpdate(Cab cab, int newState) {
+	public void onCabUpdate(CabImpl cab, int newState) {
 		placeCabInPanel(cab, newState);			
 	}
 
@@ -141,7 +141,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 
 	@Override
-	public void onCabAdd(Cab cab) {
+	public void onCabAdd(CabImpl cab) {
 		placeCabInPanel(cab, -1);
 	}
 
@@ -155,7 +155,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 * @param cab
 	 * @param oldState
 	 */
-	private void placeCabInPanel(Cab cab, int oldState) {
+	private void placeCabInPanel(CabImpl cab, int oldState) {
 		if (cab.isDriving()) {
 			if (oldState == Station.CAB_DRIVE) {
 				throw new RuntimeException("Wrong state");

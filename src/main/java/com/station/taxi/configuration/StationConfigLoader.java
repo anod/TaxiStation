@@ -1,5 +1,6 @@
 package com.station.taxi.configuration;
 
+import com.station.taxi.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +14,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.station.taxi.Cab;
-import com.station.taxi.Passenger;
-import com.station.taxi.Station;
-import com.station.taxi.TaxiMeter;
 import com.station.taxi.spring.StationContext;
 /**
  * Parse configuration xml and load station
@@ -52,7 +49,7 @@ public class StationConfigLoader {
         // parse <system> tag
         TaxiMeter meter = readTaxiMeter(doc);
         Station station = readStation(doc, meter);
-        ArrayList<Cab> taxis = readTaxiCabs(doc);
+        ArrayList<ICab> taxis = readTaxiCabs(doc);
         ArrayList<Passenger> passengers = readPassengers(doc);
         station.init(taxis, passengers);
 		return station;
@@ -81,8 +78,8 @@ public class StationConfigLoader {
 	 * @param doc
 	 * @return
 	 */
-	private ArrayList<Cab> readTaxiCabs(Document doc) {
-		ArrayList<Cab> result = new ArrayList<Cab>();
+	private ArrayList<ICab> readTaxiCabs(Document doc) {
+		ArrayList<ICab> result = new ArrayList<ICab>();
 
         NodeList taxis = doc.getElementsByTagName("taxi");
         for(int i=0; i<taxis.getLength() ; i++){

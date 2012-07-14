@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import com.station.taxi.Cab;
+import com.station.taxi.CabImpl;
 import com.station.taxi.Station;
 /**
  * Add new cab dialog
@@ -100,9 +100,9 @@ public class NewCabDialog extends JDialog {
 		};
 		
 		mWhileWaitingValues = new String[3];
-		mWhileWaitingValues[0]=Cab.WAIT_EAT;
-		mWhileWaitingValues[1]=Cab.WAIT_DRINK;
-		mWhileWaitingValues[2]=Cab.WAIT_NEWSPAPPER;
+		mWhileWaitingValues[0]=CabImpl.WAIT_EAT;
+		mWhileWaitingValues[1]=CabImpl.WAIT_DRINK;
+		mWhileWaitingValues[2]=CabImpl.WAIT_NEWSPAPPER;
 		
 		return waitingStrings;
 	}
@@ -117,7 +117,7 @@ public class NewCabDialog extends JDialog {
 
 		String whileWaiting = mWhileWaitingValues[mWhileWaiting.getSelectedIndex()];
 		int num = Integer.valueOf(mNumber.getText());
-		Cab cab = new Cab(num, whileWaiting);
+		CabImpl cab = new CabImpl(num, whileWaiting);
 		mStation.addCab(cab);
 		setVisible(false);  
 	}

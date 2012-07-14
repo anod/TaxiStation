@@ -1,12 +1,12 @@
 package com.station.taxi.logger;
 
+import com.station.taxi.ICab;
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.station.taxi.Cab;
 import com.station.taxi.Passenger;
 
 /**
@@ -19,7 +19,7 @@ import com.station.taxi.Passenger;
 public class LoggerWrapper {
 	private static final String LOG_CAB = "logs/CabLog_%s.txt";
 	private static final String LOG_PASSENGER = "logs/PassengerLog_%s.txt";
-	private static Logger sLogger = Logger.getLogger("logs/TaxiStation");
+	private static final Logger sLogger = Logger.getLogger("logs/TaxiStation");
 	
 	static {
 		ConsoleHandler consoleHandler = new ConsoleHandler();
@@ -39,7 +39,7 @@ public class LoggerWrapper {
 	 * Add a new Cab Logger
 	 * @param cab
 	 */
-	public static void addCabLogger(Cab cab) {
+	public static void addCabLogger(ICab cab) {
 		
 		FileHandler fileHandler;
 		try {

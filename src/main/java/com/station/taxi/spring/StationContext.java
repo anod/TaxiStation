@@ -4,7 +4,8 @@
  */
 package com.station.taxi.spring;
 
-import com.station.taxi.Cab;
+import com.station.taxi.CabImpl;
+import com.station.taxi.ICab;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -22,8 +23,9 @@ public class StationContext {
 		return mApplicationContext;
 	}
 	
-	public Cab createCab(int num, String whileWaiting) {
-		return (Cab)mApplicationContext.getBean("cab", num, whileWaiting);
+	public ICab createCab(int num, String whileWaiting) {
+		Object o = mApplicationContext.getBean("cab", num, whileWaiting);
+		return (ICab)o;
 	}
 	
 }

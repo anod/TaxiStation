@@ -1,6 +1,6 @@
 package com.station.taxi.events;
 
-import com.station.taxi.Cab;
+import com.station.taxi.CabImpl;
 /**
  * Cab Event listener interface
  * @author alex
@@ -18,5 +18,5 @@ abstract public class CabEventListener {
 	public static final int INBREAK = 7;
 	public static final int DRIVING = 8;	
 
-	abstract public void update(int type, Cab cab);
+	abstract public void update(int type, CabImpl cab);
 }

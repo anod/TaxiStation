@@ -2,18 +2,19 @@ package com.station.taxi.logger;
 
 import java.util.List;
 
-import com.station.taxi.Cab;
+import com.station.taxi.CabImpl;
+import com.station.taxi.ICab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
 
 
 public class CabLogger extends CabEventListener {
 
-	public CabLogger(Cab cab) {
+	public CabLogger(ICab cab) {
 		LoggerWrapper.addCabLogger(cab);
 	}
 	@Override
-	public void update(int type, Cab cab) {
+	public void update(int type, CabImpl cab) {
 		switch(type) {
 		case START:
 			logCab(cab, "Cab is ready and running...");
@@ -41,14 +42,14 @@ public class CabLogger extends CabEventListener {
 	 * @param cab
 	 * @param message
 	 */
-	private static void logCab(Cab cab, String message) {
+	private static void logCab(CabImpl cab, String message) {
 		LoggerWrapper.log(String.format(CabFilter.PATTERN, cab.getNumber()) + " " + message);
 	}
 
 	/**
 	 * @param cab
 	 */
-	private void logArrivedDestination(Cab cab) {
+	private void logArrivedDestination(CabImpl cab) {
 		List<Passenger> passengers = cab.getPassegners();
 		String destination = passengers.get(0).getDestination();		
 		int size = passengers.size();
@@ -58,7 +59,7 @@ public class CabLogger extends CabEventListener {
 	/**
 	 * @param cab
 	 */
-	private void logDriveDestination(Cab cab) {
+	private void logDriveDestination(CabImpl cab) {
 		// Create string of passenger names
 		List<Passenger> passengers = cab.getPassegners();
 		String destination = passengers.get(0).getDestination();		

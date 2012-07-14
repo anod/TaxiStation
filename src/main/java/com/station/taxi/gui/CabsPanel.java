@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import com.station.taxi.Cab;
+import com.station.taxi.CabImpl;
 /**
  * Panel contain cabs in waiting state
  * @author alex
@@ -26,7 +26,7 @@ public abstract class CabsPanel extends JPanel {
 	 * Adds new view and if it's already there refresh it
 	 * @param cab
 	 */
-	public void addOrUpdateCab(Cab cab) {
+	public void addOrUpdateCab(CabImpl cab) {
 		int num = cab.getNumber();
 		if (!mCabViews.containsKey(num)) {
 			CabView view = new CabView(cab);
@@ -42,7 +42,7 @@ public abstract class CabsPanel extends JPanel {
 	 * @param cab
 	 * @return
 	 */
-	public boolean removeCab(Cab cab) {
+	public boolean removeCab(CabImpl cab) {
 		int number = cab.getNumber();
 		if (mCabViews.containsKey(number)) {
 			remove(mCabViews.get(number));

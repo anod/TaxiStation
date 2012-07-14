@@ -144,7 +144,7 @@ public class Passenger extends Thread {
 	 * @param (Cab)cab
 	 * @param (double)price
 	 */
-	public void onArrival(Cab cab, double price) {
+	public void onArrival(CabImpl cab, double price) {
 		mPaidPrice  = price;
 		notify(PassengerEventListener.ARRIVED);
 		mState = STATE_EXIT;
