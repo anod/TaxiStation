@@ -2,7 +2,6 @@ package com.station.taxi.logger;
 
 import java.util.List;
 
-import com.station.taxi.CabImpl;
 import com.station.taxi.ICab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
@@ -10,30 +9,28 @@ import com.station.taxi.events.CabEventListener;
 
 public class CabLogger extends CabEventListener {
 
-	public CabLogger(ICab cab) {
-		LoggerWrapper.addCabLogger(cab);
-	}
 	@Override
-	public void update(int type, CabImpl cab) {
+	public void update(int type, ICab cab) {
 		switch(type) {
-		case START:
-			logCab(cab, "Cab is ready and running...");
-		break;
-		case INTERRUPT:
-			logCab(cab, "Cab interupt requested...");		
-		break;
-		case WAITING:
-			logCab(cab, "Waiting for passengers...");		
-		break;		
-		case DRIVE_DESTINATION:
-			logDriveDestination(cab);
-		break;
-		case ARRIVED_DESTINATION:
-			logArrivedDestination(cab);		
-		break;
-		case GOTO_BREAK:
-			logCab(cab,"Goto break for "+(cab.getBreakTime()/1000)+" seconds to "+cab.getWhileWaiting());
-		break;
+			case START:
+				LoggerWrapper.addCabLogger(cab);
+				logCab(cab, "Cab is ready and running...");
+			break;
+			case INTERRUPT:
+				logCab(cab, "Cab interupt requested...");		
+			break;
+			case WAITING:
+				logCab(cab, "Waiting for passengers...");		
+			break;		
+			case DRIVE_DESTINATION:
+				logDriveDestination(cab);
+			break;
+			case ARRIVED_DESTINATION:
+				logArrivedDestination(cab);		
+			break;
+			case GOTO_BREAK:
+				logCab(cab,"Goto break for "+(cab.getBreakTime()/1000)+" seconds to "+cab.getWhileWaiting());
+			break;
 		}
 		
 	}
@@ -42,14 +39,14 @@ public class CabLogger extends CabEventListener {
 	 * @param cab
 	 * @param message
 	 */
-	private static void logCab(CabImpl cab, String message) {
+	private static void logCab(ICab cab, String message) {
 		LoggerWrapper.log(String.format(CabFilter.PATTERN, cab.getNumber()) + " " + message);
 	}
 
 	/**
 	 * @param cab
 	 */
-	private void logArrivedDestination(CabImpl cab) {
+	private void logArrivedDestination(ICab cab) {
 		List<Passenger> passengers = cab.getPassegners();
 		String destination = passengers.get(0).getDestination();		
 		int size = passengers.size();
@@ -59,7 +56,7 @@ public class CabLogger extends CabEventListener {
 	/**
 	 * @param cab
 	 */
-	private void logDriveDestination(CabImpl cab) {
+	private void logDriveDestination(ICab cab) {
 		// Create string of passenger names
 		List<Passenger> passengers = cab.getPassegners();
 		String destination = passengers.get(0).getDestination();		

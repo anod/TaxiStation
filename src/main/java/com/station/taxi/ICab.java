@@ -15,6 +15,7 @@ import java.util.List;
  */
 public interface ICab extends Runnable {
 
+
 	/**
 	 * Register cab event listener
 	 * @param listener
@@ -120,11 +121,6 @@ public interface ICab extends Runnable {
 	 * @return
 	 */
 	boolean isWaiting();
-
-	/**
-	 * Cab thread loop
-	 */
-	void running();
 
 	/**
 	 * Set TaxiMeter instance

@@ -22,7 +22,6 @@ public class TaxiStationMain {
 
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, TaxiStationMain.class);
 		final StationContext context = new StationContext(applicationContext);
-        
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -31,6 +30,5 @@ public class TaxiStationMain {
 				window.addWindowListener(new StationWindowAdapter(window));
 			}
 		});
-
 	}
 }

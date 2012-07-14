@@ -24,7 +24,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Events of station state change:
 	 * 	Initialization
 	 *  Adding or changing state of cabs
-	 *  Adding or cahnging state of passengers
+	 *  Adding or changing state of passengers
 	 */
 	public interface IStateChangeListener {
 		/**
@@ -273,7 +273,7 @@ public class Station extends Thread implements IStationEventListener {
 		//Set taxi meter
 		cab.setMeter(createTaxiMeter());
 		cab.setStationEventListener(this);
-		cab.addCabEventListener(new CabLogger(cab));
+		cab.addCabEventListener(new CabLogger());
 	}
 
 	/**

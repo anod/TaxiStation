@@ -64,8 +64,9 @@ public class LoggerWrapper {
 			fileHandler.setFilter(new PassengerFilter(p.getPassangerName()));
 			sLogger.addHandler(fileHandler);
 			
-		} catch (Exception e)
-		{ e.printStackTrace(); }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Put a message into info log

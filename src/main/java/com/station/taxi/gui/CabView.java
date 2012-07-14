@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.station.taxi.CabImpl;
+import com.station.taxi.ICab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
 /**
@@ -212,10 +213,9 @@ public class CabView extends JPanel {
 	 */
 	class ViewCabEventListener extends CabEventListener {
 		@Override
-		public void update(int type, CabImpl cab) {
+		public void update(int type, ICab cab) {
 			refresh();
 		}
-		
 	}
 	
 	

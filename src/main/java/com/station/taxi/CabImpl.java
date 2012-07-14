@@ -51,19 +51,30 @@ public class CabImpl implements ICab {
 	private int mBreakTime;
 	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
 	
-	public CabImpl() { }
-	
 	/**
 	 * 
 	 * @param num Cab number
 	 * @param whileWaiting action while waiting?
 	 */
 	public CabImpl(int num, String whileWaiting) {
+		init(num, whileWaiting);
+	}
+
+	/**
+	 * 
+	 * @param num
+	 * @param whileWaiting 
+	 */
+	protected void init(int num, String whileWaiting) {
 		mNumber = num;
 		mWhileWaiting = whileWaiting;
 		// safe for threads
 		mPassangers = Collections.synchronizedList(new ArrayList<Passenger>(MAX_PASSANGERS));
 		mReciptsList = Collections.synchronizedList(new ArrayList<Receipt>());
+	}
+	
+	public void testAop() { 
+		System.out.println("testAop body...");
 	}
 	/**
 	 * Cab Id Number
@@ -241,17 +252,7 @@ public class CabImpl implements ICab {
 	 */
 	@Override
 	public void run() {
-		running();
-	}
-
-	/**
-	 * Cab thread loop
-	 */
-	@Override
-	public void running() {
-		System.out.println("ALEXALEXALEX!");
-		// Tell station that cab thread is started and running
-		notify(CabEventListener.START);
+	// Tell station that cab thread is started and running
 		mStationListener.onCabReady(this);
 		mThreadRunning = true;
 		
