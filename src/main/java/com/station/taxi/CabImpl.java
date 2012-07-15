@@ -65,17 +65,14 @@ public class CabImpl implements ICab {
 	 * @param num
 	 * @param whileWaiting 
 	 */
-	protected void init(int num, String whileWaiting) {
+	private void init(int num, String whileWaiting) {
 		mNumber = num;
 		mWhileWaiting = whileWaiting;
 		// safe for threads
 		mPassangers = Collections.synchronizedList(new ArrayList<Passenger>(MAX_PASSANGERS));
 		mReciptsList = Collections.synchronizedList(new ArrayList<Receipt>());
 	}
-	
-	public void testAop() { 
-		System.out.println("testAop body...");
-	}
+
 	/**
 	 * Cab Id Number
 	 * @return
@@ -162,8 +159,9 @@ public class CabImpl implements ICab {
 	public double getTotalEarning(Date start,Date end){
 		double total =0;
 		for (Receipt r : mReciptsList) {
-			if(r.getStartTime().after(start) && r.getStartTime().before(end))
+			if(r.getStartTime().after(start) && r.getStartTime().before(end)) {
 				total += r.getPrice();
+			}
 		}
 		return total;
 	}
@@ -253,6 +251,7 @@ public class CabImpl implements ICab {
 	@Override
 	public void run() {
 	// Tell station that cab thread is started and running
+		notify(CabEventListener.START);
 		mStationListener.onCabReady(this);
 		mThreadRunning = true;
 		

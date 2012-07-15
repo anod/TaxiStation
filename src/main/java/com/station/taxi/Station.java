@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.station.taxi.events.IStationEventListener;
-import com.station.taxi.logger.CabLogger;
 import com.station.taxi.logger.PassengerLogger;
 /**
  * Taxi cab station object
@@ -273,7 +272,6 @@ public class Station extends Thread implements IStationEventListener {
 		//Set taxi meter
 		cab.setMeter(createTaxiMeter());
 		cab.setStationEventListener(this);
-		cab.addCabEventListener(new CabLogger());
 	}
 
 	/**

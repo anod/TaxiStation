@@ -11,5 +11,5 @@
 		<aop:include name="cabLoggingAspect"/>
 	</aop:aspectj-autoproxy>
 	<!-- AspectJ -->
-	<bean id="cabLoggingAspect" class="com.station.taxi.aop.CabLoggingAspect"/>
+	<bean id="cabLoggingAspect" class="com.station.taxi.aop.CabLoggingAspect" init-method="init"/>
 </beans>

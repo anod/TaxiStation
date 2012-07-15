@@ -12,16 +12,51 @@ import org.aspectj.lang.annotation.*;
  */
 @Aspect 
 public class CabLoggingAspect {
-
+	private CabLogger mLogger;
+	
+	public void init() {
+		System.out.println("CabLoggingAspect: init()");
+		mLogger = new CabLogger();
+	}
+	
 	@Before("execution(* com.station.taxi.ICab.run(..))")
     public void logStart(JoinPoint joinPoint) {
-		ICab cab = (ICab)joinPoint.getThis();
-				
-		CabLogger logger = new CabLogger();
-		logger.update(CabEventListener.START, cab);
-		System.out.println("logRunning() is running!");
-		System.out.println("hijacked : " + joinPoint.getSignature().getName());
-		System.out.println("******");
+		System.out.println("CabLoggingAspect: logStart()");
 
+		ICab cab = (ICab)joinPoint.getThis();				
+		mLogger.update(CabEventListener.START, cab);
     }
+	
+	@AfterReturning("execution(* com.station.taxi.ICab.drive(..))")
+	public void logDrive(JoinPoint joinPoint) {
+		System.out.println("CabLoggingAspect: logDrive()");
+
+		ICab cab = (ICab)joinPoint.getThis();				
+		mLogger.update(CabEventListener.DRIVE_DESTINATION, cab);
+	}
+	
+	@AfterReturning("execution(* com.station.taxi.ICab.goToWaiting(..))")
+	public void logWaiting(JoinPoint joinPoint) {
+		System.out.println("CabLoggingAspect: logWaiting()");
+
+		ICab cab = (ICab)joinPoint.getThis();				
+		mLogger.update(CabEventListener.WAITING, cab);
+	}
+
+	@AfterReturning("execution(* com.station.taxi.ICab.goToBreak(..))")
+	public void logBreak(JoinPoint joinPoint) {
+		System.out.println("CabLoggingAspect: logBreak()");
+
+		ICab cab = (ICab)joinPoint.getThis();				
+		mLogger.update(CabEventListener.GOTO_BREAK, cab);
+	}
+
+	@AfterReturning("execution(* com.station.taxi.ICab.arrive(..))")
+	public void logArrive(JoinPoint joinPoint) {
+		System.out.println("CabLoggingAspect: logArrive()");
+
+		ICab cab = (ICab)joinPoint.getThis();				
+		mLogger.update(CabEventListener.ARRIVED_DESTINATION, cab);
+	}
+
 }
