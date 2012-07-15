@@ -2,13 +2,13 @@
 <system pricePerSecond="0.5" startPrice="4.3">
 <station maxWaitingTaxis="5" name="Hahasmonaim"/>
 <taxis>
-<taxi number="888" whileWaiting="readNewsPaper"/>
-<taxi number="111" whileWaiting="readNewsPaper"/>
 <taxi number="333" whileWaiting="drink"/>
-<taxi number="222" whileWaiting="eat"/>
-<taxi number="555" whileWaiting="eat"/>
-<taxi number="777" whileWaiting="drink"/>
 <taxi number="444" whileWaiting="readNewsPaper"/>
+<taxi number="777" whileWaiting="drink"/>
+<taxi number="222" whileWaiting="eat"/>
+<taxi number="111" whileWaiting="readNewsPaper"/>
+<taxi number="555" whileWaiting="eat"/>
+<taxi number="888" whileWaiting="readNewsPaper"/>
 </taxis>
 <passengers/>
 </system>

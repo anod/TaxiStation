@@ -10,7 +10,7 @@ import java.util.*;
  * @author Eran Zimbler
  * @version 0.2
  */
-public class CabImpl implements ICab { 
+public class Cab implements ICab { 
     /**
      * Lock used when maintaining queue of requested updates.
      */
@@ -56,7 +56,7 @@ public class CabImpl implements ICab {
 	 * @param num Cab number
 	 * @param whileWaiting action while waiting?
 	 */
-	public CabImpl(int num, String whileWaiting) {
+	public Cab(int num, String whileWaiting) {
 		init(num, whileWaiting);
 	}
 

@@ -1,6 +1,6 @@
 package com.station.taxi.events;
 
-import com.station.taxi.CabImpl;
+import com.station.taxi.ICab;
 import com.station.taxi.Passenger;
 
 /**
@@ -14,17 +14,17 @@ public interface IStationEventListener {
 	 * Called when cab thread is ready
 	 * @param Cab cab
 	 */
-	public void onCabReady(CabImpl cab);
+	public void onCabReady(ICab cab);
 	/**
 	 * Cab request break event
 	 * @param cab
 	 */
-	public void onBreakRequest(CabImpl cab);
+	public void onBreakRequest(ICab cab);
 	/**
 	 * Cab request waiting event after arriving to the destination
 	 * @param Cab cab
 	 */
-	public void onWaitingRequest(CabImpl cab);
+	public void onWaitingRequest(ICab cab);
 	/**
 	 * Passenger request Exit event
 	 * @param Passenger p

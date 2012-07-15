@@ -19,7 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import com.station.taxi.CabImpl;
+import com.station.taxi.ICab;
 import com.station.taxi.Passenger;
 import com.station.taxi.Station;
 import com.station.taxi.TaxiMeter;
@@ -59,7 +59,7 @@ public class StationConfigStorage {
 			station.getPassengers()
 		);
 	}	
-	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<CabImpl> taxis,List<Passenger> passengers)
+	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<ICab> taxis,List<Passenger> passengers)
 	{
 		root.setAttribute("pricePerSecond", String.valueOf(meter.getPricePerSecond()));
 		root.setAttribute("startPrice", String.valueOf(meter.getStartPrice()));
@@ -96,9 +96,9 @@ public class StationConfigStorage {
 		}
 		return passengersRoot;
 	}
-	private Node writeTaxisElements(List<CabImpl> taxis) {
+	private Node writeTaxisElements(List<ICab> taxis) {
 		Element taxiRoot = doc.createElement("taxis");
-		for(CabImpl c: taxis) {
+		for(ICab c: taxis) {
 			Element taxiChild = doc.createElement("taxi");
 			taxiChild.setAttribute("number", String.valueOf(c.getNumber()));
 			taxiChild.setAttribute("whileWaiting", c.getWhileWaiting());

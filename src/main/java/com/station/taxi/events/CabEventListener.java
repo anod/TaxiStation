@@ -1,6 +1,5 @@
 package com.station.taxi.events;
 
-import com.station.taxi.CabImpl;
 import com.station.taxi.ICab;
 /**
  * Cab Event listener interface

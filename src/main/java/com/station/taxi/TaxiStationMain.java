@@ -19,7 +19,6 @@ public class TaxiStationMain {
 	private static final String CONFIG_PATH = "spring/StationXMLConfig.xml";
 
 	public static void main(String[] args) {
-
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, TaxiStationMain.class);
 		final StationContext context = new StationContext(applicationContext);
 		SwingUtilities.invokeLater(new Runnable() {

@@ -4,7 +4,6 @@
  */
 package com.station.taxi.spring;
 
-import com.station.taxi.CabImpl;
 import com.station.taxi.ICab;
 import org.springframework.context.ApplicationContext;
 

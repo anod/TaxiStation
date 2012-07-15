@@ -20,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import com.station.taxi.CabImpl;
-import com.station.taxi.Station;
+import com.station.taxi.Cab;
+import com.station.taxi.ICab;
 /**
  * Add new cab dialog
  * @author alex
@@ -32,15 +32,15 @@ public class NewCabDialog extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Station mStation;
+	private StationFrame mStationFrame;
 	private JTextField mNumber;
 	private JComboBox<String> mWhileWaiting;
 	private String[] mWhileWaitingValues;
 
 	public NewCabDialog(StationFrame stationFrame) {
 		setTitle(TextsBundle.getString("dialog_addcab_title")); //$NON-NLS-1$
-		mStation = stationFrame.getStation();
-		new JDialog(stationFrame, TextsBundle.getString("dialog_title_addcab"));
+		mStationFrame = stationFrame;
+		JDialog jDialog = new JDialog(stationFrame, TextsBundle.getString("dialog_title_addcab"));
 		setupViews();
 		pack();
 		setLocationRelativeTo(null);		
@@ -56,11 +56,13 @@ public class NewCabDialog extends JDialog {
 
 		btnPanel.add(okBtn);
 		okBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent ae) {
 				addButton();
 			}
 		});
 		noBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent ae) {
 				cancelButton();
 			}
@@ -100,9 +102,9 @@ public class NewCabDialog extends JDialog {
 		};
 		
 		mWhileWaitingValues = new String[3];
-		mWhileWaitingValues[0]=CabImpl.WAIT_EAT;
-		mWhileWaitingValues[1]=CabImpl.WAIT_DRINK;
-		mWhileWaitingValues[2]=CabImpl.WAIT_NEWSPAPPER;
+		mWhileWaitingValues[0]=Cab.WAIT_EAT;
+		mWhileWaitingValues[1]=Cab.WAIT_DRINK;
+		mWhileWaitingValues[2]=Cab.WAIT_NEWSPAPPER;
 		
 		return waitingStrings;
 	}
@@ -117,8 +119,8 @@ public class NewCabDialog extends JDialog {
 
 		String whileWaiting = mWhileWaitingValues[mWhileWaiting.getSelectedIndex()];
 		int num = Integer.valueOf(mNumber.getText());
-		CabImpl cab = new CabImpl(num, whileWaiting);
-		mStation.addCab(cab);
+		ICab cab = mStationFrame.getContext().createCab(num, whileWaiting);
+		mStationFrame.getStation().addCab(cab);
 		setVisible(false);  
 	}
 

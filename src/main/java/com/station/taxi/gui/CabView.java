@@ -20,7 +20,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.station.taxi.CabImpl;
 import com.station.taxi.ICab;
 import com.station.taxi.Passenger;
 import com.station.taxi.events.CabEventListener;
@@ -35,7 +34,7 @@ public class CabView extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private CabImpl mCab;
+	private ICab mCab;
 	private JTable mPassangertable;
 	private JLabel mStatusLabel;
 	private JButton mBtnArrive;
@@ -46,7 +45,7 @@ public class CabView extends JPanel {
 	private MouseAdapter mClickAdapter;
 	
 	
-	public CabView(CabImpl cab) {
+	public CabView(ICab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
 		
@@ -111,6 +110,7 @@ public class CabView extends JPanel {
 		mBtnArrive = new JButton(TextsBundle.getString("btn_arrive"));
 		mInfoPanel.add(mBtnArrive);
 		mBtnArrive.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				mCab.arrive();
 			}
@@ -155,7 +155,7 @@ public class CabView extends JPanel {
 	 * Change arrive button according to cab state
 	 * @param cab
 	 */
-	private void setArriveBtn(CabImpl cab) {
+	private void setArriveBtn(ICab cab) {
 		if (cab.isDriving()) {
 			mBtnArrive.setVisible(true);
 		} else {
@@ -167,7 +167,7 @@ public class CabView extends JPanel {
 	/**
 	 * Add passengers to the table component
 	 */
-	private void setPassangers(CabImpl cab) {
+	private void setPassangers(ICab cab) {
 		List<Passenger> passengers = cab.getPassegners();
 		int size = passengers.size();
 		Object[][] data = new Object[2][2];
@@ -186,7 +186,7 @@ public class CabView extends JPanel {
 	 * Update status text and icon
 	 * @param cab
 	 */
-	private void setStatus(CabImpl cab) {
+	private void setStatus(ICab cab) {
 
 		String text;
 		if (cab.isDriving()) {

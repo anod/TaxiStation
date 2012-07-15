@@ -19,11 +19,19 @@ public class CabLoggingAspect {
 		mLogger = new CabLogger();
 	}
 	
+	@Pointcut("execution(* com.station.taxi.ICab.*(..))")
+	public void anyCall() { }
+	
+	@Before("anyCall()")
+	public void logAnyCall(JoinPoint joinPoint) {
+		System.out.println("CabLoggingAspect: logAnyCall(): "+joinPoint.getSignature().getName());
+	}
+	
 	@Before("execution(* com.station.taxi.ICab.run(..))")
     public void logStart(JoinPoint joinPoint) {
 		System.out.println("CabLoggingAspect: logStart()");
 
-		ICab cab = (ICab)joinPoint.getThis();				
+		ICab cab = (ICab)joinPoint.getTarget();		
 		mLogger.update(CabEventListener.START, cab);
     }
 	
@@ -31,7 +39,7 @@ public class CabLoggingAspect {
 	public void logDrive(JoinPoint joinPoint) {
 		System.out.println("CabLoggingAspect: logDrive()");
 
-		ICab cab = (ICab)joinPoint.getThis();				
+		ICab cab = (ICab)joinPoint.getTarget();				
 		mLogger.update(CabEventListener.DRIVE_DESTINATION, cab);
 	}
 	
@@ -39,7 +47,7 @@ public class CabLoggingAspect {
 	public void logWaiting(JoinPoint joinPoint) {
 		System.out.println("CabLoggingAspect: logWaiting()");
 
-		ICab cab = (ICab)joinPoint.getThis();				
+		ICab cab = (ICab)joinPoint.getTarget();				
 		mLogger.update(CabEventListener.WAITING, cab);
 	}
 
@@ -47,7 +55,7 @@ public class CabLoggingAspect {
 	public void logBreak(JoinPoint joinPoint) {
 		System.out.println("CabLoggingAspect: logBreak()");
 
-		ICab cab = (ICab)joinPoint.getThis();				
+		ICab cab = (ICab)joinPoint.getTarget();				
 		mLogger.update(CabEventListener.GOTO_BREAK, cab);
 	}
 
@@ -55,7 +63,7 @@ public class CabLoggingAspect {
 	public void logArrive(JoinPoint joinPoint) {
 		System.out.println("CabLoggingAspect: logArrive()");
 
-		ICab cab = (ICab)joinPoint.getThis();				
+		ICab cab = (ICab)joinPoint.getTarget();				
 		mLogger.update(CabEventListener.ARRIVED_DESTINATION, cab);
 	}
 
