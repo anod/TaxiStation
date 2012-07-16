@@ -51,6 +51,8 @@ public class Cab implements ICab {
 	private int mBreakTime;
 	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
 	
+	private ICab mAopProxy;
+	
 	/**
 	 * 
 	 * @param num Cab number
@@ -58,6 +60,10 @@ public class Cab implements ICab {
 	 */
 	public Cab(int num, String whileWaiting) {
 		init(num, whileWaiting);
+	}
+	
+	public void setAopProxy(ICab proxy) {
+		mAopProxy = proxy;
 	}
 
 	/**
@@ -252,7 +258,8 @@ public class Cab implements ICab {
 	public void run() {
 	// Tell station that cab thread is started and running
 		notify(CabEventListener.START);
-		mStationListener.onCabReady(this);
+		
+		mStationListener.onCabReady(mAopProxy);
 		mThreadRunning = true;
 		
 		while ( mThreadRunning ) {
@@ -284,7 +291,7 @@ public class Cab implements ICab {
 		Random rand = new Random();
 		int value = rand.nextInt(100);
 		if (value < 10) {		
-			mStationListener.onBreakRequest(this);
+			mStationListener.onBreakRequest(mAopProxy);
 		}
 	}
 	/**
@@ -295,7 +302,7 @@ public class Cab implements ICab {
 		mBreakTime -= ONE_SECOND;
 		notify(CabEventListener.INBREAK);
 		if (mBreakTime <=0) {
-			mStationListener.onWaitingRequest(this);
+			mStationListener.onWaitingRequest(mAopProxy);
 		}
 	}
 	/**
@@ -322,7 +329,7 @@ public class Cab implements ICab {
 			mReciptsList.add(mMeter.reciept(size));
 			notifyArrival();
 			mPassangers.clear();
-			mStationListener.onWaitingRequest(this);
+			mStationListener.onWaitingRequest(mAopProxy);
 		}
 	}
 	/**
@@ -371,7 +378,7 @@ public class Cab implements ICab {
 	private void notifyArrival() {
 		notify(CabEventListener.ARRIVED_DESTINATION);		
 		for(Passenger p: mPassangers) {
-			p.onArrival(this, mMeter.getCurrentValue() / mPassangers.size());
+			p.onArrival(mAopProxy, mMeter.getCurrentValue() / mPassangers.size());
 		}
 	}
 	
