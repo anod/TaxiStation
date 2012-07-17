@@ -1,6 +1,11 @@
 package com.station.taxi;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 /**
  * Receipt is used to keep the receipts in the cab object.
  * @author alex
@@ -8,7 +13,13 @@ import java.util.Date;
  * @version 0.2
  *
  */
-public class Receipt {
+@Entity
+public class Receipt implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy= GenerationType.AUTO)
+	private long mId;
 	private double mPrice;
 	private Date mStartTime;
 	private Date mEndTime;
