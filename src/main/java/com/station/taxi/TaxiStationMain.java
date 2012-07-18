@@ -16,7 +16,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class TaxiStationMain {
 
-	private static final String CONFIG_PATH = "spring/StationXMLConfig.xml";
+	private static final String CONFIG_PATH = "StationXMLConfig.xml";
 
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, TaxiStationMain.class);
