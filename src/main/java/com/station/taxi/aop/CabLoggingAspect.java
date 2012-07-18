@@ -15,56 +15,41 @@ public class CabLoggingAspect {
 	private CabLogger mLogger;
 	
 	public void init() {
-		System.out.println("CabLoggingAspect: init()");
 		mLogger = new CabLogger();
 	}
-	
-	@Pointcut("execution(* com.station.taxi.ICab.*(..))")
-	public void anyCall() { }
-	
-	@Before("anyCall()")
-	public void logAnyCall(JoinPoint joinPoint) {
-		System.out.println("CabLoggingAspect: logAnyCall(): "+joinPoint.getSignature().getName());
-	}
-	
+
 	@Before("execution(* com.station.taxi.ICab.run(..))")
     public void logStart(JoinPoint joinPoint) {
-		System.out.println("CabLoggingAspect: logStart()");
-
-		ICab cab = (ICab)joinPoint.getTarget();		
-		mLogger.update(CabEventListener.START, cab);
+		update(joinPoint, CabEventListener.START);
     }
 	
 	@AfterReturning("execution(* com.station.taxi.ICab.drive(..))")
 	public void logDrive(JoinPoint joinPoint) {
-		System.out.println("CabLoggingAspect: logDrive()");
-
-		ICab cab = (ICab)joinPoint.getTarget();				
-		mLogger.update(CabEventListener.DRIVE_DESTINATION, cab);
+		update(joinPoint, CabEventListener.DRIVE_DESTINATION);
 	}
 	
 	@AfterReturning("execution(* com.station.taxi.ICab.goToWaiting(..))")
 	public void logWaiting(JoinPoint joinPoint) {
-		System.out.println("CabLoggingAspect: logWaiting()");
-
-		ICab cab = (ICab)joinPoint.getTarget();				
-		mLogger.update(CabEventListener.WAITING, cab);
+		update(joinPoint, CabEventListener.WAITING);
 	}
 
 	@AfterReturning("execution(* com.station.taxi.ICab.goToBreak(..))")
 	public void logBreak(JoinPoint joinPoint) {
-		System.out.println("CabLoggingAspect: logBreak()");
-
-		ICab cab = (ICab)joinPoint.getTarget();				
-		mLogger.update(CabEventListener.GOTO_BREAK, cab);
+		update(joinPoint, CabEventListener.GOTO_BREAK);
 	}
 
 	@AfterReturning("execution(* com.station.taxi.ICab.arrive(..))")
 	public void logArrive(JoinPoint joinPoint) {
-		System.out.println("CabLoggingAspect: logArrive()");
-
-		ICab cab = (ICab)joinPoint.getTarget();				
-		mLogger.update(CabEventListener.ARRIVED_DESTINATION, cab);
+		update(joinPoint, CabEventListener.ARRIVED_DESTINATION);
 	}
 
+	@AfterReturning("execution(* com.station.taxi.ICab.interrupt(..))")
+	public void logInterrupt(JoinPoint joinPoint) {
+		update(joinPoint, CabEventListener.INTERRUPT);
+	}
+
+	private void update(JoinPoint joinPoint, int type) {
+		ICab cab = (ICab)joinPoint.getTarget();				
+		mLogger.update(type, cab);
+	}
 }
