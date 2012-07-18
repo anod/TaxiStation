@@ -1,5 +1,8 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.ICab;
+import com.station.taxi.IPassenger;
+import com.station.taxi.events.CabEventListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -19,10 +21,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-
-import com.station.taxi.ICab;
-import com.station.taxi.Passenger;
-import com.station.taxi.events.CabEventListener;
 /**
  * Represents cab on the panel
  * @author alex
@@ -168,7 +166,7 @@ public class CabView extends JPanel {
 	 * Add passengers to the table component
 	 */
 	private void setPassangers(ICab cab) {
-		List<Passenger> passengers = cab.getPassegners();
+		List<IPassenger> passengers = cab.getPassegners();
 		int size = passengers.size();
 		Object[][] data = new Object[2][2];
 		data[0][0] = (size>0) ? passengers.get(0).getPassangerName() : "";

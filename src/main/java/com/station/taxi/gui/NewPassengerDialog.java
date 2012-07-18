@@ -1,10 +1,10 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.IPassenger;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,10 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
-import javax.xml.soap.Text;
 
-import com.station.taxi.Passenger;
-import com.station.taxi.Station;
 /**
  * The new Passenger dialog panel
  * @author Eran Zimbler
@@ -28,6 +25,7 @@ public class NewPassengerDialog extends JDialog {
 	private JPanel content = new JPanel();
 	private JLabel warning = new JLabel();
 	private StationFrame mOwner;
+	
 	public NewPassengerDialog(StationFrame owner) {
 		new JDialog(owner, TextsBundle.getString("dialog_title_addpassenger"));
 		
@@ -52,7 +50,7 @@ public class NewPassengerDialog extends JDialog {
 			this.repaint();
 			return;
 		}
-		Passenger p = new Passenger(name,dest);
+		IPassenger p = mOwner.getContext().createPassenger(name,dest);
 		mOwner.getStation().addPassenger(p);
 		setVisible(false);
 

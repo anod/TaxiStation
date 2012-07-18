@@ -1,11 +1,10 @@
 package com.station.taxi;
 
+import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.events.PassengerEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import com.station.taxi.events.IStationEventListener;
-import com.station.taxi.events.PassengerEventListener;
 
 /**
  * Represents passenger of taxi cab
@@ -13,7 +12,7 @@ import com.station.taxi.events.PassengerEventListener;
  * @author Eran Zimbler
  * @version 0.2 
  */
-public class Passenger extends Thread {
+public class Passenger implements IPassenger {
 	private static final int STATE_INIT = 0;
 	private static final int STATE_WAITING = 1;
 	private static final int STATE_TRANSIT = 2;
@@ -28,29 +27,38 @@ public class Passenger extends Thread {
 	private int mState = STATE_INIT;
 	private int mTimeLeft = 25;
 	
-	private List<PassengerEventListener> mEventListeners = new ArrayList<PassengerEventListener>();
+	private List<PassengerEventListener> mEventListeners = new ArrayList<>();
 	private double mPaidPrice = .0;
 
+	private IPassenger mAopProxy;
+	
 	public Passenger(String name, String destination) {
 		mName = name;
 		mDestination = destination;
 	}
 
+	public void setAopProxy(IPassenger proxy) {
+		mAopProxy = proxy;
+	}
+	
 	/**
 	 * @return name of passenger
 	 */
+	@Override
 	public String getPassangerName() {
 		return mName;
 	}
 	/**
 	 * @return Time left in line of passenger
 	 */
+	@Override
 	public int getTimeLeft() {
 		return mTimeLeft;
 	}
 	/**
 	 * @return destination of passenger
 	 */
+	@Override
 	public  String getDestination() {
 		return mDestination;
 	}
@@ -58,6 +66,7 @@ public class Passenger extends Thread {
 	 * 
 	 * @return time to wait in queue
 	 */
+	@Override
 	public int getExitTime() {
 		return mExitTime;
 	}
@@ -65,6 +74,7 @@ public class Passenger extends Thread {
 	 * Register passenger at station listener
 	 * @param IStationEventListener
 	 */
+	@Override
 	public void setStationEventListener(IStationEventListener listener) {
 		mStationListener = listener;
 	}
@@ -72,6 +82,7 @@ public class Passenger extends Thread {
 	 * Register passenger event listener
 	 * @param PassengerEventListener
 	 */
+	@Override
 	public void addPassengerEventListener(PassengerEventListener listener) {
 		mEventListeners.add(listener);
 	}
@@ -82,7 +93,7 @@ public class Passenger extends Thread {
 	public void interrupt() {
 		notify(PassengerEventListener.INTERRUPT);
 		mThreadRunning = false;
-		super.interrupt();
+		//super.interrupt();
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
@@ -91,7 +102,7 @@ public class Passenger extends Thread {
 	public void run() {
 		notify(PassengerEventListener.START);
 		// Tell station that Passenger thread is started and running
-		mStationListener.onPassengerReady(this);
+		mStationListener.onPassengerReady(mAopProxy);
 		mThreadRunning = true;
 		
 		while ( mThreadRunning  ) {
@@ -99,8 +110,8 @@ public class Passenger extends Thread {
 				if(mState == STATE_WAITING)
 				{
 					inWaitQueue();
-				}	        	
-				sleep(ONE_SECOND);
+				}        	
+				Thread.sleep(ONE_SECOND);
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}			
@@ -108,22 +119,34 @@ public class Passenger extends Thread {
 	}
 	
 	/**
-	 * While in waiting queue
-	 * @throws InterruptedException 
+	 * Exit from waiting queue
+	 * 
 	 */
-	private synchronized void inWaitQueue() throws InterruptedException {
+	@Override
+	public void exitQueue() {
+		if (mState != STATE_WAITING) {
+			throw new RuntimeException("Passenger not in queue");
+		}
+		mState = STATE_EXIT;
+		mStationListener.onExitRequest(mAopProxy);
+		notify(PassengerEventListener.EXIT_QUEUE);
+	}
+	
+	/**
+	 * While in waiting queue
+	 */
+	private synchronized void inWaitQueue() {
 		if(mTimeLeft >=0) { // using >= since it is possible the passenger is picked up when he is about to leave
 			mTimeLeft--;
-			mStationListener.onPassengerUpdate(this);
+			mStationListener.onPassengerUpdate(mAopProxy);
 		}else {
-			notify(PassengerEventListener.EXIT_QUEUE);			
-			mState = STATE_EXIT;
-			mStationListener.onExitRequest(this);
+			mAopProxy.exitQueue();
 		}
 	}
 	/**
 	 * Changes the state of passenger to waiting
 	 */
+	@Override
 	public void enterWaitLine() {
 		Random rand = new Random();	
 		mExitTime = rand.nextInt(25)+5;
@@ -134,6 +157,7 @@ public class Passenger extends Thread {
 	/**
 	 * Passenger enters cab
 	 */
+	@Override
 	public void enterCab() {
 		mState = STATE_TRANSIT;
 		mExitTime -= mTimeLeft; 
@@ -144,10 +168,11 @@ public class Passenger extends Thread {
 	 * @param (Cab)cab
 	 * @param (double)price
 	 */
+	@Override
 	public void onArrival(ICab cab, double price) {
 		mPaidPrice  = price;
-		notify(PassengerEventListener.ARRIVED);
 		mState = STATE_EXIT;
+		notify(PassengerEventListener.ARRIVED);
 	}
 
 	/* (non-Javadoc)
@@ -170,6 +195,7 @@ public class Passenger extends Thread {
 	/**
 	 * @return Price passenger paid for drive
 	 */
+	@Override
 	public double getPaidPrice() {
 		return mPaidPrice;
 	}
@@ -177,6 +203,7 @@ public class Passenger extends Thread {
 	 * Checks whether the passenger is still in line 
 	 * @return true if the passenger is not in line 
 	 */
+	@Override
 	public boolean leftLine() {
 		if(mState == STATE_EXIT || mState == STATE_TRANSIT)
 		{

@@ -1,13 +1,13 @@
 package com.station.taxi.logger;
 
 import com.station.taxi.ICab;
+import com.station.taxi.IPassenger;
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.station.taxi.Passenger;
 
 /**
  * Helper object to create log
@@ -28,9 +28,7 @@ public class LoggerWrapper {
 		sLogger.addHandler(consoleHandler);
 		try {
 			sLogger.addHandler(new FileHandler("logs/StationLog.txt"));
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException | SecurityException e) {
 			e.printStackTrace();
 		}
 	}
@@ -47,7 +45,7 @@ public class LoggerWrapper {
 			fileHandler.setFormatter(new StationFormatter());
 			fileHandler.setFilter(new CabFilter(cab.getNumber()));
 			sLogger.addHandler(fileHandler);
-		} catch (Exception e) {
+		} catch (IOException | SecurityException e) {
 			e.printStackTrace();
 		}
 		
@@ -56,7 +54,7 @@ public class LoggerWrapper {
 	 * Add a passenger logger
 	 * @param p
 	 */
-	public static void addPassengerLogger(Passenger p) {
+	public static void addPassengerLogger(IPassenger p) {
 		FileHandler fileHandler;
 		try {
 			fileHandler = new FileHandler(String.format(LOG_PASSENGER, p.getPassangerName()));
@@ -64,7 +62,7 @@ public class LoggerWrapper {
 			fileHandler.setFilter(new PassengerFilter(p.getPassangerName()));
 			sLogger.addHandler(fileHandler);
 			
-		} catch (Exception e) {
+		} catch (IOException | SecurityException e) {
 			e.printStackTrace();
 		}
 	}

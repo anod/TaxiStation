@@ -1,6 +1,6 @@
 package com.station.taxi.events;
 
-import com.station.taxi.Passenger;
+import com.station.taxi.IPassenger;
 /**
  * Passenger Event listener interface
  * @author alex
@@ -16,6 +16,6 @@ abstract public class PassengerEventListener {
 	public static final int EXIT_QUEUE = 3;
 	public static final int TRANSIT = 4;
 
-	abstract public void update(int type, Passenger passenger);
+	abstract public void update(int type, IPassenger passenger);
 
 }

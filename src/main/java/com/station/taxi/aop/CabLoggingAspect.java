@@ -38,7 +38,7 @@ public class CabLoggingAspect {
 		update(joinPoint, CabEventListener.GOTO_BREAK);
 	}
 
-	@AfterReturning("execution(* com.station.taxi.ICab.arrive(..))")
+	@Before("execution(* com.station.taxi.ICab.arrive(..))")
 	public void logArrive(JoinPoint joinPoint) {
 		update(joinPoint, CabEventListener.ARRIVED_DESTINATION);
 	}

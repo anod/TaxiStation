@@ -1,7 +1,7 @@
 package com.station.taxi.events;
 
 import com.station.taxi.ICab;
-import com.station.taxi.Passenger;
+import com.station.taxi.IPassenger;
 
 /**
  * 
@@ -29,15 +29,15 @@ public interface IStationEventListener {
 	 * Passenger request Exit event
 	 * @param Passenger p
 	 */
-	public void onExitRequest(Passenger p);
+	public void onExitRequest(IPassenger p);
 	/**
 	 * called when Passenger object is ready
 	 * @param Passenger p
 	 */
-	public void onPassengerReady(Passenger p);
+	public void onPassengerReady(IPassenger p);
 	/**
 	 * called when a Passenger object is updated
 	 * @param Passenger p
 	 */
-	public void onPassengerUpdate(Passenger p);
+	public void onPassengerUpdate(IPassenger p);
 }

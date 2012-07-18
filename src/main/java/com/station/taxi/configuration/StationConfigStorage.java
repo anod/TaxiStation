@@ -20,9 +20,10 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import com.station.taxi.ICab;
-import com.station.taxi.Passenger;
+import com.station.taxi.IPassenger;
 import com.station.taxi.Station;
 import com.station.taxi.TaxiMeter;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 /**
  * 
  * @author Eran Zimbler
@@ -36,7 +37,7 @@ public class StationConfigStorage {
 		mConfigFile = fileName;
 		try {
 			setup();
-		} catch (Exception e) {
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -59,7 +60,7 @@ public class StationConfigStorage {
 			station.getPassengers()
 		);
 	}	
-	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<ICab> taxis,List<Passenger> passengers)
+	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<ICab> taxis,List<IPassenger> passengers)
 	{
 		root.setAttribute("pricePerSecond", String.valueOf(meter.getPricePerSecond()));
 		root.setAttribute("startPrice", String.valueOf(meter.getStartPrice()));
@@ -78,17 +79,13 @@ public class StationConfigStorage {
         DOMSource source = new DOMSource(doc);
         StreamResult result =  new StreamResult(sw);
         trans.transform(source, result);
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (TransformerFactoryConfigurationError | IllegalArgumentException | IOException | TransformerException e) {
 			e.printStackTrace();
 		}
 	}
-	private Node writePassengerElements(List<Passenger> passengers) {
+	private Node writePassengerElements(List<IPassenger> passengers) {
 		Element passengersRoot = doc.createElement("passengers");
-		for(Passenger p: passengers) {
+		for(IPassenger p: passengers) {
 			Element pChild = doc.createElement("passenger");
 			pChild.setAttribute("name", p.getPassangerName());
 			pChild.setAttribute("destination", p.getDestination());

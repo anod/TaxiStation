@@ -1,13 +1,12 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.IPassenger;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
-
 import javax.swing.JPanel;
 
-import com.station.taxi.Passenger;
 /**
  * Panel will contain passengers in waiting state
  * @author alex
@@ -17,7 +16,7 @@ import com.station.taxi.Passenger;
 public class PassengersPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private HashMap<String, PassengerView> mPassViews = new HashMap<String, PassengerView>();
+	private HashMap<String, PassengerView> mPassViews = new HashMap<>();
 	private MouseAdapter mClickAdapter;
 	private StationFrame mFatherContainer;
 	public PassengersPanel(StationFrame father) {
@@ -26,7 +25,7 @@ public class PassengersPanel extends JPanel {
 		mClickAdapter = initClickAdpater();
 		addMouseListener(mClickAdapter);
 	}
-	public void addPassanger(Passenger p) {
+	public void addPassanger(IPassenger p) {
 		String passengerName = p.getPassangerName();
 		if (!mPassViews.containsKey(passengerName))
 		{
@@ -37,7 +36,7 @@ public class PassengersPanel extends JPanel {
 			repaint();
 		}
 	}
-	public boolean removePassanger(Passenger p) {
+	public boolean removePassanger(IPassenger p) {
 		if (mPassViews.containsKey(p.getPassangerName())) {
 			final PassengerView view = mPassViews.get(p.getPassangerName());
 			remove(view);
@@ -49,7 +48,7 @@ public class PassengersPanel extends JPanel {
 		return false;
 		
 	}
-	public void updatePassenger(Passenger p)
+	public void updatePassenger(IPassenger p)
 	{
 		String passengerName = p.getPassangerName();
 		if(mPassViews.containsKey(passengerName))

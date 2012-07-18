@@ -27,7 +27,7 @@ public interface ICab extends Runnable {
 	 * @param passenger
 	 * @throws Exception
 	 */
-	void addPassenger(Passenger passenger) throws Exception;
+	void addPassenger(IPassenger passenger) throws Exception;
 
 	/**
 	 * Tells to cab that it arrived to destination
@@ -74,7 +74,7 @@ public interface ICab extends Runnable {
 	 * List of passengers inside the cab
 	 * @return
 	 */
-	List<Passenger> getPassegners();
+	List<IPassenger> getPassegners();
 
 	double getTotalEarning();
 

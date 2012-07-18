@@ -1,10 +1,8 @@
 package com.station.taxi;
 
+import com.station.taxi.events.IStationEventListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.station.taxi.events.IStationEventListener;
-import com.station.taxi.logger.PassengerLogger;
 /**
  * Taxi cab station object
  * @author alex
@@ -41,7 +39,7 @@ public class Station extends Thread implements IStationEventListener {
 		 * Passenger update its state
 		 * @param p
 		 */
-		public void onPassengerUpdate(Passenger p);
+		public void onPassengerUpdate(IPassenger p);
 		/**
 		 * New cab added to the station
 		 * @param cab
@@ -51,7 +49,7 @@ public class Station extends Thread implements IStationEventListener {
 		 * New passenger added to the station
 		 * @param p
 		 */
-		public void onPassengerAdd(Passenger p);
+		public void onPassengerAdd(IPassenger p);
 	}
 	
     /**
@@ -74,11 +72,11 @@ public class Station extends Thread implements IStationEventListener {
 	/**
 	 * List of passengers waiting in queue
 	 */
-	private List<Passenger> mPassengersList;
+	private List<IPassenger> mPassengersList;
 	/**
 	 * List of passengers who exit the queue 
 	 */
-	private List<Passenger> mPassengerExit;
+	private List<IPassenger> mPassengerExit;
 	
 	private String mStationName;
 	private int mMaxWaitingCount;
@@ -97,13 +95,13 @@ public class Station extends Thread implements IStationEventListener {
 	public Station(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
 		mStationName = name;
 		mMaxWaitingCount = maxWaitingCount;
-		mTaxiWaiting = new ArrayList<ICab>();
-		mTaxiBreak = new ArrayList<ICab>();
-		mTaxiDriving = new ArrayList<ICab>();
-		mPassengersList = new ArrayList<Passenger>();
-		mPassengerExit = new ArrayList<Passenger>();
+		mTaxiWaiting = new ArrayList<>();
+		mTaxiBreak = new ArrayList<>();
+		mTaxiDriving = new ArrayList<>();
+		mPassengersList = new ArrayList<>();
+		mPassengerExit = new ArrayList<>();
 		mDefaultTaxiMeter = defaultTaxiMeter;
-		mInitThreads = new ArrayList<Runnable>();
+		mInitThreads = new ArrayList<>();
 	}
 	
 	/**
@@ -111,12 +109,12 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param initCabs
 	 * @param initPassengers
 	 */
-	public void init(List<ICab> initCabs, List<Passenger> initPassengers) {
+	public void init(List<ICab> initCabs, List<IPassenger> initPassengers) {
 		for(ICab cab: initCabs) {
 			initCab(cab);
 			mInitThreads.add(cab);
 		}
-		for(Passenger p: initPassengers) {
+		for(IPassenger p: initPassengers) {
 			initPassenger(p);
 			mInitThreads.add(p);
 		}
@@ -140,8 +138,8 @@ public class Station extends Thread implements IStationEventListener {
 		for(ICab cab: cabs) {
 			cab.interrupt();
 		}
-		List<Passenger> passengers = getPassengers();
-		for(Passenger p: passengers) {
+		List<IPassenger> passengers = getPassengers();
+		for(IPassenger p: passengers) {
 			p.interrupt();
 		}
 		super.interrupt();
@@ -169,7 +167,7 @@ public class Station extends Thread implements IStationEventListener {
 	 */
 	public List<ICab> getCabs() {
 		synchronized (sLock) {		
-			List<ICab> allCabs = new ArrayList<ICab>();
+			List<ICab> allCabs = new ArrayList<>();
 			allCabs.addAll(mTaxiDriving);
 			allCabs.addAll(mTaxiWaiting);
 			allCabs.addAll(mTaxiBreak);
@@ -180,9 +178,9 @@ public class Station extends Thread implements IStationEventListener {
 	 * 
 	 * @return All passengers in station
 	 */
-	public List<Passenger> getPassengers() {
+	public List<IPassenger> getPassengers() {
 		synchronized (sLock) {	
-			List<Passenger> allPassengers = mPassengersList;
+			List<IPassenger> allPassengers = mPassengersList;
 			allPassengers.addAll(mPassengerExit);
 			return allPassengers;
 		}
@@ -256,12 +254,12 @@ public class Station extends Thread implements IStationEventListener {
 	 * Add a passenger to the station
 	 * @param cab
 	 */
-	public void addPassenger(Passenger p) {
+	public void addPassenger(IPassenger p) {
 		if (!mThreadRunning) {
 			throw new UnsupportedOperationException("Passenger can by added only to running stataion");
 		}		
 		initPassenger(p);
-		p.start();
+		new Thread(p).start();
 	}
 	
 	/**
@@ -278,9 +276,8 @@ public class Station extends Thread implements IStationEventListener {
 	 * Init a new Passenger in the station
 	 * @param p
 	 */
-	private void initPassenger(Passenger p) {
+	private void initPassenger(IPassenger p) {
 		p.setStationEventListener(this);
-		p.addPassengerEventListener(new PassengerLogger(p));
 	}	
 	/**
 	 * Creates new instance of taxi meter
@@ -316,13 +313,13 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param cab
 	 */
 	private void addPassengersToCab(ICab cab) {
-		Passenger firstPassenger = mPassengersList.remove(0);
+		IPassenger firstPassenger = mPassengersList.remove(0);
 		try {
 			cab.addPassenger(firstPassenger);
 			mStateListener.onPassengerUpdate(firstPassenger);
 			String dest = firstPassenger.getDestination();
 			for(int i=0; i<mPassengersList.size(); i++) {
-				Passenger p = mPassengersList.get(i);
+				IPassenger p = mPassengersList.get(i);
 				if (p.getDestination().equals(dest)) {
 					cab.addPassenger(p);
 					mStateListener.onPassengerUpdate(p);
@@ -390,7 +387,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Passenger request to exit from the queue
 	 */
 	@Override
-	public void onExitRequest(Passenger p)
+	public void onExitRequest(IPassenger p)
 	{
 		synchronized (sLock) {
 			if(mPassengersList.contains(p))
@@ -422,7 +419,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Registered passenger thread notify that it's ready
 	 */
 	@Override
-	public void onPassengerReady(Passenger p) {
+	public void onPassengerReady(IPassenger p) {
 		mPassengersList.add(p);
 		mStateListener.onPassengerAdd(p);
 		p.enterWaitLine();
@@ -437,7 +434,7 @@ public class Station extends Thread implements IStationEventListener {
 	}
 
 	@Override
-	public void onPassengerUpdate(Passenger passenger) {
+	public void onPassengerUpdate(IPassenger passenger) {
 		mStateListener.onPassengerUpdate(passenger);
 	}
 

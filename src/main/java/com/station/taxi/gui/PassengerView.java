@@ -1,17 +1,16 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.IPassenger;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
-import com.station.taxi.Passenger;
 /**
- * The graphical represantation for a single 
+ * The graphical representation for a single 
  * passenger
  * @author Eran Zimbler
  * @version 0.2
@@ -19,11 +18,11 @@ import com.station.taxi.Passenger;
 public class PassengerView extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
-	private Passenger mPassenger;
+	private IPassenger mPassenger;
 	private int mTimeLeft=0;
 	private JLabel mIcon = new JLabel("");
 	private JLabel lblTimeLeft = new JLabel("");
-	public PassengerView(Passenger p) {
+	public PassengerView(IPassenger p) {
 		setBorder(new TitledBorder(null, p.getPassangerName(), TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new GridLayout(0,2,2,1));
 		mPassenger = p;
@@ -34,10 +33,11 @@ public class PassengerView extends JPanel{
 	public void updateSelf()	{
 		mTimeLeft= mPassenger.getTimeLeft();
 		lblTimeLeft.setText("Time left:" + mTimeLeft +"");
-		if(mTimeLeft > 5)
+		if(mTimeLeft > 5) {
 			mIcon.setIcon(ImageUtils.createImageIcon("passenger"));
-		else
+		} else {
 			mIcon.setIcon(ImageUtils.createImageIcon("angry"));
+		}
 		repaint();
 	}
 	private void setupViews() {

@@ -1,12 +1,16 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.ICab;
+import com.station.taxi.IPassenger;
+import com.station.taxi.Station;
+import com.station.taxi.Station.IStateChangeListener;
+import com.station.taxi.spring.StationContext;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -14,12 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-
-import com.station.taxi.ICab;
-import com.station.taxi.Passenger;
-import com.station.taxi.Station;
-import com.station.taxi.Station.IStateChangeListener;
-import com.station.taxi.spring.StationContext;
 /**
  * TaxiStationMain station frame
  * @author alex
@@ -116,8 +114,8 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 		for(ICab cab: cabs) {
 			placeCabInPanel(cab, -1);
 		}
-		List<Passenger> pmany = mStation.getPassengers();
-		for (Passenger p: pmany) {
+		List<IPassenger> pmany = mStation.getPassengers();
+		for (IPassenger p: pmany) {
 			addPassangerToLine(p);
 		}	
 	}
@@ -129,7 +127,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 
 	@Override
-	public void onPassengerUpdate(Passenger p) {
+	public void onPassengerUpdate(IPassenger p) {
 		if(p.leftLine())
 		{
 			removePassangerFromLine(p);
@@ -146,7 +144,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 
 	@Override
-	public void onPassengerAdd(Passenger p) {
+	public void onPassengerAdd(IPassenger p) {
 		addPassangerToLine(p);
 	}
 
@@ -172,18 +170,18 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 * Add passenger to the panel with passengers that are waiting for taxi
 	 * @param p
 	 */
-	private void addPassangerToLine(Passenger p) {
+	private void addPassangerToLine(IPassenger p) {
 		mPassangerPanel.addPassanger(p);
 	}
 	/**
 	 * 
 	 * @param p
 	 */
-	private void removePassangerFromLine(Passenger p) {
+	private void removePassangerFromLine(IPassenger p) {
 		mPassangerPanel.removePassanger(p);
 		
 	}
-	private void updatePassenger(Passenger p) {
+	private void updatePassenger(IPassenger p) {
 		mPassangerPanel.updatePassenger(p);
 		
 	}

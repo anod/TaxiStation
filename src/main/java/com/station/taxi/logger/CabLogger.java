@@ -1,10 +1,9 @@
 package com.station.taxi.logger;
 
-import java.util.List;
-
 import com.station.taxi.ICab;
-import com.station.taxi.Passenger;
+import com.station.taxi.IPassenger;
 import com.station.taxi.events.CabEventListener;
+import java.util.List;
 
 
 public class CabLogger extends CabEventListener {
@@ -47,8 +46,8 @@ public class CabLogger extends CabEventListener {
 	 * @param cab
 	 */
 	private void logArrivedDestination(ICab cab) {
-		List<Passenger> passengers = cab.getPassegners();
-		String destination = passengers.get(0).getDestination();		
+		List<IPassenger> passengers = cab.getPassegners();
+		String destination = cab.getDestination();
 		int size = passengers.size();
 		logCab(cab,"Arrived to desitnation '"+destination+"' with "+size+" passengers");
 	}
@@ -58,7 +57,7 @@ public class CabLogger extends CabEventListener {
 	 */
 	private void logDriveDestination(ICab cab) {
 		// Create string of passenger names
-		List<Passenger> passengers = cab.getPassegners();
+		List<IPassenger> passengers = cab.getPassegners();
 		String destination = passengers.get(0).getDestination();		
 		StringBuffer sb = new StringBuffer(passengers.get(0).getPassangerName());
 		int size = passengers.size();

@@ -33,7 +33,7 @@ public class Cab implements ICab {
 	public static final String WAIT_DRINK = "drink";
 	
 	private IStationEventListener mStationListener;
-	private List<Passenger> mPassangers;
+	private List<IPassenger> mPassangers;
 	private String mWhileWaiting;
 	private int mNumber;
 	private TaxiMeter mMeter;
@@ -49,7 +49,7 @@ public class Cab implements ICab {
 	 * Time in milliseconds
 	 */
 	private int mBreakTime;
-	private List<CabEventListener> mEventListeners = new ArrayList<CabEventListener>();
+	private List<CabEventListener> mEventListeners = new ArrayList<>();
 	
 	private ICab mAopProxy;
 	
@@ -75,7 +75,7 @@ public class Cab implements ICab {
 		mNumber = num;
 		mWhileWaiting = whileWaiting;
 		// safe for threads
-		mPassangers = Collections.synchronizedList(new ArrayList<Passenger>(MAX_PASSANGERS));
+		mPassangers = Collections.synchronizedList(new ArrayList<IPassenger>(MAX_PASSANGERS));
 		mReciptsList = Collections.synchronizedList(new ArrayList<Receipt>());
 	}
 
@@ -161,6 +161,7 @@ public class Cab implements ICab {
 		}
 		return total;
 	}
+	
 	@Override
 	public double getTotalEarning(Date start,Date end){
 		double total =0;
@@ -177,14 +178,16 @@ public class Cab implements ICab {
 	 * @throws Exception
 	 */
 	@Override
-	public void addPassenger(Passenger passenger) throws Exception {
-		if (mPassangers.size() > 0) {
-			Passenger first = mPassangers.get(0);
-			if (!first.getDestination().equals(passenger.getDestination())) {
-				throw new Exception("Wrong destination");
+	public void addPassenger(IPassenger passenger) throws Exception {
+		synchronized (sLock) {
+			if (mPassangers.size() > 0) {
+				IPassenger first = mPassangers.get(0);
+				if (!first.getDestination().equals(passenger.getDestination())) {
+					throw new Exception("Wrong destination");
+				}
 			}
+			mPassangers.add(passenger);
 		}
-		mPassangers.add(passenger);
 		passenger.enterCab();
 	}
 	/**
@@ -205,8 +208,10 @@ public class Cab implements ICab {
 	 * @return
 	 */
 	@Override
-	public List<Passenger> getPassegners() {
-		return mPassangers;
+	public List<IPassenger> getPassegners() {
+		synchronized (sLock) {
+			return mPassangers;
+		}
 	}
 	/**
 	 * Current break time
@@ -377,7 +382,7 @@ public class Cab implements ICab {
 	 */
 	private void notifyArrival() {
 		notify(CabEventListener.ARRIVED_DESTINATION);		
-		for(Passenger p: mPassangers) {
+		for(IPassenger p: mPassangers) {
 			p.onArrival(mAopProxy, mMeter.getCurrentValue() / mPassangers.size());
 		}
 	}
@@ -415,7 +420,8 @@ public class Cab implements ICab {
 		sb.append(", ");
 		if (mPassangers.size() > 0) {
 			sb.append("Passangers: ");
-			for(Passenger p : mPassangers) {
+			for (Iterator<IPassenger> it = mPassangers.iterator(); it.hasNext();) {
+				IPassenger p = it.next();
 				sb.append(p);
 				sb.append(" ");
 			}

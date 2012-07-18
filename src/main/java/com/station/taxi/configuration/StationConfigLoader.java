@@ -50,7 +50,7 @@ public class StationConfigLoader {
         TaxiMeter meter = readTaxiMeter(doc);
         Station station = readStation(doc, meter);
         ArrayList<ICab> taxis = readTaxiCabs(doc);
-        ArrayList<Passenger> passengers = readPassengers(doc);
+        ArrayList<IPassenger> passengers = readPassengers(doc);
         station.init(taxis, passengers);
 		return station;
 	}
@@ -60,15 +60,15 @@ public class StationConfigLoader {
 	 * @param doc
 	 * @return
 	 */
-	private ArrayList<Passenger> readPassengers(Document doc) {
-		ArrayList<Passenger> result = new ArrayList<Passenger>();
+	private ArrayList<IPassenger> readPassengers(Document doc) {
+		ArrayList<IPassenger> result = new ArrayList<>();
 		
         NodeList taxis = doc.getElementsByTagName("passenger");
         for(int i=0; i<taxis.getLength() ; i++){
         	 NamedNodeMap attrs = taxis.item(i).getAttributes();
              String name = attrs.getNamedItem("name").getNodeValue();
              String destination = attrs.getNamedItem("destination").getNodeValue();
-        	 result.add(new Passenger(name, destination));
+        	 result.add(mContext.createPassenger(name, destination));
         }
 		return result;		
 	}
@@ -79,7 +79,7 @@ public class StationConfigLoader {
 	 * @return
 	 */
 	private ArrayList<ICab> readTaxiCabs(Document doc) {
-		ArrayList<ICab> result = new ArrayList<ICab>();
+		ArrayList<ICab> result = new ArrayList<>();
 
         NodeList taxis = doc.getElementsByTagName("taxi");
         for(int i=0; i<taxis.getLength() ; i++){

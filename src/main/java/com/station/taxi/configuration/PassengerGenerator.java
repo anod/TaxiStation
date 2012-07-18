@@ -1,27 +1,38 @@
 package com.station.taxi.configuration;
 
+import com.station.taxi.IPassenger;
+import com.station.taxi.spring.StationContext;
 import java.util.Random;
 
-import com.station.taxi.Passenger;
-
 public class PassengerGenerator {
+	
 	final private String[] DESTNATIONS = {"Holon","Eilat","RamatGan","Herzeliya","TelAviv","Haifa","BatYam"};
-	public Passenger generateRandomPassenger(){
+	
+	/**
+	 * Generates random passenger
+	 * @return 
+	 */
+	public IPassenger generateRandomPassenger(StationContext context){
 		Random rand = new Random();
 		int length = DESTNATIONS.length;
 		String dest = DESTNATIONS[rand.nextInt(length)];
 		String name = generateName(4);
-		Passenger p = new Passenger(name, dest);
-		return p;
+		return context.createPassenger(name, dest);
 	}
+	
+	/**
+	 * 
+	 * @param length
+	 * @return 
+	 */
 	private String generateName(int length) {
-		String name = "";    
+		StringBuilder name = new StringBuilder();
 		for(int i=0;i<length;i++){	
-		int rnd = (int) (Math.random() * 52); // or use Random or whatever
-		char base = (rnd < 26) ? 'A' : 'a';
-		name +=(char) (base + rnd % 26);
+			int rnd = (int) (Math.random() * 52); // or use Random or whatever
+			char base = (rnd < 26) ? 'A' : 'a';
+			name.append((char) (base + rnd % 26));
 		}
-	return name;
+		return name.toString();
 	}
 }
 		

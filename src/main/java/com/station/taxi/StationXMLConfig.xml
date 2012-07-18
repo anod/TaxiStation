@@ -6,10 +6,14 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
 
 	<bean id="cab" class="com.station.taxi.Cab" scope="prototype" />
+	<bean id="passenger" class="com.station.taxi.Passenger" scope="prototype" />
 	
 	<aop:aspectj-autoproxy>
 		<aop:include name="cabLoggingAspect"/>
+		<aop:include name="passengerLoggingAspect"/>
 	</aop:aspectj-autoproxy>
 	<!-- AspectJ -->
 	<bean id="cabLoggingAspect" class="com.station.taxi.aop.CabLoggingAspect" init-method="init"/>
+	<bean id="passengerLoggingAspect" class="com.station.taxi.aop.PassengerLoggingAspect" init-method="init"/>
+
 </beans>
