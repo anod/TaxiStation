@@ -330,6 +330,7 @@ public class Cab implements ICab {
 			if (mCabStatus != STATUS_DRIVING) {
 				throw new RuntimeException("Cab is not driving");
 			}
+			notify(CabEventListener.ARRIVED_DESTINATION);		
 			int size = mPassangers.size();
 			mReciptsList.add(mMeter.reciept(size));
 			notifyArrival();
@@ -381,7 +382,6 @@ public class Cab implements ICab {
 	 * Notify passengers and station about end of the trip...
 	 */
 	private void notifyArrival() {
-		notify(CabEventListener.ARRIVED_DESTINATION);		
 		for(IPassenger p: mPassangers) {
 			p.onArrival(mAopProxy, mMeter.getCurrentValue() / mPassangers.size());
 		}
