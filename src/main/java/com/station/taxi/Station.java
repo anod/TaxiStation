@@ -9,7 +9,7 @@ import java.util.List;
  * @author Eran Zimbler
  * @version 0.2
  */
-public class Station extends Thread implements IStationEventListener {
+public class Station implements IStation, IStationEventListener {
 	/**
 	 * Cab states
 	 */
@@ -109,6 +109,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * @param initCabs
 	 * @param initPassengers
 	 */
+	@Override
 	public void init(List<ICab> initCabs, List<IPassenger> initPassengers) {
 		for(ICab cab: initCabs) {
 			initCab(cab);
@@ -120,17 +121,15 @@ public class Station extends Thread implements IStationEventListener {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Thread#start()
+	/**
+	 * Get threads that needs to initiated
+	 * @return 
 	 */
 	@Override
-	public synchronized void start() {
-		for(Runnable t: mInitThreads) {
-			new Thread(t).start();
-		}
-		super.start();
+	public List<Runnable> getInitThreads() {
+		return mInitThreads;
 	}
-
+	
 	@Override
 	public void interrupt() {
 		mThreadRunning = false;
@@ -142,7 +141,6 @@ public class Station extends Thread implements IStationEventListener {
 		for(IPassenger p: passengers) {
 			p.interrupt();
 		}
-		super.interrupt();
 	}
 	
 	/* (non-Javadoc)
@@ -155,7 +153,7 @@ public class Station extends Thread implements IStationEventListener {
 		while ( mThreadRunning ) {
 			try {
 				fillCab();
-	        	sleep(300); 
+	        	Thread.sleep(300); 
 	        } catch (InterruptedException e) {
 	        	/* Allow thread to exit */
 			}
@@ -165,6 +163,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Get all taxi cabs in station
 	 * @return
 	 */
+	@Override
 	public List<ICab> getCabs() {
 		synchronized (sLock) {		
 			List<ICab> allCabs = new ArrayList<>();
@@ -178,6 +177,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * 
 	 * @return All passengers in station
 	 */
+	@Override
 	public List<IPassenger> getPassengers() {
 		synchronized (sLock) {	
 			List<IPassenger> allPassengers = mPassengersList;
@@ -188,12 +188,14 @@ public class Station extends Thread implements IStationEventListener {
 	/**
 	 * @return Station name
 	 */
+	@Override
 	public String getStationName() {
 		return mStationName;
 	}
 	/**
 	 * @return default TaxiMeter
 	 */
+	@Override
 	public TaxiMeter getDefaultTaxiMeter() {
 		return mDefaultTaxiMeter;		
 	}
@@ -201,12 +203,14 @@ public class Station extends Thread implements IStationEventListener {
 	 * 
 	 * @return maximum number of waiting taxi cabs
 	 */
+	@Override
 	public int getMaxWaitingCount() {
 		return mMaxWaitingCount;
 	}		
 	/**
 	 * @return Number of taxi cabs in waiting state
 	 */
+	@Override
 	public int getWaitingTaxiCount() {
 		synchronized (sLock) {
 			return mTaxiWaiting.size();
@@ -215,6 +219,7 @@ public class Station extends Thread implements IStationEventListener {
 	/**
 	 * @return Number of taxi cabs in driving state
 	 */
+	@Override
 	public int getDrivingTaxiCount() {
 		synchronized (sLock) {
 			return mTaxiDriving.size();
@@ -223,6 +228,7 @@ public class Station extends Thread implements IStationEventListener {
 	/**
 	 * @return Number of passengers waiting in line
 	 */
+	@Override
 	public int getWaitingPassengersCount()
 	{
 		synchronized (sLock) {
@@ -232,6 +238,7 @@ public class Station extends Thread implements IStationEventListener {
 	/**
 	 * @return Number of passengers that left the line angry
 	 */
+	@Override
 	public int getExitPassengersCount()
 	{
 		synchronized (sLock) {
@@ -242,6 +249,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Add a cab to the station
 	 * @param cab
 	 */
+	@Override
 	public void addCab(ICab cab) {
 		if (!mThreadRunning) {
 			throw new UnsupportedOperationException("Cab can by added only to running stataion");
@@ -254,6 +262,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * Add a passenger to the station
 	 * @param cab
 	 */
+	@Override
 	public void addPassenger(IPassenger p) {
 		if (!mThreadRunning) {
 			throw new UnsupportedOperationException("Passenger can by added only to running stataion");
@@ -429,6 +438,7 @@ public class Station extends Thread implements IStationEventListener {
 	 * 
 	 * @param listener
 	 */
+	@Override
 	public void registerStateListener(IStateChangeListener listener) {
 		mStateListener = listener;
 	}

@@ -1,12 +1,15 @@
 package com.station.taxi.gui;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import com.station.taxi.Station;
+import com.station.taxi.StationExecutor;
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import javax.xml.parsers.ParserConfigurationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.xml.sax.SAXException;
 
 /**
  * StationFrame window adapter - initialize and stop station thread
@@ -58,13 +61,14 @@ public class StationWindowAdapter extends WindowAdapter {
 		try {
 			//Load station from configuration
 			mStation = configLoader.load();
-		} catch (Exception e) {
+		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 			return;
 		}
 		mStation.registerStateListener(mStationFrame);
+		StationExecutor executor = new StationExecutor();
 		//Start station thread
-		mStation.start();
+		executor.execute(mStation);
 	}
 	
 }
