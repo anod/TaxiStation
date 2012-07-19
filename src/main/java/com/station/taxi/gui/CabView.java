@@ -104,7 +104,9 @@ public class CabView extends JPanel {
 		mPassangertable.setEnabled(false);
 		mPassangertable.setPreferredSize(new Dimension(140, 40));
 		mPassangertable.addMouseListener(mClickAdapter);
-		
+		mPassangertable.setModel(new DefaultTableModel(	new String[][] {
+			{ "", "" }, { "", "" } }, new String[] { "", "" }
+		));
 		mBtnArrive = new JButton(TextsBundle.getString("btn_arrive"));
 		mInfoPanel.add(mBtnArrive);
 		mBtnArrive.addActionListener(new ActionListener() {
@@ -168,16 +170,16 @@ public class CabView extends JPanel {
 	private void setPassangers(ICab cab) {
 		List<IPassenger> passengers = cab.getPassegners();
 		int size = passengers.size();
-		Object[][] data = new Object[2][2];
-		data[0][0] = (size>0) ? passengers.get(0).getPassangerName() : "";
-		data[0][1] = (size>1) ? passengers.get(1).getPassangerName() : "";
-		data[1][0] = (size>2) ? passengers.get(2).getPassangerName() : "";
-		data[1][1] = (size>3) ? passengers.get(3).getPassangerName() : "";		
-		mPassangertable.setModel(new DefaultTableModel(
-			data,
-			new String[] { "", "" }
-		));
-		mPassangertable.validate();
+		String name = "";
+		name = (size>0) ? passengers.get(0).getPassangerName() : "";
+		mPassangertable.getModel().setValueAt(name, 0, 0);
+		name = (size>1) ? passengers.get(1).getPassangerName() : "";
+		mPassangertable.getModel().setValueAt(name, 0, 1);
+		name = (size>2) ? passengers.get(2).getPassangerName() : "";
+		mPassangertable.getModel().setValueAt(name, 1, 0);
+		name = (size>3) ? passengers.get(3).getPassangerName() : "";
+		mPassangertable.getModel().setValueAt(name, 1, 1);		
+//		mPassangertable.validate();
 	}
 
 	/**
