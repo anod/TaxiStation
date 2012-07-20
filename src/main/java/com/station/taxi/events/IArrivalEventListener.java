@@ -1,6 +1,6 @@
 package com.station.taxi.events;
 
-import com.station.taxi.ICab;
+import com.station.taxi.model.Cab;
 
 /**
  * Passage arrival event listener
@@ -16,5 +16,5 @@ public interface IArrivalEventListener {
 	 * @param cab
 	 * @param price
 	 */
-	public void onArrival(ICab cab, double price);
+	public void onArrival(Cab cab, double price);
 }

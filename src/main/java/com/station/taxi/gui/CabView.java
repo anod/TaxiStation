@@ -1,7 +1,7 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.ICab;
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Cab;
+import com.station.taxi.model.Passenger;
 import com.station.taxi.events.CabEventListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -32,7 +32,7 @@ public class CabView extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private ICab mCab;
+	private Cab mCab;
 	private JTable mPassangertable;
 	private JLabel mStatusLabel;
 	private JButton mBtnArrive;
@@ -43,7 +43,7 @@ public class CabView extends JPanel {
 	private MouseAdapter mClickAdapter;
 	
 	
-	public CabView(ICab cab) {
+	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
 		
@@ -155,7 +155,7 @@ public class CabView extends JPanel {
 	 * Change arrive button according to cab state
 	 * @param cab
 	 */
-	private void setArriveBtn(ICab cab) {
+	private void setArriveBtn(Cab cab) {
 		if (cab.isDriving()) {
 			mBtnArrive.setVisible(true);
 		} else {
@@ -167,8 +167,8 @@ public class CabView extends JPanel {
 	/**
 	 * Add passengers to the table component
 	 */
-	private void setPassangers(ICab cab) {
-		List<IPassenger> passengers = cab.getPassegners();
+	private void setPassangers(Cab cab) {
+		List<Passenger> passengers = cab.getPassegners();
 		int size = passengers.size();
 		String name = "";
 		name = (size>0) ? passengers.get(0).getPassangerName() : "";
@@ -186,7 +186,7 @@ public class CabView extends JPanel {
 	 * Update status text and icon
 	 * @param cab
 	 */
-	private void setStatus(ICab cab) {
+	private void setStatus(Cab cab) {
 
 		String text;
 		if (cab.isDriving()) {
@@ -213,7 +213,7 @@ public class CabView extends JPanel {
 	 */
 	class ViewCabEventListener extends CabEventListener {
 		@Override
-		public void update(int type, ICab cab) {
+		public void update(int type, Cab cab) {
 			refresh();
 		}
 	}

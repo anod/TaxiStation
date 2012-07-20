@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.station.taxi;
+package com.station.taxi.model;
 
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.IStationEventListener;
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author alex
  */
-public interface ICab extends Runnable {
+public interface Cab extends Runnable {
 
 
 	/**
@@ -27,7 +27,7 @@ public interface ICab extends Runnable {
 	 * @param passenger
 	 * @throws Exception
 	 */
-	void addPassenger(IPassenger passenger) throws Exception;
+	void addPassenger(Passenger passenger) throws Exception;
 
 	/**
 	 * Tells to cab that it arrived to destination
@@ -74,7 +74,7 @@ public interface ICab extends Runnable {
 	 * List of passengers inside the cab
 	 * @return
 	 */
-	List<IPassenger> getPassegners();
+	List<Passenger> getPassegners();
 
 	double getTotalEarning();
 

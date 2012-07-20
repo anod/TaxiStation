@@ -1,4 +1,4 @@
-package com.station.taxi;
+package com.station.taxi.model;
 
 import com.station.taxi.events.IStationEventListener;
 import com.station.taxi.events.PassengerEventListener;
@@ -12,7 +12,7 @@ import java.util.Random;
  * @author Eran Zimbler
  * @version 0.2 
  */
-public class Passenger implements IPassenger {
+public class TaxiPassenger implements Passenger {
 	private static final int STATE_INIT = 0;
 	private static final int STATE_WAITING = 1;
 	private static final int STATE_TRANSIT = 2;
@@ -30,14 +30,14 @@ public class Passenger implements IPassenger {
 	private List<PassengerEventListener> mEventListeners = new ArrayList<>();
 	private double mPaidPrice = .0;
 
-	private IPassenger mAopProxy;
+	private Passenger mAopProxy;
 	
-	public Passenger(String name, String destination) {
+	public TaxiPassenger(String name, String destination) {
 		mName = name;
 		mDestination = destination;
 	}
 
-	public void setAopProxy(IPassenger proxy) {
+	public void setAopProxy(Passenger proxy) {
 		mAopProxy = proxy;
 	}
 	
@@ -101,7 +101,7 @@ public class Passenger implements IPassenger {
 	@Override
 	public void run() {
 		notify(PassengerEventListener.START);
-		// Tell station that Passenger thread is started and running
+		// Tell station that TaxiPassenger thread is started and running
 		mStationListener.onPassengerReady(mAopProxy);
 		mThreadRunning = true;
 		
@@ -155,7 +155,7 @@ public class Passenger implements IPassenger {
 		mState = STATE_WAITING;
 	}
 	/**
-	 * Passenger enters cab
+	 * TaxiPassenger enters cab
 	 */
 	@Override
 	public void enterCab() {
@@ -164,12 +164,12 @@ public class Passenger implements IPassenger {
 		notify(PassengerEventListener.TRANSIT);
 	}
 	/**
-	 * Passenger arrived to destination
+	 * TaxiPassenger arrived to destination
 	 * @param (Cab)cab
 	 * @param (double)price
 	 */
 	@Override
-	public void onArrival(ICab cab, double price) {
+	public void onArrival(Cab cab, double price) {
 		mPaidPrice  = price;
 		mState = STATE_EXIT;
 		notify(PassengerEventListener.ARRIVED);

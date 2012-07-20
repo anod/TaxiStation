@@ -20,8 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import com.station.taxi.Cab;
-import com.station.taxi.ICab;
+import com.station.taxi.model.TaxiCab;
+import com.station.taxi.model.Cab;
 /**
  * Add new cab dialog
  * @author alex
@@ -102,9 +102,9 @@ public class NewCabDialog extends JDialog {
 		};
 		
 		mWhileWaitingValues = new String[3];
-		mWhileWaitingValues[0]=Cab.WAIT_EAT;
-		mWhileWaitingValues[1]=Cab.WAIT_DRINK;
-		mWhileWaitingValues[2]=Cab.WAIT_NEWSPAPPER;
+		mWhileWaitingValues[0]=TaxiCab.WAIT_EAT;
+		mWhileWaitingValues[1]=TaxiCab.WAIT_DRINK;
+		mWhileWaitingValues[2]=TaxiCab.WAIT_NEWSPAPPER;
 		
 		return waitingStrings;
 	}
@@ -119,7 +119,7 @@ public class NewCabDialog extends JDialog {
 
 		String whileWaiting = mWhileWaitingValues[mWhileWaiting.getSelectedIndex()];
 		int num = Integer.valueOf(mNumber.getText());
-		ICab cab = mStationFrame.getContext().createCab(num, whileWaiting);
+		Cab cab = mStationFrame.getContext().createCab(num, whileWaiting);
 		mStationFrame.getStation().addCab(cab);
 		setVisible(false);  
 	}
@@ -132,7 +132,7 @@ public class NewCabDialog extends JDialog {
 	}
 
 	/**
-	 * Input verifier for Cab number
+	 * Input verifier for TaxiCab number
 	 * On errro highlight red and show popup message 
 	 */
 	private class CabNumberInputVerifier extends InputVerifier implements KeyListener {

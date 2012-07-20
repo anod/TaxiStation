@@ -1,6 +1,6 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.Station;
+import com.station.taxi.model.TaxiStation;
 import com.station.taxi.StationExecutor;
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
@@ -21,7 +21,7 @@ public class StationWindowAdapter extends WindowAdapter {
 	
 	private static final String CONFIG_XML = "configs/config1.xml";
 
-	private Station mStation;
+	private TaxiStation mStation;
 	private StationFrame mStationFrame;
 
 	/* (non-Javadoc)

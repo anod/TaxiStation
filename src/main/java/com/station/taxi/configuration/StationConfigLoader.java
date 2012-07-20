@@ -1,5 +1,9 @@
 package com.station.taxi.configuration;
 
+import com.station.taxi.model.TaxiMeter;
+import com.station.taxi.model.Passenger;
+import com.station.taxi.model.TaxiStation;
+import com.station.taxi.model.Cab;
 import com.station.taxi.*;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +44,7 @@ public class StationConfigLoader {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public Station load() throws ParserConfigurationException, SAXException, IOException {
+	public TaxiStation load() throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(new File(mFileName));
@@ -48,9 +52,9 @@ public class StationConfigLoader {
         
         // parse <system> tag
         TaxiMeter meter = readTaxiMeter(doc);
-        Station station = readStation(doc, meter);
-        ArrayList<ICab> taxis = readTaxiCabs(doc);
-        ArrayList<IPassenger> passengers = readPassengers(doc);
+        TaxiStation station = readStation(doc, meter);
+        ArrayList<Cab> taxis = readTaxiCabs(doc);
+        ArrayList<Passenger> passengers = readPassengers(doc);
         station.init(taxis, passengers);
 		return station;
 	}
@@ -60,8 +64,8 @@ public class StationConfigLoader {
 	 * @param doc
 	 * @return
 	 */
-	private ArrayList<IPassenger> readPassengers(Document doc) {
-		ArrayList<IPassenger> result = new ArrayList<>();
+	private ArrayList<Passenger> readPassengers(Document doc) {
+		ArrayList<Passenger> result = new ArrayList<>();
 		
         NodeList taxis = doc.getElementsByTagName("passenger");
         for(int i=0; i<taxis.getLength() ; i++){
@@ -78,8 +82,8 @@ public class StationConfigLoader {
 	 * @param doc
 	 * @return
 	 */
-	private ArrayList<ICab> readTaxiCabs(Document doc) {
-		ArrayList<ICab> result = new ArrayList<>();
+	private ArrayList<Cab> readTaxiCabs(Document doc) {
+		ArrayList<Cab> result = new ArrayList<>();
 
         NodeList taxis = doc.getElementsByTagName("taxi");
         for(int i=0; i<taxis.getLength() ; i++){
@@ -97,14 +101,14 @@ public class StationConfigLoader {
 	 * @param meter
 	 * @return
 	 */
-	private Station readStation(Document doc, TaxiMeter meter) {
+	private TaxiStation readStation(Document doc, TaxiMeter meter) {
         NodeList stations = doc.getElementsByTagName("station");
         
         NamedNodeMap attrs = stations.item(0).getAttributes();
         String stationName = attrs.getNamedItem("name").getNodeValue();
         String maxWaitingTaxis = attrs.getNamedItem("maxWaitingTaxis").getNodeValue();
         
-		return new Station(stationName, Integer.valueOf(maxWaitingTaxis), meter);
+		return new TaxiStation(stationName, Integer.valueOf(maxWaitingTaxis), meter);
 	}
 
 	/**

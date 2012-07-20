@@ -1,6 +1,6 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Passenger;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,7 +25,7 @@ public class PassengersPanel extends JPanel {
 		mClickAdapter = initClickAdpater();
 		addMouseListener(mClickAdapter);
 	}
-	public void addPassanger(IPassenger p) {
+	public void addPassanger(Passenger p) {
 		String passengerName = p.getPassangerName();
 		if (!mPassViews.containsKey(passengerName))
 		{
@@ -36,7 +36,7 @@ public class PassengersPanel extends JPanel {
 			repaint();
 		}
 	}
-	public boolean removePassanger(IPassenger p) {
+	public boolean removePassanger(Passenger p) {
 		if (mPassViews.containsKey(p.getPassangerName())) {
 			final PassengerView view = mPassViews.get(p.getPassangerName());
 			remove(view);
@@ -48,7 +48,7 @@ public class PassengersPanel extends JPanel {
 		return false;
 		
 	}
-	public void updatePassenger(IPassenger p)
+	public void updatePassenger(Passenger p)
 	{
 		String passengerName = p.getPassangerName();
 		if(mPassViews.containsKey(passengerName))

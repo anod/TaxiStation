@@ -1,4 +1,4 @@
-package com.station.taxi;
+package com.station.taxi.model;
 
 import java.io.Serializable;
 import java.util.Date;

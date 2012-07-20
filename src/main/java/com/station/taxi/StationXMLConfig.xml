@@ -5,8 +5,9 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd ">
 
-	<bean id="cab" class="com.station.taxi.Cab" scope="prototype" />
-	<bean id="passenger" class="com.station.taxi.Passenger" scope="prototype" />
+	<bean id="cab" class="com.station.taxi.model.TaxiCab" scope="prototype" />
+	<bean id="passenger" class="com.station.taxi.model.TaxiPassenger" scope="prototype" />
+	<bean id="station" class="com.station.taxi.model.TaxiStation" scope="prototype" />
 	
 	<aop:aspectj-autoproxy>
 		<aop:include name="cabLoggingAspect"/>

@@ -19,10 +19,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import com.station.taxi.ICab;
-import com.station.taxi.IPassenger;
-import com.station.taxi.Station;
-import com.station.taxi.TaxiMeter;
+import com.station.taxi.model.Cab;
+import com.station.taxi.model.Passenger;
+import com.station.taxi.model.TaxiStation;
+import com.station.taxi.model.TaxiMeter;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 /**
  * 
@@ -51,7 +51,7 @@ public class StationConfigStorage {
 	 * 
 	 * @param station
 	 */
-	public void save(Station station) {
+	public void save(TaxiStation station) {
 		saveStation(
 			station.getDefaultTaxiMeter(), 
 			station.getStationName(), 
@@ -60,7 +60,7 @@ public class StationConfigStorage {
 			station.getPassengers()
 		);
 	}	
-	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<ICab> taxis,List<IPassenger> passengers)
+	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<Cab> taxis,List<Passenger> passengers)
 	{
 		root.setAttribute("pricePerSecond", String.valueOf(meter.getPricePerSecond()));
 		root.setAttribute("startPrice", String.valueOf(meter.getStartPrice()));
@@ -83,9 +83,9 @@ public class StationConfigStorage {
 			e.printStackTrace();
 		}
 	}
-	private Node writePassengerElements(List<IPassenger> passengers) {
+	private Node writePassengerElements(List<Passenger> passengers) {
 		Element passengersRoot = doc.createElement("passengers");
-		for(IPassenger p: passengers) {
+		for(Passenger p: passengers) {
 			Element pChild = doc.createElement("passenger");
 			pChild.setAttribute("name", p.getPassangerName());
 			pChild.setAttribute("destination", p.getDestination());
@@ -93,9 +93,9 @@ public class StationConfigStorage {
 		}
 		return passengersRoot;
 	}
-	private Node writeTaxisElements(List<ICab> taxis) {
+	private Node writeTaxisElements(List<Cab> taxis) {
 		Element taxiRoot = doc.createElement("taxis");
-		for(ICab c: taxis) {
+		for(Cab c: taxis) {
 			Element taxiChild = doc.createElement("taxi");
 			taxiChild.setAttribute("number", String.valueOf(c.getNumber()));
 			taxiChild.setAttribute("whileWaiting", c.getWhileWaiting());

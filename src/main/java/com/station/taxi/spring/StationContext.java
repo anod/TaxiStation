@@ -4,10 +4,10 @@
  */
 package com.station.taxi.spring;
 
-import com.station.taxi.Cab;
-import com.station.taxi.ICab;
-import com.station.taxi.IPassenger;
-import com.station.taxi.Passenger;
+import com.station.taxi.model.TaxiCab;
+import com.station.taxi.model.Cab;
+import com.station.taxi.model.Passenger;
+import com.station.taxi.model.TaxiPassenger;
 import org.springframework.aop.framework.Advised;
 import org.springframework.context.ApplicationContext;
 
@@ -36,13 +36,13 @@ public class StationContext {
 	 * @param whileWaiting
 	 * @return 
 	 */
-	public ICab createCab(int num, String whileWaiting) {
+	public Cab createCab(int num, String whileWaiting) {
 		Advised advised = (Advised)mApplicationContext.getBean("cab", num, whileWaiting);
 		try {
-			Cab cab = (Cab) advised.getTargetSource().getTarget();
-			cab.setAopProxy((ICab)advised);
+			TaxiCab cab = (TaxiCab) advised.getTargetSource().getTarget();
+			cab.setAopProxy((Cab)advised);
 		} catch (Exception ex) {}
-		return (ICab)advised;
+		return (Cab)advised;
 	}
 	
 	/**
@@ -51,13 +51,13 @@ public class StationContext {
 	 * @param destination
 	 * @return 
 	 */
-	public IPassenger createPassenger(String name, String destination) {
+	public Passenger createPassenger(String name, String destination) {
 		Advised advised = (Advised)mApplicationContext.getBean("passenger", name, destination);
 		try {
-			Passenger p = (Passenger) advised.getTargetSource().getTarget();
-			p.setAopProxy((IPassenger)advised);
+			TaxiPassenger p = (TaxiPassenger) advised.getTargetSource().getTarget();
+			p.setAopProxy((Passenger)advised);
 		} catch (Exception ex) {}
-		return (IPassenger)advised;
+		return (Passenger)advised;
 	}
 	
 }

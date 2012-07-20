@@ -1,7 +1,7 @@
 package com.station.taxi.logger;
 
-import com.station.taxi.ICab;
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Cab;
+import com.station.taxi.model.Passenger;
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -37,7 +37,7 @@ public class LoggerWrapper {
 	 * Add a new Cab Logger
 	 * @param cab
 	 */
-	public static void addCabLogger(ICab cab) {
+	public static void addCabLogger(Cab cab) {
 		
 		FileHandler fileHandler;
 		try {
@@ -54,7 +54,7 @@ public class LoggerWrapper {
 	 * Add a passenger logger
 	 * @param p
 	 */
-	public static void addPassengerLogger(IPassenger p) {
+	public static void addPassengerLogger(Passenger p) {
 		FileHandler fileHandler;
 		try {
 			fileHandler = new FileHandler(String.format(LOG_PASSENGER, p.getPassangerName()));

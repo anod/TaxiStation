@@ -1,9 +1,9 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.ICab;
-import com.station.taxi.IPassenger;
-import com.station.taxi.Station;
-import com.station.taxi.Station.IStateChangeListener;
+import com.station.taxi.model.Cab;
+import com.station.taxi.model.Passenger;
+import com.station.taxi.model.TaxiStation;
+import com.station.taxi.model.TaxiStation.IStateChangeListener;
 import com.station.taxi.spring.StationContext;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -32,7 +32,7 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	private WaitingPanel mWaitingPanel;
 	private PassengersPanel mPassangerPanel;
 	private DrivingPanel mDrivingPanel;
-	private Station mStation;
+	private TaxiStation mStation;
 	private StationContext mContext;
 	
 	
@@ -103,31 +103,31 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 * Get station instance
 	 * @return
 	 */
-	public Station getStation() {
+	public TaxiStation getStation() {
 		return mStation;
 	}
 
 	@Override
-	public void onStationStart(Station station) {
+	public void onStationStart(TaxiStation station) {
 		mStation = station;
-		List<ICab> cabs = station.getCabs();
-		for(ICab cab: cabs) {
+		List<Cab> cabs = station.getCabs();
+		for(Cab cab: cabs) {
 			placeCabInPanel(cab, -1);
 		}
-		List<IPassenger> pmany = mStation.getPassengers();
-		for (IPassenger p: pmany) {
+		List<Passenger> pmany = mStation.getPassengers();
+		for (Passenger p: pmany) {
 			addPassangerToLine(p);
 		}	
 	}
 	
 
 	@Override
-	public void onCabUpdate(ICab cab, int newState) {
+	public void onCabUpdate(Cab cab, int newState) {
 		placeCabInPanel(cab, newState);			
 	}
 
 	@Override
-	public void onPassengerUpdate(IPassenger p) {
+	public void onPassengerUpdate(Passenger p) {
 		if(p.leftLine())
 		{
 			removePassangerFromLine(p);
@@ -139,12 +139,12 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	}
 
 	@Override
-	public void onCabAdd(ICab cab) {
+	public void onCabAdd(Cab cab) {
 		placeCabInPanel(cab, -1);
 	}
 
 	@Override
-	public void onPassengerAdd(IPassenger p) {
+	public void onPassengerAdd(Passenger p) {
 		addPassangerToLine(p);
 	}
 
@@ -153,9 +153,9 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 * @param cab
 	 * @param oldState
 	 */
-	private void placeCabInPanel(ICab cab, int oldState) {
+	private void placeCabInPanel(Cab cab, int oldState) {
 		if (cab.isDriving()) {
-			if (oldState == Station.CAB_DRIVE) {
+			if (oldState == TaxiStation.CAB_DRIVE) {
 				throw new RuntimeException("Wrong state");
 			}
 			mWaitingPanel.removeCab(cab);
@@ -170,18 +170,18 @@ public class StationFrame extends JFrame implements IStateChangeListener {
 	 * Add passenger to the panel with passengers that are waiting for taxi
 	 * @param p
 	 */
-	private void addPassangerToLine(IPassenger p) {
+	private void addPassangerToLine(Passenger p) {
 		mPassangerPanel.addPassanger(p);
 	}
 	/**
 	 * 
 	 * @param p
 	 */
-	private void removePassangerFromLine(IPassenger p) {
+	private void removePassangerFromLine(Passenger p) {
 		mPassangerPanel.removePassanger(p);
 		
 	}
-	private void updatePassenger(IPassenger p) {
+	private void updatePassenger(Passenger p) {
 		mPassangerPanel.updatePassenger(p);
 		
 	}

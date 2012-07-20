@@ -1,5 +1,6 @@
 package com.station.taxi;
 
+import com.station.taxi.model.Station;
 import java.util.concurrent.Executor;
 
 /**
@@ -10,7 +11,7 @@ public class StationExecutor implements Executor {
 
 	@Override
 	public void execute(Runnable command) {
-		IStation station = (IStation)command;
+		Station station = (Station)command;
 		for(Runnable target: station.getInitThreads()) {
 			new Thread(target).start();
 		}

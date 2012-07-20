@@ -1,4 +1,4 @@
-package com.station.taxi;
+package com.station.taxi.model;
 /**
  * Taxi Meter calculate price for driven distance
  * @author alex
@@ -6,6 +6,7 @@ package com.station.taxi;
  * @version 0.1
  *
  */
+import com.station.taxi.model.Receipt;
 import java.util.Date;
 /**
  * TaxiMeter object

@@ -1,6 +1,6 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.ICab;
+import com.station.taxi.model.Cab;
 import java.awt.GridLayout;
 import java.util.HashMap;
 
@@ -26,7 +26,7 @@ public abstract class CabsPanel extends JPanel {
 	 * Adds new view and if it's already there refresh it
 	 * @param cab
 	 */
-	public void addOrUpdateCab(ICab cab) {
+	public void addOrUpdateCab(Cab cab) {
 		int num = cab.getNumber();
 		if (!mCabViews.containsKey(num)) {
 			CabView view = new CabView(cab);
@@ -42,7 +42,7 @@ public abstract class CabsPanel extends JPanel {
 	 * @param cab
 	 * @return
 	 */
-	public boolean removeCab(ICab cab) {
+	public boolean removeCab(Cab cab) {
 		int number = cab.getNumber();
 		if (mCabViews.containsKey(number)) {
 			remove(mCabViews.get(number));

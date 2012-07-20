@@ -2,16 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.station.taxi;
+package com.station.taxi.model;
 
-import com.station.taxi.Station.IStateChangeListener;
+import com.station.taxi.model.TaxiStation.IStateChangeListener;
 import java.util.List;
 
 /**
  *
  * @author alex
  */
-public interface IStation extends Runnable {
+public interface Station extends Runnable {
 
 	/**
 	 * Get threads that needs to initiated
@@ -23,19 +23,19 @@ public interface IStation extends Runnable {
 	 * Add a cab to the station
 	 * @param cab
 	 */
-	void addCab(ICab cab);
+	void addCab(Cab cab);
 
 	/**
 	 * Add a passenger to the station
 	 * @param cab
 	 */
-	void addPassenger(IPassenger p);
+	void addPassenger(Passenger p);
 
 	/**
 	 * Get all taxi cabs in station
 	 * @return
 	 */
-	List<ICab> getCabs();
+	List<Cab> getCabs();
 
 	/**
 	 * @return default TaxiMeter
@@ -62,10 +62,10 @@ public interface IStation extends Runnable {
 	 *
 	 * @return All passengers in station
 	 */
-	List<IPassenger> getPassengers();
+	List<Passenger> getPassengers();
 
 	/**
-	 * @return Station name
+	 * @return TaxiStation name
 	 */
 	String getStationName();
 
@@ -80,11 +80,11 @@ public interface IStation extends Runnable {
 	int getWaitingTaxiCount();
 
 	/**
-	 * Initialize Station with cabs and passengers before station is running
+	 * Initialize TaxiStation with cabs and passengers before station is running
 	 * @param initCabs
 	 * @param initPassengers
 	 */
-	void init(List<ICab> initCabs, List<IPassenger> initPassengers);
+	void init(List<Cab> initCabs, List<Passenger> initPassengers);
 
 	/**
 	 * Stop station thread

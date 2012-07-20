@@ -1,6 +1,6 @@
 package com.station.taxi.configuration;
 
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Passenger;
 import com.station.taxi.spring.StationContext;
 import java.util.Random;
 
@@ -12,7 +12,7 @@ public class PassengerGenerator {
 	 * Generates random passenger
 	 * @return 
 	 */
-	public IPassenger generateRandomPassenger(StationContext context){
+	public Passenger generateRandomPassenger(StationContext context){
 		Random rand = new Random();
 		int length = DESTNATIONS.length;
 		String dest = DESTNATIONS[rand.nextInt(length)];

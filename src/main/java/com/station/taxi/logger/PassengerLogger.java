@@ -1,12 +1,12 @@
 package com.station.taxi.logger;
 
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Passenger;
 import com.station.taxi.events.PassengerEventListener;
 
 public class PassengerLogger extends PassengerEventListener {
 
 	@Override
-	public void update(int type, IPassenger passenger) {
+	public void update(int type, Passenger passenger) {
 		switch (type) {
 		case START:
 			LoggerWrapper.addPassengerLogger(passenger);
@@ -37,7 +37,7 @@ public class PassengerLogger extends PassengerEventListener {
 	 * @param p
 	 * @param message
 	 */
-	private static void logPassenger(IPassenger p,String message)
+	private static void logPassenger(Passenger p,String message)
 	{
 		LoggerWrapper.log(String.format(PassengerFilter.PATTERN,p.getPassangerName()) + " " + message);
 	}

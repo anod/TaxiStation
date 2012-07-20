@@ -1,6 +1,6 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Passenger;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -18,11 +18,11 @@ import javax.swing.border.TitledBorder;
 public class PassengerView extends JPanel{
 	
 	private static final long serialVersionUID = 1L;
-	private IPassenger mPassenger;
+	private Passenger mPassenger;
 	private int mTimeLeft=0;
 	private JLabel mIcon = new JLabel("");
 	private JLabel lblTimeLeft = new JLabel("");
-	public PassengerView(IPassenger p) {
+	public PassengerView(Passenger p) {
 		setBorder(new TitledBorder(null, p.getPassangerName(), TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new GridLayout(0,2,2,1));
 		mPassenger = p;

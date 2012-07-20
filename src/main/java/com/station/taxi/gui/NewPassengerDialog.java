@@ -1,6 +1,6 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Passenger;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -50,7 +50,7 @@ public class NewPassengerDialog extends JDialog {
 			this.repaint();
 			return;
 		}
-		IPassenger p = mOwner.getContext().createPassenger(name,dest);
+		Passenger p = mOwner.getContext().createPassenger(name,dest);
 		mOwner.getStation().addPassenger(p);
 		setVisible(false);
 

@@ -1,6 +1,6 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.IPassenger;
+import com.station.taxi.model.Passenger;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -100,7 +100,7 @@ public class StationToolBar extends JPanel implements ActionListener {
 			mStationFrame.closeWindow();
 		} else if (e.getActionCommand().equals(GENERATE_PASSENGER)) {
 			PassengerGenerator gen = new PassengerGenerator();
-			IPassenger p = gen.generateRandomPassenger(mStationFrame.getContext());
+			Passenger p = gen.generateRandomPassenger(mStationFrame.getContext());
 			mStationFrame.getStation().addPassenger(p);
 		}
 

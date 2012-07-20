@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.station.taxi;
+package com.station.taxi.model;
 
 import com.station.taxi.events.IStationEventListener;
 import com.station.taxi.events.PassengerEventListener;
@@ -11,7 +11,7 @@ import com.station.taxi.events.PassengerEventListener;
  *
  * @author alex
  */
-public interface IPassenger extends Runnable {
+public interface Passenger extends Runnable {
 
 	/**
 	 * @return name of passenger
@@ -60,7 +60,7 @@ public interface IPassenger extends Runnable {
 	 * @param (Cab)cab
 	 * @param (double)price
 	 */
-	void onArrival(ICab cab, double price);
+	void onArrival(Cab cab, double price);
 
 	/**
 	 * Register passenger at station listener
