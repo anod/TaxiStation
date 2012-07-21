@@ -4,9 +4,9 @@
  */
 package com.station.taxi.spring;
 
-import com.station.taxi.model.TaxiCab;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
+import com.station.taxi.model.TaxiCab;
 import com.station.taxi.model.TaxiPassenger;
 import org.springframework.aop.framework.Advised;
 import org.springframework.context.ApplicationContext;
@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationContext;
  *
  * @author alex
  */
-public class StationContext {
+abstract public class StationContext {
 	private final ApplicationContext mApplicationContext;
 	
 	public StationContext(ApplicationContext applicationContext) {

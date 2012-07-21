@@ -67,7 +67,7 @@
 
 		<!-- Swing GUI Profile -->
 		<profile>
-			<id>gui</id>
+			<id>Swing GUI</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -78,9 +78,17 @@
 
 		<!-- WEB Profile -->
 		<profile>
-			<id>web</id>
+			<id>WEB</id>
 			<properties>
                 <packaging.type>war</packaging.type>
+			</properties>
+		</profile>
+
+		<!-- Socket Server Profile -->
+		<profile>
+			<id>Socket Server</id>
+			<properties>
+                <packaging.type>jar</packaging.type>
 			</properties>
 		</profile>
 

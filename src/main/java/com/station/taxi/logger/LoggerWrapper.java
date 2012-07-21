@@ -46,7 +46,7 @@ public class LoggerWrapper {
 			fileHandler.setFilter(new CabFilter(cab.getNumber()));
 			sLogger.addHandler(fileHandler);
 		} catch (IOException | SecurityException e) {
-			e.printStackTrace();
+			logException(LoggerWrapper.class.getName(), e);
 		}
 		
 	}
@@ -63,7 +63,7 @@ public class LoggerWrapper {
 			sLogger.addHandler(fileHandler);
 			
 		} catch (IOException | SecurityException e) {
-			e.printStackTrace();
+			logException(LoggerWrapper.class.getName(), e);
 		}
 	}
 	/**
@@ -74,4 +74,7 @@ public class LoggerWrapper {
 		sLogger.log(Level.INFO, message + "\n");
 	}
 
+	public static void logException(String name, Exception ex) {
+		Logger.getLogger(name).log(Level.SEVERE, null, ex);
+	}
 }

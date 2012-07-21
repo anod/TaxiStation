@@ -18,6 +18,8 @@ Any value defined here will override the pom.xml file value but is only applicab
     <spring-data xmlns="http://www.netbeans.org/ns/spring-data/1">
         <config-files>
             <config-file>src/main/java/com/station/taxi/spring/StationXMLConfig.xml</config-file>
+            <config-file>src/main/java/com/station/taxi/sockets/SocketsXMLConfig.xml</config-file>
+            <config-file>src/main/java/com/station/taxi/gui/GuiXMLConfig.xml</config-file>
         </config-files>
         <config-file-groups/>
     </spring-data>
