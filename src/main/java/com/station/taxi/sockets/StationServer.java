@@ -59,7 +59,8 @@ public class StationServer implements Server {
 		while(mAccepting) {
 			try {
 				final Socket socket = mServer.accept();
-				new Thread(new ServerWorker(socket)).start();
+				ServerWorker w = mStationContext.createWorker(socket);
+				new Thread(w).start();
 			} catch (IOException ex) {
 				LoggerWrapper.logException(StationServer.class.getName() , ex);
 				stop();

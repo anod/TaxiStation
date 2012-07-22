@@ -10,11 +10,11 @@
 	<bean id="server" class="com.station.taxi.sockets.StationServer" scope="prototype" />
 	<bean id="worker" class="com.station.taxi.sockets.ServerWorker" scope="prototype" />
 
-	<!-- AspectJ
+
 	<aop:aspectj-autoproxy>
-		<aop:include name="socketServerLoggingAspect"/>
+		<aop:include name="stationServerLoggingAspect"/>
 	</aop:aspectj-autoproxy>
 
-	<bean id="socketServerLoggingAspect" class="com.station.taxi.aop.SocketServerLoggingAspect" init-method="init"/>
-// -->
+	<bean id="stationServerLoggingAspect" class="com.station.taxi.aop.StationServerLoggingAspect"/>
+
 </beans>
