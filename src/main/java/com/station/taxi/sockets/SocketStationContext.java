@@ -22,4 +22,8 @@ public class SocketStationContext extends StationContext {
 		return server;
 	}
 	
+	public Client createClient() {
+		Client client = (Client)getApplicationContext().getBean("client", this);
+		return client;
+	}
 }

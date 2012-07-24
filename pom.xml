@@ -92,6 +92,14 @@
 			</properties>
 		</profile>
 
+		<!-- Socket Client Profile -->
+		<profile>
+			<id>Socket Client</id>
+			<properties>
+                <packaging.type>jar</packaging.type>
+			</properties>
+		</profile>
+
 	</profiles>
 
 	<build>

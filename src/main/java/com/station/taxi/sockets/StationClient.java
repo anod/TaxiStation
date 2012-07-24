@@ -10,13 +10,21 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
  * @author alex
  */
-public class StationClient {
+public class StationClient implements Client{
 	private Socket mSocket;
+	
+	private final SocketStationContext mStationContext;
+
+	private StationClient(SocketStationContext context) {
+		mStationContext = context;
+	}
 	
 	public boolean connect() {
 		try {
@@ -31,8 +39,6 @@ public class StationClient {
 		return true;
 	}
 	
-	
-	
 	public void close() {
 		if (mSocket == null) {
 			return;
@@ -42,5 +48,24 @@ public class StationClient {
 		} catch (IOException ex) {
 			Logger.getLogger(StationClient.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+	
+	private static final String CONFIG_PATH = "SocketsXMLConfig.xml";
+
+	public static void main(String[] args) {
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, StationClient.class);
+		final SocketStationContext context = new SocketStationContext(applicationContext);
+		final Client client = context.createClient();
+		boolean isConnected = client.connect();
+		if (isConnected) {
+			client.readInput();
+			client.close();
+		}
+		
+	}
+
+	@Override
+	public void readInput() {
+		//throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
