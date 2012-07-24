@@ -14,5 +14,5 @@ public interface Client {
 	
 	public void close();
 
-	public void readInput();
+	public void communicate();
 }

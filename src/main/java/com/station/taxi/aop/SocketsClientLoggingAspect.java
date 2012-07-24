@@ -32,4 +32,14 @@ public class SocketsClientLoggingAspect {
 		}
     }
 	
+	@Before("execution(* com.station.taxi.sockets.Client.close(..))")
+    public void logBeforeClose(JoinPoint joinPoint) {
+		LoggerWrapper.log("Closing connection...");
+    }
+
+	@Before("execution(* com.station.taxi.sockets.Client.communicate(..))")
+    public void logBeforeCommunicate(JoinPoint joinPoint) {
+		LoggerWrapper.log("Starting communication with server...");
+    }
+
 }
