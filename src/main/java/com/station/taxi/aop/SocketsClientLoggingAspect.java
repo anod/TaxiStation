@@ -19,27 +19,27 @@ public class SocketsClientLoggingAspect {
 
 	@Before("execution(* com.station.taxi.sockets.Client.connect(..))")
     public void logBeforeConnect(JoinPoint joinPoint) {
-		LoggerWrapper.log("Connecting...");
+		LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Connecting...");
     }
 
 	@AfterReturning(pointcut="execution(* com.station.taxi.sockets.Client.connect(..))", returning = "result")
     public void logAfterConnect(JoinPoint joinPoint, Object result) {
 		boolean isConnected = (Boolean)result;
 		if (isConnected) {
-			LoggerWrapper.log("Succesfully connected to server");
+			LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Succesfully connected to server");
 		} else {
-			LoggerWrapper.log("Failed to connect to server");			
+			LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Failed to connect to server");			
 		}
     }
 	
 	@Before("execution(* com.station.taxi.sockets.Client.close(..))")
     public void logBeforeClose(JoinPoint joinPoint) {
-		LoggerWrapper.log("Closing connection...");
+		LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Closing connection...");
     }
 
 	@Before("execution(* com.station.taxi.sockets.Client.communicate(..))")
     public void logBeforeCommunicate(JoinPoint joinPoint) {
-		LoggerWrapper.log("Starting communication with server...");
+		LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Starting communication with server...");
     }
 
 }
