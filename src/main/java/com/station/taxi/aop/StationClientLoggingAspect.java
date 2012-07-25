@@ -15,7 +15,7 @@ import org.aspectj.lang.annotation.Before;
  * @author alex
  */
 @Aspect
-public class SocketsClientLoggingAspect {
+public class StationClientLoggingAspect {
 
 	@Before("execution(* com.station.taxi.sockets.Client.connect(..))")
     public void logBeforeConnect(JoinPoint joinPoint) {
