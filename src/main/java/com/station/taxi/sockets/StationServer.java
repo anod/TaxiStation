@@ -21,6 +21,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class StationServer implements Server {
 	public static final int PORT = 13000;
 	
+	public static final String KEY_ACTION = "action";
+	public static final String ACTION_ADDCAB = "addcab";
+	public static final String KEY_CABNUM = "num";
+	public static final String KEY_CABWHILEWAITING = "whileWaiting";
+
 	private ServerSocket mServer;
 	private boolean mAccepting = false;
 	private final SocketStationContext mStationContext;

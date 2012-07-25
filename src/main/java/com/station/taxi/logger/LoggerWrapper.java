@@ -74,6 +74,10 @@ public class LoggerWrapper {
 		sLogger.log(Level.INFO, message + "\n");
 	}
 
+	public static void log(String tag, String message) {
+		log("[" + tag + "] " + message);
+	}
+
 	public static void logException(String name, Exception ex) {
 		Logger.getLogger(name).log(Level.SEVERE, null, ex);
 	}

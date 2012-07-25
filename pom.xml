@@ -60,6 +60,13 @@
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<version>1.0.1.Final</version>
 		</dependency>
+
+		<dependency>
+		  <groupId>net.sf.json-lib</groupId>
+		  <artifactId>json-lib</artifactId>
+		  <version>2.2.3</version>
+		  <classifier>jdk15</classifier>
+		</dependency>
 	</dependencies>
 
 	<!-- Define profiles -->
@@ -87,6 +94,14 @@
 		<!-- Socket Server Profile -->
 		<profile>
 			<id>Socket Server</id>
+			<properties>
+                <packaging.type>jar</packaging.type>
+			</properties>
+		</profile>
+
+		<!-- Socket Client Profile -->
+		<profile>
+			<id>Socket Client</id>
 			<properties>
                 <packaging.type>jar</packaging.type>
 			</properties>

@@ -9,12 +9,19 @@
 
 	<bean id="server" class="com.station.taxi.sockets.StationServer" scope="prototype" />
 	<bean id="worker" class="com.station.taxi.sockets.ServerWorker" scope="prototype" />
+	<bean id="client" class="com.station.taxi.sockets.StationClient" scope="prototype" />
 
-
+	<!-- AspectJ //-->
 	<aop:aspectj-autoproxy>
-		<aop:include name="stationServerLoggingAspect"/>
+		<!--
+		<aop:include name="socketServerLoggingAspect"/>
+		//-->
+		<aop:include name="socketsClientLoggingAspect"/>
 	</aop:aspectj-autoproxy>
 
-	<bean id="stationServerLoggingAspect" class="com.station.taxi.aop.StationServerLoggingAspect"/>
+	<bean id="socketsClientLoggingAspect" class="com.station.taxi.aop.SocketsClientLoggingAspect"/>
 
+<!--
+	<bean id="socketServerLoggingAspect" class="com.station.taxi.aop.SocketServerLoggingAspect" init-method="init"/>
+// -->
 </beans>
