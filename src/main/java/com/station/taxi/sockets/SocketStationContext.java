@@ -7,12 +7,24 @@ package com.station.taxi.sockets;
 import com.station.taxi.spring.StationContext;
 import java.net.Socket;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
  * @author alex
  */
 public class SocketStationContext extends StationContext {
+	private static final String CONFIG_PATH = "SocketsXMLConfig.xml";
+	
+	/**
+	 * Factory method to create instance SocketStationContext
+	 * based on XML configuration
+	 * @return 
+	 */
+	public static SocketStationContext readFromXml() {
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, StationServer.class);
+		return new SocketStationContext(applicationContext);
+	}
 	
 	public SocketStationContext(ApplicationContext applicationContext) {
 		super(applicationContext);

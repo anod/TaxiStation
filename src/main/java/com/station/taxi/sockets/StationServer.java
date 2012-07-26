@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.sockets;
 
 import com.station.taxi.logger.LoggerWrapper;
@@ -11,9 +7,6 @@ import java.net.Socket;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
-
-	
 /**
  *
  * @author alex
@@ -76,11 +69,8 @@ public class StationServer implements Server {
 	}
 	
 	
-	private static final String CONFIG_PATH = "SocketsXMLConfig.xml";
-
 	public static void main(String[] args) {
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, StationServer.class);
-		final SocketStationContext context = new SocketStationContext(applicationContext);
+		final SocketStationContext context = SocketStationContext.readFromXml();
 		final Server server = context.createServer();
 		boolean isStarted = server.start();
 		if (isStarted) {

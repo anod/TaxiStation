@@ -13,15 +13,10 @@
 
 	<!-- AspectJ //-->
 	<aop:aspectj-autoproxy>
-		<!--
-		<aop:include name="socketServerLoggingAspect"/>
-		//-->
-		<aop:include name="socketsClientLoggingAspect"/>
+		<aop:include name="stationServerLoggingAspect"/>
+		<aop:include name="stationClientLoggingAspect"/>
 	</aop:aspectj-autoproxy>
 
-	<bean id="socketsClientLoggingAspect" class="com.station.taxi.aop.SocketsClientLoggingAspect"/>
-
-<!--
-	<bean id="socketServerLoggingAspect" class="com.station.taxi.aop.SocketServerLoggingAspect" init-method="init"/>
-// -->
+	<bean id="stationClientLoggingAspect" class="com.station.taxi.aop.StationClientLoggingAspect"/>
+	<bean id="stationServerLoggingAspect" class="com.station.taxi.aop.StationServerLoggingAspect"/>
 </beans>

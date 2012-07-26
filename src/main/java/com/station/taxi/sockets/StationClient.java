@@ -60,20 +60,6 @@ public class StationClient implements Client{
 		}
 		mSocket = null;
 	}
-	
-	private static final String CONFIG_PATH = "SocketsXMLConfig.xml";
-
-	public static void main(String[] args) {
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, StationClient.class);
-		final SocketStationContext context = new SocketStationContext(applicationContext);
-		final Client client = context.createClient();
-		boolean isConnected = client.connect();
-		if (isConnected) {
-			client.communicate();
-			client.close();
-		}
-		
-	}
 
 	@Override
 	public void communicate() {
@@ -87,7 +73,6 @@ public class StationClient implements Client{
 			}
 			if (input.equals(USER_ACTION_ADDCAB)) {
 				addCabRequest(scan);
-				//
 			} else if (input.equals(USER_ACTION_ADDPASSENGER)) {
 				//
 			} else {
@@ -110,4 +95,16 @@ public class StationClient implements Client{
 		mToNetOutputStream.println(json.toString());
 
 	}
+	
+	public static void main(String[] args) {
+		final SocketStationContext context = SocketStationContext.readFromXml();
+		final Client client = context.createClient();
+		boolean isConnected = client.connect();
+		if (isConnected) {
+			client.communicate();
+			client.close();
+		}
+		
+	}
+
 }
