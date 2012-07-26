@@ -23,4 +23,8 @@ Any value defined here will override the pom.xml file value but is only applicab
         </config-files>
         <config-file-groups/>
     </spring-data>
+    <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>Validator</word>
+        <word>Validators</word>
+    </spellchecker-wordlist>
 </project-shared-configuration>

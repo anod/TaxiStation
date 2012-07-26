@@ -22,6 +22,10 @@ import javax.swing.border.EmptyBorder;
 
 import com.station.taxi.model.TaxiCab;
 import com.station.taxi.model.Cab;
+import com.station.taxi.validator.CabValidator;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.validation.MapBindingResult;
 /**
  * Add new cab dialog
  * @author alex
@@ -162,22 +166,26 @@ public class NewCabDialog extends JDialog {
 		}
  
 		private boolean validateCabNumber(JTextField input) {
-			String numberStr = input.getText();
+			String number = input.getText();
 			
-			if (numberStr.length() < NUM_MIN_LEN || numberStr.length() > NUM_MAX_LEN) {
+			Map<String, String> map = new HashMap<>();
+			MapBindingResult errors = new MapBindingResult(map, Integer.class.getName());
+			CabValidator.getNumberStringValidator().validate(number, errors);
+			
+			if (!errors.hasErrors()) {
+				return true;
+			}
+			
+			if (errors.getGlobalError().getCode().equals(CabValidator.ERR_CAB_NUM_LENGTH)) {
 				String errText = String.format(TextsBundle.getString("dialog_addcab_num_err_length"), NUM_MIN_LEN, NUM_MAX_LEN);
 				mMessageLabel.setText(errText);
 				return false;
 			}
-			
-			for (char c: numberStr.toCharArray()){
-				if(!Character.isDigit(c)){
-					mMessageLabel.setText(TextsBundle.getString("dialog_addcab_num_err_chars"));
-					return false;
-				}
+
+			if (errors.getGlobalError().getCode().equals(CabValidator.ERR_CAB_NUM_CHARS)) {
+				mMessageLabel.setText(TextsBundle.getString("dialog_addcab_num_err_chars"));
 			}
-			
-			return true;
+			return false;
 		}
 		
 		@Override
