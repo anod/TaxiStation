@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sf.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -21,6 +21,8 @@ import org.springframework.validation.ObjectError;
  * @author alex
  */
 public class StationClient implements Client{
+	private static final String HOST = "localhost";
+
 	private static final String USER_ACTION_EXIT = "exit";
 	private static final String USER_ACTION_ADDCAB = "addcab";
 	private static final String USER_ACTION_ADDPASSENGER = "addpassenger";
@@ -38,7 +40,7 @@ public class StationClient implements Client{
 	@Override
 	public boolean connect() {
 		try {
-			mSocket = new Socket("localhost", StationServer.PORT);
+			mSocket = new Socket(HOST, StationServer.PORT);
 			mFromNetInputStream = new DataInputStream(mSocket.getInputStream());
 			mToNetOutputStream = new PrintStream(mSocket.getOutputStream());
 		} catch (UnknownHostException ex) {

@@ -4,8 +4,6 @@ import com.station.taxi.logger.LoggerWrapper;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -16,6 +14,8 @@ public class StationServer implements Server {
 	
 	public static final String KEY_ACTION = "action";
 	public static final String ACTION_ADDCAB = "addcab";
+	public static final String ACTION_EXIT = "exit";
+
 	public static final String KEY_CABNUM = "num";
 	public static final String KEY_CABWHILEWAITING = "whileWaiting";
 
