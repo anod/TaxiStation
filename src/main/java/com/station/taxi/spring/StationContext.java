@@ -37,7 +37,8 @@ abstract public class StationContext {
 	 * @return 
 	 */
 	public Cab createCab(int num, String whileWaiting) {
-		Advised advised = (Advised)mApplicationContext.getBean("cab", num, whileWaiting);
+		Object object = mApplicationContext.getBean("cab", num, whileWaiting);
+		Advised advised = (Advised)object;
 		try {
 			TaxiCab cab = (TaxiCab) advised.getTargetSource().getTarget();
 			cab.setAopProxy((Cab)advised);

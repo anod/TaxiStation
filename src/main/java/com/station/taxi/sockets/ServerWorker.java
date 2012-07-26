@@ -32,17 +32,20 @@ public class ServerWorker implements Runnable {
 //			DataInputStream inputStream = new DataInputStream(mSocket.getInputStream());
 			BufferedReader inputStream = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 			PrintStream outputStream = new PrintStream(mSocket.getOutputStream());
-
-			while(true) {
+			OUTER:
+			while (true) {
 				String msg = inputStream.readLine();
 				JSONObject data = (JSONObject)JSONValue.parse(msg);
 				String action = (String) data.get(StationServer.KEY_ACTION);
-				if (action.equals(StationServer.ACTION_ADDCAB)) {
-					
-				} else if (action.equals(StationServer.ACTION_EXIT)) {
-					break;
-				} else {
-					System.out.print("Unknown data received: " + msg);
+				switch (action) {
+					case StationServer.ACTION_ADDCAB:
+						
+						break;
+					case StationServer.ACTION_EXIT:
+						break OUTER;
+					default:
+						System.out.print("Unknown data received: " + msg);
+						break;
 				}
 			}
 			

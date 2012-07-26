@@ -14,7 +14,7 @@ public interface Server {
 	 * Start server to listen to incoming connection on predefined port
 	 * @return 
 	 */
-	boolean start();
+	void start();
 
 	/**
 	 * Accept connections and start worker thread

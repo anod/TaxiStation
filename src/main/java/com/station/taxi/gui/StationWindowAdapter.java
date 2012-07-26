@@ -1,7 +1,7 @@
 package com.station.taxi.gui;
 
 import com.station.taxi.model.TaxiStation;
-import com.station.taxi.StationExecutor;
+import com.station.taxi.model.StationExecutor;
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
 import java.awt.event.WindowAdapter;
