@@ -169,7 +169,7 @@ public class NewCabDialog extends JDialog {
 			String number = input.getText();
 			
 			Map<String, String> map = new HashMap<>();
-			MapBindingResult errors = new MapBindingResult(map, Integer.class.getName());
+			MapBindingResult errors = new MapBindingResult(map, String.class.getName());
 			CabValidator.getNumberStringValidator().validate(number, errors);
 			
 			if (!errors.hasErrors()) {
