@@ -2,8 +2,10 @@ package com.station.taxi.sockets;
 
 import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.validator.CabValidator;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -30,7 +32,7 @@ public class StationClient implements Client{
 	private Socket mSocket;
 	
 	private final SocketStationContext mStationContext;
-	private DataInputStream mFromNetInputStream;
+	private BufferedReader mFromNetInputStream;
 	private PrintStream mToNetOutputStream;
 
 	private StationClient(SocketStationContext context) {
@@ -41,7 +43,7 @@ public class StationClient implements Client{
 	public boolean connect() {
 		try {
 			mSocket = new Socket(HOST, StationServer.PORT);
-			mFromNetInputStream = new DataInputStream(mSocket.getInputStream());
+			mFromNetInputStream = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 			mToNetOutputStream = new PrintStream(mSocket.getOutputStream());
 		} catch (UnknownHostException ex) {
 			LoggerWrapper.logException(StationClient.class.getName(), ex);
@@ -61,7 +63,7 @@ public class StationClient implements Client{
 		try {
 			mSocket.close();
 		} catch (IOException ex) {
-			Logger.getLogger(StationClient.class.getName()).log(Level.SEVERE, null, ex);
+			LoggerWrapper.logException(StationClient.class.getName(), ex);
 		}
 		mSocket = null;
 	}
@@ -70,20 +72,30 @@ public class StationClient implements Client{
 	public void communicate() {
 		Scanner scan = new Scanner(System.in);
 
-		while(true) {
+		boolean running = true;
+		while(running) {
 			System.out.println("Please enter action [addcab,addpassenger,exit]: ");
 			String input = scan.nextLine();
-			if (input.equals(USER_ACTION_EXIT)) {
-				break;
-			}
-			if (input.equals(USER_ACTION_ADDCAB)) {
-				addCabRequest(scan);
-			} else if (input.equals(USER_ACTION_ADDPASSENGER)) {
-				//
-			} else {
-				System.out.println("Wrong input. Try again.");
+
+			switch (input) {
+				case USER_ACTION_EXIT:
+					running = false;
+					break;
+				case USER_ACTION_ADDCAB:
+					addCabRequest(scan);
+					break;
+				case USER_ACTION_ADDPASSENGER:
+					break;
+				default:
+					System.out.println("Wrong input. Try again.");
+					break;
 			}
 		}
+		
+		JSONObject json = new JSONObject();
+		json.put(Message.KEY_ACTION, Message.ACTION_EXIT);
+		LoggerWrapper.log(StationClient.class.getSimpleName(), json.toString());
+		mToNetOutputStream.println(json.toString());
 	}
 
 	private void addCabRequest(Scanner scan) {
@@ -100,12 +112,18 @@ public class StationClient implements Client{
 		}
 		
 		JSONObject json = new JSONObject();
-		json.put(StationServer.KEY_ACTION, StationServer.ACTION_ADDCAB);
-		json.put(StationServer.KEY_CABNUM, Integer.valueOf(numberStr));
-		json.put(StationServer.KEY_CABWHILEWAITING, whileWaiting);
+		json.put(Message.KEY_ACTION, Message.ACTION_ADDCAB);
+		json.put(Message.KEY_CABNUM, Integer.valueOf(numberStr));
+		json.put(Message.KEY_CABWHILEWAITING, whileWaiting);
 		
+		LoggerWrapper.log(StationClient.class.getName(), json.toString());
 		mToNetOutputStream.println(json.toString());
-
+		try {
+			String response = mFromNetInputStream.readLine();
+			LoggerWrapper.log(StationClient.class.getSimpleName(), response);
+		} catch (IOException ex) {
+			LoggerWrapper.logException(StationClient.class.getName(), ex);
+		}
 	}
 	
 	/**

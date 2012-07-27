@@ -1,9 +1,10 @@
 package com.station.taxi.gui;
 
-import com.station.taxi.model.TaxiStation;
-import com.station.taxi.model.StationExecutor;
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
+import com.station.taxi.logger.LoggerWrapper;
+import com.station.taxi.model.StationExecutor;
+import com.station.taxi.model.TaxiStation;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class StationWindowAdapter extends WindowAdapter {
 			//Load station from configuration
 			mStation = configLoader.load();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
+			LoggerWrapper.logException(StationWindowAdapter.class.getName(), e);
 			return;
 		}
 		mStation.registerStateListener(mStationFrame);

@@ -1,6 +1,5 @@
 package com.station.taxi.model;
 
-import com.station.taxi.model.Station;
 import java.util.concurrent.Executor;
 
 /**

@@ -20,13 +20,6 @@ import org.xml.sax.SAXException;
  */
 public class StationServer implements Server, IStateChangeListener {
 	public static final int PORT = 13000;
-	
-	public static final String KEY_ACTION = "action";
-	public static final String ACTION_ADDCAB = "addcab";
-	public static final String ACTION_EXIT = "exit";
-
-	public static final String KEY_CABNUM = "num";
-	public static final String KEY_CABWHILEWAITING = "whileWaiting";
 
 	private static final String CONFIG_XML = "configs/config1.xml";
 
@@ -88,7 +81,7 @@ public class StationServer implements Server, IStateChangeListener {
 		while(mAccepting) {
 			try {
 				final Socket socket = mServer.accept();
-				ServerWorker w = mStationContext.createWorker(socket);
+				ServerWorker w = mStationContext.createWorker(socket, mStation, mStationContext);
 				new Thread(w).start();
 			} catch (IOException ex) {
 				LoggerWrapper.logException(StationServer.class.getName() , ex);
@@ -109,7 +102,7 @@ public class StationServer implements Server, IStateChangeListener {
 			public void run() {
 				server.stop();
 			}
-	    }, "Shutdown-thread"));
+	    }, "shutdown-thread"));
 	}
 
 	@Override
