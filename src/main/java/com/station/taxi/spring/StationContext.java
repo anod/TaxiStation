@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.spring;
 
 import com.station.taxi.model.Cab;
