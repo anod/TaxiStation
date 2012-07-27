@@ -1,7 +1,21 @@
-Fri Jul 27 18:35:43 IDT 2012 : Apache Derby Network Server - 10.8.1.2 - (1095077) started and ready to accept connections on port 1527
+Sat Jul 28 00:21:04 IDT 2012 : Apache Derby Network Server - 10.8.1.2 - (1095077) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Fri Jul 27 18:35:43 IDT 2012:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0138-c914-3e92-ffffa7063903 
+Sat Jul 28 00:21:04 IDT 2012:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0138-ca50-6bd8-ffffa7063903 
+on database directory /Users/alex/Documents/workspace/TaxiStation/db/TaxiStation  with class loader sun.misc.Launcher$AppClassLoader@20c6b8b0 
+Loaded from file:/Applications/NetBeans/glassfish-3.1.2/javadb/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_05-b05
+user.dir=/Applications/NetBeans/glassfish-3.1.2/javadb
+derby.system.home=/Users/alex/Documents/workspace/TaxiStation/db
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Sat Jul 28 00:21:05 IDT 2012:
+Shutting down instance a816c00e-0138-ca50-6bd8-ffffa7063903 on database directory /Users/alex/Documents/workspace/TaxiStation/db/TaxiStation with class loader sun.misc.Launcher$AppClassLoader@20c6b8b0 
+Sat Jul 28 00:21:05 IDT 2012 Thread[DRDAConnThread_4,5,main] (DATABASE = TaxiStation), (DRDAID = {2}), Database 'TaxiStation' shutdown.
+----------------------------------------------------------------
+Sat Jul 28 00:21:12 IDT 2012:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance 6c44409f-0138-ca50-6bd8-ffffa7063903 
 on database directory /Users/alex/Documents/workspace/TaxiStation/db/TaxiStation  with class loader sun.misc.Launcher$AppClassLoader@20c6b8b0 
 Loaded from file:/Applications/NetBeans/glassfish-3.1.2/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
