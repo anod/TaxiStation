@@ -23,8 +23,8 @@ public class JPATestMain {
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("TaxiStationPU");
 		EntityManager em = emf.createEntityManager();
-		
-		em.find(Receipt.class, 1L);
+		Receipt r1 = em.find(Receipt.class, 1L);
+		System.out.println(r1);
 		
 		ReceiptRepository repository = applicationContext.getBean(ReceiptRepository.class);
 
@@ -35,13 +35,15 @@ public class JPATestMain {
 	//	repository.save(newReceipt1);
 //		repository.save(newReceipt2);
 //		repository.save(newReceipt3);
-		
+	
+			System.out.println("====-11111-=====");
+			
 		Iterable<Receipt> all = repository.findAll();
 		for(Receipt r: all) {
 			System.out.println(r);
 		}
 
-			System.out.println("TEST");
+			System.out.println("====-22222-====");
 		
 		all = repository.findByPassengerNumber(2);
 		for(Receipt r: all) {
