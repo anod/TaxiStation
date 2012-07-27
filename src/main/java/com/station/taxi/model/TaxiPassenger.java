@@ -1,6 +1,6 @@
 package com.station.taxi.model;
 
-import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.events.StationEventListener;
 import com.station.taxi.events.PassengerEventListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class TaxiPassenger implements Passenger {
 	private static final int STATE_TRANSIT = 2;
 	private static final int STATE_EXIT = 3;
 
-	private IStationEventListener mStationListener;
+	private StationEventListener mStationListener;
 	private static final int ONE_SECOND = 1000;
 	private int mExitTime = 0;
 	private String mName;
@@ -72,10 +72,10 @@ public class TaxiPassenger implements Passenger {
 	}
 	/**
 	 * Register passenger at station listener
-	 * @param IStationEventListener
+	 * @param StationEventListener
 	 */
 	@Override
-	public void setStationEventListener(IStationEventListener listener) {
+	public void setStationEventListener(StationEventListener listener) {
 		mStationListener = listener;
 	}
 	/**

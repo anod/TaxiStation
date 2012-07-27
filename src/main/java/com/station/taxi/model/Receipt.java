@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 /**
@@ -17,6 +18,7 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
+@Table(name="Receipts")
 public class Receipt implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -106,4 +108,6 @@ public class Receipt implements Serializable {
 	public void setPassengersCount(int passengersCount) {
 		this.mPassengersCount = passengersCount;
 	}
+	
+	
 }

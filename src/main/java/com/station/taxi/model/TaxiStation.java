@@ -1,6 +1,9 @@
 package com.station.taxi.model;
 
-import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.db.repositories.ReceiptRepository;
+import com.station.taxi.events.StationEventListener;
+import com.station.taxi.logger.LoggerWrapper;
+import com.station.taxi.spring.StationContext;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -9,7 +12,7 @@ import java.util.List;
  * @author Eran Zimbler
  * @version 0.2
  */
-public class TaxiStation implements Station, IStationEventListener {
+public class TaxiStation implements Station, StationEventListener {
 	/**
 	 * Cab states
 	 */
@@ -78,9 +81,12 @@ public class TaxiStation implements Station, IStationEventListener {
 	 */
 	private List<Passenger> mPassengerExit;
 	
-	private String mStationName;
-	private int mMaxWaitingCount;
-	private TaxiMeter mDefaultTaxiMeter;
+	private final StationContext mContext;
+
+	private final String mStationName;
+	private final int mMaxWaitingCount;
+	private final TaxiMeter mDefaultTaxiMeter;
+	
 	private boolean mThreadRunning = false;
 	
 	private List<Runnable> mInitThreads;
@@ -92,7 +98,8 @@ public class TaxiStation implements Station, IStationEventListener {
 	 * @param maxWaitingCount maximum number of waiting taxi cabs
 	 * @param defaultTaxiMeter taxi meter with defaults
 	 */
-	public TaxiStation(String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
+	public TaxiStation(StationContext context, String name, int maxWaitingCount, TaxiMeter defaultTaxiMeter) {
+		mContext = context;
 		mStationName = name;
 		mMaxWaitingCount = maxWaitingCount;
 		mTaxiWaiting = new ArrayList<>();
@@ -296,7 +303,7 @@ public class TaxiStation implements Station, IStationEventListener {
 		try {
 			return mDefaultTaxiMeter.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			LoggerWrapper.logException(TaxiStation.class.getName(), e);
 		}
 		return null;
 	}
@@ -339,7 +346,7 @@ public class TaxiStation implements Station, IStationEventListener {
 				}					
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LoggerWrapper.logException(TaxiStation.class.getName(), e);
 		}
 	}
 
@@ -448,4 +455,9 @@ public class TaxiStation implements Station, IStationEventListener {
 		mStateListener.onPassengerUpdate(passenger);
 	}
 
+	@Override
+	public void onCabArrival(Cab cab, Receipt receipt) {
+		ReceiptRepository receiptDao = mContext.getReceiptRepository();
+		// TODO receiptDao.save(receipt);
+	}
 }

@@ -1,7 +1,7 @@
 package com.station.taxi.model;
 
 import com.station.taxi.events.CabEventListener;
-import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.events.StationEventListener;
 import java.util.Date;
 import java.util.List;
 
@@ -128,7 +128,7 @@ public interface Cab extends Runnable {
 	 * Register station listener
 	 * @param listener
 	 */
-	void setStationEventListener(IStationEventListener listener);
+	void setStationEventListener(StationEventListener listener);
 
 	String toString();
 	

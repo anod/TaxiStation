@@ -107,7 +107,7 @@ public class StationConfigLoader {
         String stationName = attrs.getNamedItem("name").getNodeValue();
         String maxWaitingTaxis = attrs.getNamedItem("maxWaitingTaxis").getNodeValue();
         
-		return new TaxiStation(stationName, Integer.valueOf(maxWaitingTaxis), meter);
+		return new TaxiStation(mContext, stationName, Integer.valueOf(maxWaitingTaxis), meter);
 	}
 
 	/**

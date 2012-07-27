@@ -1,7 +1,7 @@
 package com.station.taxi.model;
 
 import com.station.taxi.events.CabEventListener;
-import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.events.StationEventListener;
 import java.util.*;
 
 /**
@@ -32,7 +32,7 @@ public class TaxiCab implements Cab {
 	public static final String WAIT_EAT = "eat";	
 	public static final String WAIT_DRINK = "drink";
 	
-	private IStationEventListener mStationListener;
+	private StationEventListener mStationListener;
 	private List<Passenger> mPassangers;
 	private String mWhileWaiting;
 	private int mNumber;
@@ -139,7 +139,7 @@ public class TaxiCab implements Cab {
 	 * @param listener
 	 */
 	@Override
-	public void setStationEventListener(IStationEventListener listener) {
+	public void setStationEventListener(StationEventListener listener) {
 		mStationListener = listener;
 	}
 	/**
@@ -332,7 +332,9 @@ public class TaxiCab implements Cab {
 			}
 			notify(CabEventListener.ARRIVED_DESTINATION);		
 			int size = mPassangers.size();
-			mReciptsList.add(mMeter.reciept(size));
+			Receipt receipt = mMeter.createReciept(size);
+			mReciptsList.add(receipt);
+			mStationListener.onCabArrival(mAopProxy, receipt);
 			notifyArrival();
 			mPassangers.clear();
 			mStationListener.onWaitingRequest(mAopProxy);

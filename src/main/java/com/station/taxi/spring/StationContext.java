@@ -1,11 +1,13 @@
 package com.station.taxi.spring;
 
+import com.station.taxi.db.repositories.ReceiptRepository;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
 import com.station.taxi.model.TaxiCab;
 import com.station.taxi.model.TaxiPassenger;
 import org.springframework.aop.framework.Advised;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 
 /**
  *
@@ -55,6 +57,17 @@ abstract public class StationContext {
 			p.setAopProxy((Passenger)advised);
 		} catch (Exception ex) {}
 		return (Passenger)advised;
+	}
+	
+	/**
+	 * Get receipt data access object
+	 * @return 
+	 */
+	public ReceiptRepository getReceiptRepository() {
+
+		ReceiptRepository repository = mApplicationContext.getBean(ReceiptRepository.class);
+
+		return repository;
 	}
 	
 }

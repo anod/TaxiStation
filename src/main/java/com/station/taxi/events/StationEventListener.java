@@ -2,6 +2,7 @@ package com.station.taxi.events;
 
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
+import com.station.taxi.model.Receipt;
 
 /**
  * 
@@ -9,12 +10,18 @@ import com.station.taxi.model.Passenger;
  * @author Eran Zimbler
  * @version 0.2
  */
-public interface IStationEventListener {
+public interface StationEventListener {
 	/**
 	 * Called when cab thread is ready
 	 * @param Cab cab
 	 */
 	public void onCabReady(Cab cab);
+	/**
+	 * 
+	 * @param cab
+	 * @param receipt 
+	 */
+	public void onCabArrival(Cab cab, Receipt receipt);
 	/**
 	 * Cab request break event
 	 * @param cab

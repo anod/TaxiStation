@@ -1,6 +1,6 @@
 package com.station.taxi.model;
 
-import com.station.taxi.events.IStationEventListener;
+import com.station.taxi.events.StationEventListener;
 import com.station.taxi.events.PassengerEventListener;
 
 /**
@@ -60,9 +60,9 @@ public interface Passenger extends Runnable {
 
 	/**
 	 * Register passenger at station listener
-	 * @param IStationEventListener
+	 * @param StationEventListener
 	 */
-	void setStationEventListener(IStationEventListener listener);
+	void setStationEventListener(StationEventListener listener);
 	
 	/**
 	 * Register passenger event listener

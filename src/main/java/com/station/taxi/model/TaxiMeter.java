@@ -45,7 +45,7 @@ public class TaxiMeter implements Cloneable {
 	}
 	
 	/**
-	 * Calc price of the ride
+	 * Calculate price of the ride
 	 * @param seconds
 	 */
 	public void increase() {
@@ -57,7 +57,12 @@ public class TaxiMeter implements Cloneable {
 		return new TaxiMeter(mStartPrice, mOneSecPrice);
 	}
 
-	public Receipt reciept(int numOfPassengers) {
+	/**
+	 * 
+	 * @param numOfPassengers
+	 * @return 
+	 */
+	public Receipt createReciept(int numOfPassengers) {
 		return new Receipt(mRideStart, new Date(), mCurrentValue, numOfPassengers);
 	}
 
