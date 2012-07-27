@@ -52,7 +52,9 @@ public class Receipt implements Serializable {
 		mPassengersCount = passengers;
 	}
 	
-	
+	public Long getId() {
+		return mId;
+	}
 	
 	public double getPrice() {
 		return mPrice;
@@ -109,5 +111,21 @@ public class Receipt implements Serializable {
 		this.mPassengersCount = passengersCount;
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Receipt #");
+		sb.append(mId);
+		sb.append(", start time: ");
+		sb.append(mStartTime.toGMTString());
+		sb.append(", end time: ");
+		sb.append(mEndTime.toGMTString());
+		sb.append(", price: ");
+		sb.append(mPrice);
+		sb.append(", count: ");
+		sb.append(mPassengersCount);
+
+		return sb.toString();
+		
+	}
 }

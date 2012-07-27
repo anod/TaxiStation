@@ -458,6 +458,6 @@ public class TaxiStation implements Station, StationEventListener {
 	@Override
 	public void onCabArrival(Cab cab, Receipt receipt) {
 		ReceiptRepository receiptDao = mContext.getReceiptRepository();
-		// TODO receiptDao.save(receipt);
+		receiptDao.save(receipt);
 	}
 }
