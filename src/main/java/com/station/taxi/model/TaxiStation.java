@@ -23,7 +23,7 @@ public class TaxiStation implements Station, IStationEventListener {
 	 *  Adding or changing state of cabs
 	 *  Adding or changing state of passengers
 	 */
-	public interface IStateChangeListener {
+	public interface StateChangeListener {
 		/**
 		 * TaxiStation is initialized and running
 		 * @param station
@@ -85,7 +85,7 @@ public class TaxiStation implements Station, IStationEventListener {
 	
 	private List<Runnable> mInitThreads;
 	
-	private IStateChangeListener mStateListener;
+	private StateChangeListener mStateListener;
 	/**
 	 * 
 	 * @param name TaxiStation name
@@ -439,7 +439,7 @@ public class TaxiStation implements Station, IStationEventListener {
 	 * @param listener
 	 */
 	@Override
-	public void registerStateListener(IStateChangeListener listener) {
+	public void registerStateListener(StateChangeListener listener) {
 		mStateListener = listener;
 	}
 

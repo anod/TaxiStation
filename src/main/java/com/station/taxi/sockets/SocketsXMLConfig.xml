@@ -9,16 +9,16 @@
 
 	<bean id="server" class="com.station.taxi.sockets.StationServer" scope="prototype" />
 	<bean id="worker" class="com.station.taxi.sockets.ServerWorker" scope="prototype" />
-	<bean id="client" class="com.station.taxi.sockets.StationClient" scope="prototype" />
+	<bean id="client" class="com.station.taxi.sockets.JSONClient" scope="prototype" />
 
 	<!-- AspectJ //-->
 	<aop:aspectj-autoproxy>
 		<aop:include name="stationServerLoggingAspect"/>
-		<aop:include name="stationClientLoggingAspect"/>
+		<aop:include name="jsonClientLoggingAspect"/>
 		<aop:include name="cabLoggingAspect"/>
 		<aop:include name="passengerLoggingAspect"/>
 	</aop:aspectj-autoproxy>
 
-	<bean id="stationClientLoggingAspect" class="com.station.taxi.aop.StationClientLoggingAspect"/>
+	<bean id="jsonClientLoggingAspect" class="com.station.taxi.aop.JSONClientLoggingAspect"/>
 	<bean id="stationServerLoggingAspect" class="com.station.taxi.aop.StationServerLoggingAspect"/>
 </beans>

@@ -9,13 +9,14 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.json.simple.JSONObject;
 
 /**
  *
  * @author alex
  */
 @Aspect
-public class StationClientLoggingAspect {
+public class JSONClientLoggingAspect {
 
 	@Before("execution(* com.station.taxi.sockets.Client.connect(..))")
     public void logBeforeConnect(JoinPoint joinPoint) {
@@ -37,9 +38,19 @@ public class StationClientLoggingAspect {
 		LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Closing connection...");
     }
 
-	@Before("execution(* com.station.taxi.sockets.Client.communicate(..))")
-    public void logBeforeCommunicate(JoinPoint joinPoint) {
-		LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Starting communication with server...");
+	@Before("execution(* com.station.taxi.sockets.Client.sendRequest(..))")
+    public void logBeforeSendRequest(JoinPoint joinPoint) {
+		Object[] args = joinPoint.getArgs();
+		LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Sending request: " + ((JSONObject)args[0]).toString());
     }
 
+	@AfterReturning(pointcut="execution(* com.station.taxi.sockets.Client.receiveResponse(..))", returning = "result")
+    public void logAfterReceiveResponse(JoinPoint joinPoint, Object result) {
+		JSONObject json = (JSONObject)result;
+		if (json != null) {
+			LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Recieved response: " + json.toString());
+		} else {
+			LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Empty response.");			
+		}
+    }
 }

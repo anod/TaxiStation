@@ -4,7 +4,7 @@
  */
 package com.station.taxi.model;
 
-import com.station.taxi.model.TaxiStation.IStateChangeListener;
+import com.station.taxi.model.TaxiStation.StateChangeListener;
 import java.util.List;
 
 /**
@@ -94,7 +94,7 @@ public interface Station extends Runnable {
 	 *
 	 * @param listener
 	 */
-	void registerStateListener(IStateChangeListener listener);
+	void registerStateListener(StateChangeListener listener);
 
 	
 }

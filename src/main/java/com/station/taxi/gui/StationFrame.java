@@ -3,7 +3,7 @@ package com.station.taxi.gui;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
 import com.station.taxi.model.TaxiStation;
-import com.station.taxi.model.TaxiStation.IStateChangeListener;
+import com.station.taxi.model.TaxiStation.StateChangeListener;
 import com.station.taxi.spring.StationContext;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,7 +24,7 @@ import javax.swing.WindowConstants;
  * @author Eran Zimbler
  * @version 0.2
  */
-public class StationFrame extends JFrame implements IStateChangeListener {
+public class StationFrame extends JFrame implements StateChangeListener {
 	/**
 	 * 
 	 */

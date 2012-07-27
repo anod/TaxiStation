@@ -87,9 +87,10 @@ public class ServerWorker implements Runnable {
 		}
 	}
 
-	
-	
-	
+	/**
+	 * Initialize input and output streams of socket
+	 * @return true if succeeded
+	 */
 	private boolean initStreams() {
 		try {
 			mInputStream = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
@@ -106,7 +107,12 @@ public class ServerWorker implements Runnable {
 		return true;
 	}
 	
-	private void addCab(JSONObject data,JSONObject response) {
+	/**
+	 * Read data validate, add new cab, fill response
+	 * @param data
+	 * @param response 
+	 */
+	private void addCab(JSONObject data, JSONObject response) {
 		long num = (long)data.get(Message.KEY_CABNUM);
 		String whileWaiting = (String)data.get(Message.KEY_CABWHILEWAITING);
 		

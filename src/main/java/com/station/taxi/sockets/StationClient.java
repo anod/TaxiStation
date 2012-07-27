@@ -2,19 +2,12 @@ package com.station.taxi.sockets;
 
 import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.validator.CabValidator;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -22,54 +15,26 @@ import org.springframework.validation.ObjectError;
  *
  * @author alex
  */
-public class StationClient implements Client{
+public class StationClient {
 	private static final String HOST = "localhost";
 
 	private static final String USER_ACTION_EXIT = "exit";
 	private static final String USER_ACTION_ADDCAB = "addcab";
 	private static final String USER_ACTION_ADDPASSENGER = "addpassenger";
 
-	private Socket mSocket;
-	
 	private final SocketStationContext mStationContext;
-	private BufferedReader mFromNetInputStream;
-	private PrintStream mToNetOutputStream;
+	private final Client mClient;
 
-	private StationClient(SocketStationContext context) {
+	public StationClient(SocketStationContext context) {
 		mStationContext = context;
+		mClient = context.createClient(HOST, StationServer.PORT);
 	}
-	
-	@Override
-	public boolean connect() {
-		try {
-			mSocket = new Socket(HOST, StationServer.PORT);
-			mFromNetInputStream = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
-			mToNetOutputStream = new PrintStream(mSocket.getOutputStream());
-		} catch (UnknownHostException ex) {
-			LoggerWrapper.logException(StationClient.class.getName(), ex);
-			return false;		
-		} catch (IOException ex) {
-			LoggerWrapper.logException(StationClient.class.getName(), ex);
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public void close() {
-		if (mSocket == null) {
+
+	public void run() {
+		if (!mClient.connect()) {
 			return;
 		}
-		try {
-			mSocket.close();
-		} catch (IOException ex) {
-			LoggerWrapper.logException(StationClient.class.getName(), ex);
-		}
-		mSocket = null;
-	}
 
-	@Override
-	public void communicate() {
 		Scanner scan = new Scanner(System.in);
 
 		boolean running = true;
@@ -94,10 +59,11 @@ public class StationClient implements Client{
 		
 		JSONObject json = new JSONObject();
 		json.put(Message.KEY_ACTION, Message.ACTION_EXIT);
-		LoggerWrapper.log(StationClient.class.getSimpleName(), json.toString());
-		mToNetOutputStream.println(json.toString());
+		mClient.sendRequest(json);
+		
+		mClient.close();
 	}
-
+	
 	private void addCabRequest(Scanner scan) {
 		System.out.println("Please enter cab number: ");
 		String numberStr = scan.nextLine();
@@ -116,13 +82,13 @@ public class StationClient implements Client{
 		json.put(Message.KEY_CABNUM, Integer.valueOf(numberStr));
 		json.put(Message.KEY_CABWHILEWAITING, whileWaiting);
 		
-		LoggerWrapper.log(StationClient.class.getName(), json.toString());
-		mToNetOutputStream.println(json.toString());
-		try {
-			String response = mFromNetInputStream.readLine();
-			LoggerWrapper.log(StationClient.class.getSimpleName(), response);
-		} catch (IOException ex) {
-			LoggerWrapper.logException(StationClient.class.getName(), ex);
+		mClient.sendRequest(json);
+		//wait for response
+		JSONObject response = (JSONObject)mClient.receiveResponse();
+		if (response != null && response.get(Message.KEY_RESPONSE_STATUS).equals(Message.STATUS_OK)) {
+			System.out.println("New cab added!");
+		} else {
+			System.out.println("Error when adding a new cab");
 		}
 	}
 	
@@ -163,21 +129,5 @@ public class StationClient implements Client{
 		System.out.println("Error: " + error.getDefaultMessage());
 		return false;
 	}
-	
-	/**
-	 * Start StationClient 
-	 * @param args 
-	 */
-	public static void main(String[] args) {
-		final SocketStationContext context = SocketStationContext.readFromXml();
-		final Client client = context.createClient();
-		boolean isConnected = client.connect();
-		if (isConnected) {
-			client.communicate();
-			client.close();
-		}
-		
-	}
-
 
 }
