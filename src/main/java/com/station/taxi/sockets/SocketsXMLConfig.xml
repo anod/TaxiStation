@@ -8,17 +8,20 @@
 	<import resource="../spring/StationXMLConfig.xml" />
 
 	<bean id="server" class="com.station.taxi.sockets.StationServer" scope="prototype" />
-	<bean id="worker" class="com.station.taxi.sockets.ServerWorker" scope="prototype" />
+	<bean id="jsonWorker" class="com.station.taxi.sockets.JSONWorker" scope="prototype" />
+	<bean id="stationWorker" class="com.station.taxi.sockets.StationWorker" scope="prototype" />
 	<bean id="client" class="com.station.taxi.sockets.JSONClient" scope="prototype" />
 
 	<!-- AspectJ //-->
 	<aop:aspectj-autoproxy>
 		<aop:include name="stationServerLoggingAspect"/>
+		<aop:include name="jsonWorkerLoggingAspect"/>
 		<aop:include name="jsonClientLoggingAspect"/>
 		<aop:include name="cabLoggingAspect"/>
 		<aop:include name="passengerLoggingAspect"/>
 	</aop:aspectj-autoproxy>
 
 	<bean id="jsonClientLoggingAspect" class="com.station.taxi.aop.JSONClientLoggingAspect"/>
+	<bean id="jsonWorkerLoggingAspect" class="com.station.taxi.aop.JSONWorkerLoggingAspect"/>
 	<bean id="stationServerLoggingAspect" class="com.station.taxi.aop.StationServerLoggingAspect"/>
 </beans>

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.aop;
 
 import com.station.taxi.logger.LoggerWrapper;
@@ -11,11 +7,10 @@ import org.aspectj.lang.annotation.Before;
 
 /**
  *
- * @author Alex Gavrishev <alex@easytobook.com>
+ * @author Alex Gavrishev
  */
 @Aspect
 public class StationServerLoggingAspect {
-	
 	
 	@Before("execution(* com.station.taxi.sockets.Server.start(..))")
     public void logStart(JoinPoint joinPoint) {

@@ -37,9 +37,10 @@ public class SocketStationContext extends StationContext {
 		return server;
 	}
 
-	public ServerWorker createWorker(Socket socket, Station station, SocketStationContext context) {
-		ServerWorker worker = (ServerWorker)getApplicationContext().getBean("worker", socket, station, context);
-		return worker;
+	public StationWorker createStationWorker(Socket socket, Station station, SocketStationContext context) {
+		Worker jsonWorker = (Worker)getApplicationContext().getBean("jsonWorker", socket);
+		StationWorker stationWorker = (StationWorker)getApplicationContext().getBean("stationWorker", jsonWorker, station, context);
+		return stationWorker;
 	}
 	
 	public Client createClient(String host, Integer port) {

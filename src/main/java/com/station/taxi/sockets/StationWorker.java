@@ -8,62 +8,50 @@ import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Station;
 import com.station.taxi.validator.CabValidator;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.validation.MapBindingResult;
 
 /**
  *
  * @author alex
  */
-public class ServerWorker implements Runnable {
-	private final Socket mSocket;
+public class StationWorker implements Runnable {
 	private final Station mStation;
 	private final SocketStationContext mContext;
-	
-	private BufferedReader mInputStream;
-	private PrintStream mOutputStream;
+	private final Worker mWorker;
 		
-	public ServerWorker(Socket socket, Station station, SocketStationContext context) {
-		mSocket = socket;
+	public StationWorker(Worker worker, Station station, SocketStationContext context) {
+		mWorker = worker;
 		mStation = station;
 		mContext = context;
 	}
 	
 	@Override
 	public void run() {
-		String tag = ServerWorker.class.getSimpleName() + mSocket.getInetAddress() + ":" + mSocket.getPort();
-		LoggerWrapper.log(tag, "Connected");
 
-		if (!initStreams()) {
+		if (!mWorker.init()) {
 			return;
 		}
 		
 		boolean running = true;
 		while (running) {
-			if (!mSocket.isConnected()) {
+			if (!mWorker.isSocketConnected()) {
 				running = false;
 				break;
 			}
 			try {
-				String msg = mInputStream.readLine();
-				JSONObject data = (JSONObject)JSONValue.parse(msg);
-				String action = (String) data.get(Message.KEY_ACTION);
+				JSONObject request = (JSONObject)mWorker.readRequest();
+				String action = (request!=null) ? (String) request.get(Message.KEY_ACTION) : "";
 
 				JSONObject response = new JSONObject();
 				response.put(Message.KEY_ACTION, action);
 
 				switch (action) {
 					case Message.ACTION_ADDCAB:
-						addCab(data,response);
+						addCab(request,response);
 						break;
 					case Message.ACTION_EXIT:
 						response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_OK);
@@ -71,40 +59,19 @@ public class ServerWorker implements Runnable {
 						break;
 					default:
 						response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_ERROR);
-						response.put(Message.KEY_ERRORS,Arrays.asList( "Unknown data received: " + msg ) );
+						response.put(Message.KEY_ERRORS,Arrays.asList( "Unknown data received: " + request ) );
 						break;
 				}
-				LoggerWrapper.log(tag, response.toString());
-				mOutputStream.println(response.toString());
+				mWorker.sendResponse(response);
 			} catch (Exception ex) {
-				LoggerWrapper.logException(ServerWorker.class.getName(), ex);
+				LoggerWrapper.logException(StationWorker.class.getName(), ex);
 				JSONObject response = new JSONObject();
 				response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_ERROR);
 				response.put(Message.KEY_ERRORS, Arrays.asList("Server error") );
-				mOutputStream.println(response.toString());
+				mWorker.sendResponse(response);
 				continue;
 			}
 		}
-	}
-
-	/**
-	 * Initialize input and output streams of socket
-	 * @return true if succeeded
-	 */
-	private boolean initStreams() {
-		try {
-			mInputStream = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
-			mOutputStream = new PrintStream(mSocket.getOutputStream());
-		} catch (IOException ex) {
-			LoggerWrapper.logException(ServerWorker.class.getName(), ex);
-			try {
-				mSocket.close();
-			} catch (IOException ex1) {
-				LoggerWrapper.logException(ServerWorker.class.getName(), ex1);
-			}
-			return false;
-		}
-		return true;
 	}
 	
 	/**
