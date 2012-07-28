@@ -31,15 +31,18 @@ public class Receipt implements Serializable {
 	private double mPrice;
 
 	@Column(name="start_time")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date mStartTime;
 
 	@Column(name="end_time")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date mEndTime;
 
 	@Column(name="passenger_count")
 	private int mPassengersCount;
+        
+        @Column(name="cabID")
+        private int mCabID;
 
 	public Receipt() {
 	}
@@ -109,8 +112,16 @@ public class Receipt implements Serializable {
 	 */
 	public void setPassengersCount(int passengersCount) {
 		this.mPassengersCount = passengersCount;
-	}
-	
+    	}
+        public int getCabID() 
+        {
+            return mCabID;
+        }
+
+        public void setCabID(int cabID) 
+        {
+            this.mCabID = cabID;
+        }
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

@@ -333,7 +333,8 @@ public class TaxiCab implements Cab {
 			notify(CabEventListener.ARRIVED_DESTINATION);		
 			int size = mPassangers.size();
 			Receipt receipt = mMeter.createReciept(size);
-			mReciptsList.add(receipt);
+			receipt.setCabID(mNumber);
+                        mReciptsList.add(receipt);
 			mStationListener.onCabArrival(mAopProxy, receipt);
 			notifyArrival();
 			mPassangers.clear();
