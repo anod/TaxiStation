@@ -1,5 +1,6 @@
 package com.station.taxi.spring;
 
+import com.station.taxi.db.ReceiptStorage;
 import com.station.taxi.db.repositories.ReceiptRepository;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
@@ -58,16 +59,14 @@ abstract public class StationContext {
 		} catch (Exception ex) {}
 		return (Passenger)advised;
 	}
-	
+
 	/**
-	 * Get receipt data access object
+	 * STorage to persist receipts
 	 * @return 
 	 */
-	public ReceiptRepository getReceiptRepository() {
+	public ReceiptStorage getReceiptStorage() {
+		return (ReceiptStorage)mApplicationContext.getBean("receiptStorage");
 
-		ReceiptRepository repository = mApplicationContext.getBean(ReceiptRepository.class);
-
-		return repository;
 	}
 	
 }

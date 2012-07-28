@@ -1,6 +1,6 @@
 package com.station.taxi.model;
 
-import com.station.taxi.db.repositories.ReceiptRepository;
+import com.station.taxi.db.ReceiptStorage;
 import com.station.taxi.events.StationEventListener;
 import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.spring.StationContext;
@@ -457,7 +457,7 @@ public class TaxiStation implements Station, StationEventListener {
 
 	@Override
 	public void onCabArrival(Cab cab, Receipt receipt) {
-		ReceiptRepository receiptDao = mContext.getReceiptRepository();
-		receiptDao.save(receipt);
+		ReceiptStorage storage = mContext.getReceiptStorage();
+		storage.save(receipt);
 	}
 }
