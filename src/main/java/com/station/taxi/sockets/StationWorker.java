@@ -38,33 +38,32 @@ public class StationWorker implements Runnable {
 				running = false;
 				break;
 			}
+			ResponseMessage response = new ResponseMessage();
 			try {
 				JSONObject request = (JSONObject)mWorker.readRequest();
-				String action = (request!=null) ? (String) request.get(Message.KEY_ACTION) : "";
+				String action = (request!=null) ? (String) request.get(RequestMessage.KEY_ACTION) : "";
 
-				JSONObject response = new JSONObject();
-				response.put(Message.KEY_ACTION, action);
 
+				response.setAction(action);
 				switch (action) {
-					case Message.ACTION_ADDCAB:
+					case RequestMessage.ACTION_ADDCAB:
 						addCab(request,response);
 						break;
-					case Message.ACTION_EXIT:
-						response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_OK);
+					case RequestMessage.ACTION_EXIT:
+						response.setStatus(ResponseMessage.STATUS_OK);
 						running = false;
 						break;
 					default:
-						response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_ERROR);
-						response.put(Message.KEY_ERRORS,Arrays.asList( "Unknown data received: " + request ) );
+						response.setStatus(ResponseMessage.STATUS_ERROR);
+						response.addError("Unknown data received: " + request);
 						break;
 				}
-				mWorker.sendResponse(response);
+				mWorker.sendResponse(response.toJSON());
 			} catch (Exception ex) {
 				LoggerWrapper.logException(StationWorker.class.getName(), ex);
-				JSONObject response = new JSONObject();
-				response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_ERROR);
-				response.put(Message.KEY_ERRORS, Arrays.asList("Server error") );
-				mWorker.sendResponse(response);
+				response.setStatus(ResponseMessage.STATUS_ERROR);
+				response.addError("Server error");
+				mWorker.sendResponse(response.toJSON());
 				continue;
 			}
 		}
@@ -75,9 +74,9 @@ public class StationWorker implements Runnable {
 	 * @param data
 	 * @param response 
 	 */
-	private void addCab(JSONObject data, JSONObject response) {
-		long num = (long)data.get(Message.KEY_CABNUM);
-		String whileWaiting = (String)data.get(Message.KEY_CABWHILEWAITING);
+	private void addCab(JSONObject data, ResponseMessage response) {
+		long num = (long)data.get(RequestMessage.KEY_CABNUM);
+		String whileWaiting = (String)data.get(RequestMessage.KEY_CABWHILEWAITING);
 		
 		Map<String, String> map = new HashMap<>();
 		MapBindingResult errors = new MapBindingResult(map, String.class.getName());
@@ -86,14 +85,14 @@ public class StationWorker implements Runnable {
 		CabValidator.getWhileWaitingValidator().validate(whileWaiting, errors);
 
 		if (errors.hasErrors()) {
-			response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_ERROR);
+			response.setStatus(ResponseMessage.STATUS_ERROR);
 			String[] errs = (String[]) errors.getGlobalErrors().toArray();
-			response.put(Message.KEY_ERRORS, Arrays.asList(errs));
+			response.setErrors(Arrays.asList(errs));
 			return;
 		}
 		Cab cab = mContext.createCab((int)num, whileWaiting);
 		mStation.addCab(cab);
-		response.put(Message.KEY_RESPONSE_STATUS, Message.STATUS_OK);
+		response.setStatus(ResponseMessage.STATUS_OK);
 	}
 	
 }

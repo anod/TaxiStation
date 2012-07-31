@@ -57,9 +57,8 @@ public class StationClient {
 			}
 		}
 		
-		JSONObject json = new JSONObject();
-		json.put(Message.KEY_ACTION, Message.ACTION_EXIT);
-		mClient.sendRequest(json);
+		RequestMessage msg = new RequestMessage(RequestMessage.ACTION_EXIT);
+		mClient.sendRequest(msg.toJSON());
 		
 		mClient.close();
 	}
@@ -76,16 +75,16 @@ public class StationClient {
 		if (!validateWhileWaiting(whileWaiting)) {
 			return;
 		}
-		
-		JSONObject json = new JSONObject();
-		json.put(Message.KEY_ACTION, Message.ACTION_ADDCAB);
-		json.put(Message.KEY_CABNUM, Integer.valueOf(numberStr));
-		json.put(Message.KEY_CABWHILEWAITING, whileWaiting);
-		
-		mClient.sendRequest(json);
+
+		RequestMessage msg = new RequestMessage(RequestMessage.ACTION_ADDCAB);
+		msg.put(RequestMessage.KEY_CABNUM, Integer.valueOf(numberStr));
+		msg.put(RequestMessage.KEY_CABWHILEWAITING, whileWaiting);
+
+		mClient.sendRequest(msg.toJSON());
+//		mClient.sendRequest(json);
 		//wait for response
 		JSONObject response = (JSONObject)mClient.receiveResponse();
-		if (response != null && response.get(Message.KEY_RESPONSE_STATUS).equals(Message.STATUS_OK)) {
+		if (response != null && response.get(ResponseMessage.KEY_RESPONSE_STATUS).equals(ResponseMessage.STATUS_OK)) {
 			System.out.println("New cab added!");
 		} else {
 			System.out.println("Error when adding a new cab");
