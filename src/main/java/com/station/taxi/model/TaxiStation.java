@@ -6,12 +6,18 @@ import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.spring.StationContext;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 /**
  * Taxi cab station object
  * @author alex
  * @author Eran Zimbler
  * @version 0.2
  */
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlType(name="station")
 public class TaxiStation implements Station, StationEventListener {
 	/**
 	 * Cab states
@@ -83,8 +89,12 @@ public class TaxiStation implements Station, StationEventListener {
 	
 	private final StationContext mContext;
 
+	@XmlAttribute(name="name")
 	private final String mStationName;
+	
+	@XmlAttribute(name="maxWaitingTaxis")
 	private final int mMaxWaitingCount;
+	
 	private final TaxiMeter mDefaultTaxiMeter;
 	
 	private boolean mThreadRunning = false;

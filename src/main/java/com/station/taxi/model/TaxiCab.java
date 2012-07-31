@@ -3,6 +3,10 @@ package com.station.taxi.model;
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.StationEventListener;
 import java.util.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Tax cab object
@@ -10,6 +14,8 @@ import java.util.*;
  * @author Eran Zimbler
  * @version 0.2
  */
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlType(name="taxi")
 public class TaxiCab implements Cab { 
     /**
      * Lock used when maintaining queue of requested updates.
@@ -32,10 +38,14 @@ public class TaxiCab implements Cab {
 	public static final String WAIT_EAT = "eat";	
 	public static final String WAIT_DRINK = "drink";
 	
+	@XmlAttribute(name="number")
+	private int mNumber;
+	@XmlAttribute(name="whileWaiting")
+	private String mWhileWaiting;
+	
 	private StationEventListener mStationListener;
 	private List<Passenger> mPassangers;
-	private String mWhileWaiting;
-	private int mNumber;
+
 	private TaxiMeter mMeter;
 	private int mCabStatus = STATUS_INIT;
 	/**
