@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,11 +25,13 @@ public class Config {
 	@XmlElement(name="station")
 	private ConfigStation stationConfig;
 	
+	@XmlElementWrapper(name="taxis")
 	@XmlElement(name="taxi")
 	private List<ConfigTaxi> taxis;
 
-	@XmlElement(name="passengers")
-	private List<ConfigTaxi> passengers;
+	@XmlElementWrapper(name="passengers")
+	@XmlElement(name="passenger")
+	private List<ConfigPassenger> passengers;
 
 	public Config() { }
 	/**
@@ -76,14 +79,14 @@ public class Config {
 	/**
 	 * @return the passengers
 	 */
-	public List<ConfigTaxi> getPassengers() {
+	public List<ConfigPassenger> getPassengers() {
 		return passengers;
 	}
 
 	/**
 	 * @param passengers the passengers to set
 	 */
-	public void setPassengers(List<ConfigTaxi> passengers) {
+	public void setPassengers(List<ConfigPassenger> passengers) {
 		this.passengers = passengers;
 	}
 
@@ -140,6 +143,11 @@ public class Config {
 		public void setMaxWaitingTaxis(int maxWaitingTaxis) {
 			this.maxWaitingTaxis = maxWaitingTaxis;
 		}
+
+		@Override
+		public String toString() {
+			return "ConfigStation [" + "maxWaitingTaxis: " + maxWaitingTaxis + ", " + "name: " + name + "]";
+		}
 		
 		
 	}
@@ -179,6 +187,11 @@ public class Config {
 		 */
 		public void setWhileWaiting(String whileWaiting) {
 			this.whileWaiting = whileWaiting;
+		}
+
+		@Override
+		public String toString() {
+			return "ConfigTaxi [" + "number: " + number + ", " + "whileWaiting: " + whileWaiting + "]";
 		}
 		
 		
@@ -220,8 +233,24 @@ public class Config {
 		public void setDestination(String destination) {
 			this.destination = destination;
 		}
+
+		@Override
+		public String toString() {
+			return "ConfigPassenger [" + "destination: " + destination + ", " + "name: " + name + "]";
+		}
 		
 		
+	}
+
+	@Override
+	public String toString() {
+		return "Config [\n" 
+			+ "  oneSecPrice: " + oneSecPrice + ", \n"
+			+ "  startPrice: " + startPrice + ", \n"
+			+ "  " + stationConfig + " \n"
+			+ "  taxis: " + taxis + " \n"
+			+ "  passengers: " + passengers + " \n"
+		+ "]";
 	}
 	
 	
