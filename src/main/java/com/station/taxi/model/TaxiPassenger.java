@@ -16,8 +16,6 @@ import javax.xml.bind.annotation.XmlType;
  * @author Eran Zimbler
  * @version 0.2 
  */
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name="passenger")
 public class TaxiPassenger implements Passenger {
 	private static final int STATE_INIT = 0;
 	private static final int STATE_WAITING = 1;
@@ -27,9 +25,7 @@ public class TaxiPassenger implements Passenger {
 	private StationEventListener mStationListener;
 	private static final int ONE_SECOND = 1000;
 
-	@XmlAttribute(name="name")
 	private String mName;
-	@XmlAttribute(name="destination")
 	private String mDestination;
 
 	private int mExitTime = 0;

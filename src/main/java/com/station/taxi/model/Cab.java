@@ -4,6 +4,8 @@ import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.StationEventListener;
 import java.util.Date;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
  *

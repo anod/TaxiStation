@@ -16,8 +16,6 @@ import javax.xml.bind.annotation.XmlType;
  * @author Eran Zimbler
  * @version 0.2
  */
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name="station")
 public class TaxiStation implements Station, StationEventListener {
 	/**
 	 * Cab states
@@ -89,10 +87,8 @@ public class TaxiStation implements Station, StationEventListener {
 	
 	private final StationContext mContext;
 
-	@XmlAttribute(name="name")
 	private final String mStationName;
 	
-	@XmlAttribute(name="maxWaitingTaxis")
 	private final int mMaxWaitingCount;
 	
 	private final TaxiMeter mDefaultTaxiMeter;

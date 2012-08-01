@@ -67,9 +67,9 @@
 		</dependency>
 
 		<dependency>
-		   <groupId>org.hibernate</groupId>
-		   <artifactId>hibernate-entitymanager</artifactId>
-		   <version>3.6.10.Final</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.6.10.Final</version>
 		</dependency>
 
 		<dependency>
@@ -108,17 +108,17 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-	 <dependency>
-	  <groupId>org.glassfish.common</groupId>
-	  <artifactId>glassfish-api</artifactId>
-	  <version>3.1.1</version>
-	 </dependency>
-	 <dependency>
-	  <groupId>javax</groupId>
-	  <artifactId>javaee-web-api</artifactId>
-	  <version>6.0</version>
-	  <type>jar</type>
-	 </dependency>
+		<dependency>
+			<groupId>org.glassfish.common</groupId>
+			<artifactId>glassfish-api</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>6.0</version>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 
 	<!-- Define profiles -->
@@ -127,11 +127,11 @@
 		<!-- Swing GUI Profile -->
 		<profile>
 			<id>Swing GUI</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<properties>
-                <packaging.type>jar</packaging.type>
+				<packaging.type>jar</packaging.type>
 			</properties>
 		</profile>
 
@@ -139,7 +139,7 @@
 		<profile>
 			<id>WEB</id>
 			<properties>
-                <packaging.type>war</packaging.type>
+				<packaging.type>war</packaging.type>
 			</properties>
 		</profile>
 
@@ -147,7 +147,7 @@
 		<profile>
 			<id>Socket Server</id>
 			<properties>
-                <packaging.type>jar</packaging.type>
+				<packaging.type>jar</packaging.type>
 			</properties>
 		</profile>
 
@@ -155,7 +155,7 @@
 		<profile>
 			<id>Socket Client</id>
 			<properties>
-                <packaging.type>jar</packaging.type>
+				<packaging.type>jar</packaging.type>
 			</properties>
 		</profile>
 
@@ -208,91 +208,91 @@
 					</execution>
 				</executions>
 			</plugin>
-		 <plugin>
-		  <groupId>org.jvnet.jaxb2.maven2</groupId>
-		  <artifactId>maven-jaxb2-plugin</artifactId>
-		  <executions>
-		   <execution>
-		    <goals>
-		     <goal>generate</goal>
-		    </goals>
-		    <configuration>
-		     <schemaIncludes>
-		      <include>jaxb/ConfigurationBindingg/*.xsd</include>
-		     </schemaIncludes>
-		     <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigurationBindingg.episode</episodeFile>
-		    </configuration>
-		    <id>jaxb-generate-ConfigurationBindingg</id>
-		   </execution>
-		   <execution>
-		    <goals>
-		     <goal>generate</goal>
-		    </goals>
-		    <configuration>
-		     <schemaIncludes>
-		      <include>jaxb/ConfigurationBindingg/*.xsd</include>
-		     </schemaIncludes>
-		     <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigurationBindingg.episode</episodeFile>
-		    </configuration>
-		    <id>jaxb-generate-ConfigurationBindingg_1</id>
-		   </execution>
-		   <execution>
-		    <goals>
-		     <goal>generate</goal>
-		    </goals>
-		    <configuration>
-		     <schemaIncludes>
-		      <include>jaxb/ConfigurationBinding/*.xsd</include>
-		     </schemaIncludes>
-		     <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigurationBinding.episode</episodeFile>
-		    </configuration>
-		    <id>jaxb-generate-ConfigurationBinding</id>
-		   </execution>
-		   <execution>
-		    <goals>
-		     <goal>generate</goal>
-		    </goals>
-		    <configuration>
-		     <schemaIncludes>
-		      <include>jaxb/ConfigBinding/*.xsd</include>
-		     </schemaIncludes>
-		     <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigBinding.episode</episodeFile>
-		    </configuration>
-		    <id>jaxb-generate-ConfigBinding</id>
-		   </execution>
-		   <execution>
-		    <goals>
-		     <goal>generate</goal>
-		    </goals>
-		    <configuration>
-		     <schemaIncludes>
-		      <include>jaxb/ConfigBinding/*.xsd</include>
-		     </schemaIncludes>
-		     <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigBinding.episode</episodeFile>
-		    </configuration>
-		    <id>jaxb-generate-ConfigBinding_1</id>
-		   </execution>
-		   <execution>
-		    <goals>
-		     <goal>generate</goal>
-		    </goals>
-		    <configuration>
-		     <schemaIncludes>
-		      <include>jaxb/ConfigBinding/*.xsd</include>
-		     </schemaIncludes>
-		     <episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigBinding.episode</episodeFile>
-		    </configuration>
-		    <id>jaxb-generate-ConfigBinding_2</id>
-		   </execution>
-		  </executions>
-		  <configuration>
-		   <catalog>src/main/resources/jaxb/catalog.xml</catalog>
-		   <catalogResolver>org.jvnet.jaxb2.maven2.resolver.tools.ClasspathCatalogResolver</catalogResolver>
-		   <forceRegenerate>true</forceRegenerate>
-		   <generateDirectory>${project.build.directory}/generated-sources/xjc</generateDirectory>
-		   <verbose>true</verbose>
-		  </configuration>
-		 </plugin>
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>jaxb/ConfigurationBindingg/*.xsd</include>
+							</schemaIncludes>
+							<episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigurationBindingg.episode</episodeFile>
+						</configuration>
+						<id>jaxb-generate-ConfigurationBindingg</id>
+					</execution>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>jaxb/ConfigurationBindingg/*.xsd</include>
+							</schemaIncludes>
+							<episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigurationBindingg.episode</episodeFile>
+						</configuration>
+						<id>jaxb-generate-ConfigurationBindingg_1</id>
+					</execution>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>jaxb/ConfigurationBinding/*.xsd</include>
+							</schemaIncludes>
+							<episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigurationBinding.episode</episodeFile>
+						</configuration>
+						<id>jaxb-generate-ConfigurationBinding</id>
+					</execution>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>jaxb/ConfigBinding/*.xsd</include>
+							</schemaIncludes>
+							<episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigBinding.episode</episodeFile>
+						</configuration>
+						<id>jaxb-generate-ConfigBinding</id>
+					</execution>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>jaxb/ConfigBinding/*.xsd</include>
+							</schemaIncludes>
+							<episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigBinding.episode</episodeFile>
+						</configuration>
+						<id>jaxb-generate-ConfigBinding_1</id>
+					</execution>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaIncludes>
+								<include>jaxb/ConfigBinding/*.xsd</include>
+							</schemaIncludes>
+							<episodeFile>${project.build.directory}/generated-sources/xjc/META-INF/jaxb-ConfigBinding.episode</episodeFile>
+						</configuration>
+						<id>jaxb-generate-ConfigBinding_2</id>
+					</execution>
+				</executions>
+				<configuration>
+					<catalog>src/main/resources/jaxb/catalog.xml</catalog>
+					<catalogResolver>org.jvnet.jaxb2.maven2.resolver.tools.ClasspathCatalogResolver</catalogResolver>
+					<forceRegenerate>true</forceRegenerate>
+					<generateDirectory>${project.build.directory}/generated-sources/xjc</generateDirectory>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

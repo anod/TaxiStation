@@ -6,8 +6,11 @@ package com.station.taxi.model;
  * @version 0.1
  *
  */
-import com.station.taxi.model.Receipt;
 import java.util.Date;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 /**
  * TaxiMeter object
  * @author alex
@@ -15,6 +18,7 @@ import java.util.Date;
  * @version 0.2
  */
 public class TaxiMeter implements Cloneable {
+
 	final private double mStartPrice;
 	final private double mOneSecPrice;
 	private double mCurrentValue;

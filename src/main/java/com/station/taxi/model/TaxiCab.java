@@ -38,9 +38,7 @@ public class TaxiCab implements Cab {
 	public static final String WAIT_EAT = "eat";	
 	public static final String WAIT_DRINK = "drink";
 	
-	@XmlAttribute(name="number")
 	private int mNumber;
-	@XmlAttribute(name="whileWaiting")
 	private String mWhileWaiting;
 	
 	private StationEventListener mStationListener;
