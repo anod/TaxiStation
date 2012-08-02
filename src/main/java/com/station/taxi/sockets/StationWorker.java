@@ -40,8 +40,12 @@ public class StationWorker implements Runnable {
 			}
 			ResponseMessage response = new ResponseMessage();
 			try {
-				JSONObject request = (JSONObject)mWorker.readRequest();
-				String action = (request!=null) ? (String) request.get(RequestMessage.KEY_ACTION) : "";
+				JSONObject json = (JSONObject)mWorker.readRequest();
+				RequestMessage request = new RequestMessage();
+				if (json != null) {
+					request.parse(json);
+				}
+				String action = request.getAction();
 
 
 				response.setAction(action);
@@ -74,9 +78,9 @@ public class StationWorker implements Runnable {
 	 * @param data
 	 * @param response 
 	 */
-	private void addCab(JSONObject data, ResponseMessage response) {
-		long num = (long)data.get(RequestMessage.KEY_CABNUM);
-		String whileWaiting = (String)data.get(RequestMessage.KEY_CABWHILEWAITING);
+	private void addCab(RequestMessage request, ResponseMessage response) {
+		long num = (long)request.getData(RequestMessage.KEY_CABNUM);
+		String whileWaiting = (String)request.getData(RequestMessage.KEY_CABWHILEWAITING);
 		
 		Map<String, String> map = new HashMap<>();
 		MapBindingResult errors = new MapBindingResult(map, String.class.getName());

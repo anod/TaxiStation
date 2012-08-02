@@ -23,15 +23,34 @@ public class RequestMessage implements JSONMessage {
 	public static final String KEY_CABWHILEWAITING = "whileWaiting";
 	
 
-	private String mAction;
+	private String mAction = "";
 	private Map<String,Object> mData = new HashMap<>();
 	
+	public RequestMessage() {
+		
+	}
 	/**
 	 * 
 	 * @param action 
 	 */
 	public RequestMessage(String action) {
 		mAction = action;
+	}
+	/**
+	 * Request action
+	 * @return 
+	 */
+	public String getAction() {
+		return mAction;
+	}
+	
+	/**
+	 * Data value by key
+	 * @param key
+	 * @return 
+	 */
+	public Object getData(String key) {
+		return mData.get(key);
 	}
 	
 	/**
@@ -45,10 +64,24 @@ public class RequestMessage implements JSONMessage {
 
 	@Override
 	public JSONObject toJSON() {
+		if (mAction == null) {
+			throw new IllegalStateException("Action is not defined");
+		}
 		JSONObject json = new JSONObject();
 		json.put(KEY_ACTION, mAction);
 		json.putAll(mData);
 		return json;
+	}
+
+	@Override
+	public void parse(JSONObject json) {
+		for (Object key: json.keySet()) {
+			if (key.equals(KEY_ACTION)) {
+				mAction = (String) json.get(key);
+			} else {
+				mData.put((String)key, json.get(key));
+			}
+		}
 	}
 	
 }

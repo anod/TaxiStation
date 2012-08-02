@@ -1,13 +1,10 @@
 package com.station.taxi.sockets;
 
-import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.validator.CabValidator;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -84,7 +81,11 @@ public class StationClient {
 //		mClient.sendRequest(json);
 		//wait for response
 		JSONObject response = (JSONObject)mClient.receiveResponse();
-		if (response != null && response.get(ResponseMessage.KEY_RESPONSE_STATUS).equals(ResponseMessage.STATUS_OK)) {
+		ResponseMessage message = new ResponseMessage();
+		if (response!=null) {
+			message.parse(response);
+		}
+		if (message.isStatusOk()) {
 			System.out.println("New cab added!");
 		} else {
 			System.out.println("Error when adding a new cab");
