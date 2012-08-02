@@ -17,6 +17,9 @@ public class RequestMessage implements JSONMessage {
 	public static final String KEY_ACTION = "action";
 
 	public static final String ACTION_ADDCAB = "addcab";
+	public static final String ACTION_LIST_WAITING_CABS = "list_waiting_cabs";
+	public static final String ACTION_LIST_WAITING_PASSENGERS = "list_waiting_passengers";
+	public static final String ACTION_LIST_DRIVING = "list_driving";
 	public static final String ACTION_EXIT = "exit";
 
 	public static final String KEY_CABNUM = "num";
