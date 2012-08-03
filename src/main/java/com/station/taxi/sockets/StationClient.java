@@ -68,6 +68,16 @@ public class StationClient {
 					addCabRequest(scan);
 					break;
 				case USER_ACTION_ADDPASSENGER:
+					//TODO
+					break;
+				case USER_ACTION_LIST_DRIVING:
+					sendListRequest(MessageFactory.ACTION_LIST_DRIVING);
+					break;
+				case USER_ACTION_LIST_WAITING_CABS:
+					sendListRequest(MessageFactory.ACTION_LIST_WAITING_CABS);
+					break;
+				case USER_ACTION_LIST_WAITING_PASSENGER:
+					sendListRequest(MessageFactory.ACTION_LIST_WAITING_PASSENGERS);
 					break;
 				default:
 					System.out.println("Wrong input. Try again.");
@@ -146,6 +156,14 @@ public class StationClient {
 		ObjectError error = errors.getGlobalError();
 		System.out.println("Error: " + error.getDefaultMessage());
 		return false;
+	}
+
+	private void sendListRequest(String action) {	
+		Request msg = new Request(action);
+		mClient.sendRequest(msg.toJSON());
+		
+		//wait for response
+		JSONObject response = (JSONObject)mClient.receiveResponse();
 	}
 
 }

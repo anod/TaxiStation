@@ -124,6 +124,7 @@ public class StationWorker implements Runnable {
 	 			response.addCab(cab);
 			}
 		}
+		response.setStatus(AbstractResponse.STATUS_OK);
 	}
 
 	private void listWaitingPassengers(ListPassengersResponse response) {
@@ -131,6 +132,7 @@ public class StationWorker implements Runnable {
 		for(Passenger p: passengers) {
 			response.addPassenger(p.getPassangerName(), p.getDestination());
 		}
+		response.setStatus(AbstractResponse.STATUS_OK);
 	}
 
 	private void listWaitingCabs(ListWaitingCabsResponse response) {
@@ -140,6 +142,7 @@ public class StationWorker implements Runnable {
 				response.addCab(cab);
 			}
 		}
+		response.setStatus(AbstractResponse.STATUS_OK);
 	}
 	
 }

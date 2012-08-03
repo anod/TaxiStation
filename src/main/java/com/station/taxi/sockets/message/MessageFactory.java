@@ -22,15 +22,27 @@ public class MessageFactory {
 	 * @return 
 	 */
 	public static AbstractResponse createResponse(String action) {
+		AbstractResponse response = null;
 		switch(action) {
 			case ACTION_LIST_WAITING_PASSENGERS:
-				return new ListPassengersResponse();
+				response = new ListPassengersResponse();
+				break;
+			case ACTION_LIST_DRIVING:
+				response = new ListDrivingCabsResponse();
+				break;
+			case ACTION_LIST_WAITING_CABS:
+				response = new ListWaitingCabsResponse();
+				break;
 			case ACTION_ADDCAB:
 			case ACTION_EXIT:
-				return new SimpleResponse();
+				response = new SimpleResponse();
+				break;
 			default:
 				throw new IllegalArgumentException("Unknown action:" + action);
+			
 		}
+		response.setAction(action);
+		return response;
 		
 	}
 	

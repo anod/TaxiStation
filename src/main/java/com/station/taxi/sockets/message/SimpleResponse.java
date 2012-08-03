@@ -10,12 +10,12 @@ public class SimpleResponse extends AbstractResponse {
 
 	@Override
 	protected void parseType(JSONObject json) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		//Empty
 	}
 
 	@Override
 	protected void toJSONType(JSONObject json) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		//Emptys
 	}
 	
 }
