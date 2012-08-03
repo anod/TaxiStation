@@ -31,7 +31,7 @@
           </a>
           <a class="brand" href="#">Taxi Station</a>
 		<ul class="nav pull-right">
-		  <li><a href="/login.jsp">Login</a></li>
+		  <li><a href="login.jsp">Login</a></li>
 		</ul>
         </div>
       </div>
@@ -40,11 +40,11 @@
     <div class="container">
 
 <div class="hero-unit">
-  <h1>Heading</h1>
-  <p>Tagline</p>
+  <h1>Welcome to Taxi Station</h1>
+  <p>Please login in order to get access to the information</p>
   <p>
-    <a class="btn btn-primary btn-large">
-      Learn more
+    <a a="login.jsp" class="btn btn-primary btn-large">
+      Login
     </a>
   </p>
 </div>
