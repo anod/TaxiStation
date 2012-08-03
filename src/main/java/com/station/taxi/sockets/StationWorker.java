@@ -2,10 +2,19 @@ package com.station.taxi.sockets;
 
 import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.model.Cab;
+import com.station.taxi.model.Passenger;
 import com.station.taxi.model.Station;
+import com.station.taxi.sockets.message.AbstractResponse;
+import com.station.taxi.sockets.message.ListDrivingCabsResponse;
+import com.station.taxi.sockets.message.ListPassengersResponse;
+import com.station.taxi.sockets.message.ListWaitingCabsResponse;
+import com.station.taxi.sockets.message.MessageFactory;
+import com.station.taxi.sockets.message.Request;
+import com.station.taxi.sockets.message.SimpleResponse;
 import com.station.taxi.validator.CabValidator;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.simple.JSONObject;
 import org.springframework.validation.MapBindingResult;
@@ -38,34 +47,43 @@ public class StationWorker implements Runnable {
 				running = false;
 				break;
 			}
-			ResponseMessage response = new ResponseMessage();
+			String action;
+			AbstractResponse response;
 			try {
 				JSONObject json = (JSONObject)mWorker.readRequest();
-				RequestMessage request = new RequestMessage();
+				Request request = new Request();
 				if (json != null) {
 					request.parse(json);
 				}
-				String action = request.getAction();
-
-
-				response.setAction(action);
+				action = request.getAction();
+				response = MessageFactory.createResponse(action);
 				switch (action) {
-					case RequestMessage.ACTION_ADDCAB:
-						addCab(request,response);
+					case MessageFactory.ACTION_ADDCAB:
+						addCab(request,(SimpleResponse)response);
 						break;
-					case RequestMessage.ACTION_EXIT:
-						response.setStatus(ResponseMessage.STATUS_OK);
+					case MessageFactory.ACTION_LIST_DRIVING:
+						listDriving((ListDrivingCabsResponse)response);
+						break;
+					case MessageFactory.ACTION_LIST_WAITING_CABS:
+						listWaitingCabs((ListWaitingCabsResponse)response);
+						break;
+					case MessageFactory.ACTION_LIST_WAITING_PASSENGERS:
+						listWaitingPassengers((ListPassengersResponse)response);
+						break;
+					case MessageFactory.ACTION_EXIT:
+						response.setStatus(AbstractResponse.STATUS_OK);
 						running = false;
 						break;
 					default:
-						response.setStatus(ResponseMessage.STATUS_ERROR);
+						response.setStatus(AbstractResponse.STATUS_ERROR);
 						response.addError("Unknown data received: " + request);
 						break;
 				}
 				mWorker.sendResponse(response.toJSON());
 			} catch (Exception ex) {
 				LoggerWrapper.logException(StationWorker.class.getName(), ex);
-				response.setStatus(ResponseMessage.STATUS_ERROR);
+				response = new SimpleResponse();
+				response.setStatus(AbstractResponse.STATUS_ERROR);
 				response.addError("Server error");
 				mWorker.sendResponse(response.toJSON());
 				continue;
@@ -78,9 +96,9 @@ public class StationWorker implements Runnable {
 	 * @param data
 	 * @param response 
 	 */
-	private void addCab(RequestMessage request, ResponseMessage response) {
-		long num = (long)request.getData(RequestMessage.KEY_CABNUM);
-		String whileWaiting = (String)request.getData(RequestMessage.KEY_CABWHILEWAITING);
+	private void addCab(Request request, SimpleResponse response) {
+		long num = (long)request.getData(Request.KEY_CABNUM);
+		String whileWaiting = (String)request.getData(Request.KEY_CABWHILEWAITING);
 		
 		Map<String, String> map = new HashMap<>();
 		MapBindingResult errors = new MapBindingResult(map, String.class.getName());
@@ -89,14 +107,39 @@ public class StationWorker implements Runnable {
 		CabValidator.getWhileWaitingValidator().validate(whileWaiting, errors);
 
 		if (errors.hasErrors()) {
-			response.setStatus(ResponseMessage.STATUS_ERROR);
+			response.setStatus(AbstractResponse.STATUS_ERROR);
 			String[] errs = (String[]) errors.getGlobalErrors().toArray();
 			response.setErrors(Arrays.asList(errs));
 			return;
 		}
 		Cab cab = mContext.createCab((int)num, whileWaiting);
 		mStation.addCab(cab);
-		response.setStatus(ResponseMessage.STATUS_OK);
+		response.setStatus(AbstractResponse.STATUS_OK);
+	}
+
+	private void listDriving(ListDrivingCabsResponse response) {
+		List<Cab> cabs = mStation.getCabs();
+		for(Cab cab : cabs) {
+			if (!cab.isDriving()) {
+	 			response.addCab(cab);
+			}
+		}
+	}
+
+	private void listWaitingPassengers(ListPassengersResponse response) {
+		List<Passenger> passengers = mStation.getPassengers();
+		for(Passenger p: passengers) {
+			response.addPassenger(p.getPassangerName(), p.getDestination());
+		}
+	}
+
+	private void listWaitingCabs(ListWaitingCabsResponse response) {
+		List<Cab> cabs = mStation.getCabs();
+		for(Cab cab : cabs) {
+			if (!cab.isDriving()) {
+				response.addCab(cab);
+			}
+		}
 	}
 	
 }

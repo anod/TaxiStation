@@ -1,5 +1,8 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.model.Cab;
+import com.station.taxi.model.TaxiCab;
+import com.station.taxi.validator.CabValidator;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,7 +12,8 @@ import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,12 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import com.station.taxi.model.TaxiCab;
-import com.station.taxi.model.Cab;
-import com.station.taxi.validator.CabValidator;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.validation.MapBindingResult;
 /**
  * Add new cab dialog

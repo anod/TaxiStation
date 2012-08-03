@@ -1,5 +1,8 @@
 package com.station.taxi.sockets;
 
+import com.station.taxi.sockets.message.AbstractResponse;
+import com.station.taxi.sockets.message.MessageFactory;
+import com.station.taxi.sockets.message.Request;
 import com.station.taxi.validator.CabValidator;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +21,19 @@ public class StationClient {
 	private static final String USER_ACTION_EXIT = "exit";
 	private static final String USER_ACTION_ADDCAB = "addcab";
 	private static final String USER_ACTION_ADDPASSENGER = "addpassenger";
+	private static final String USER_ACTION_LIST_WAITING_CABS= "list_waiting_cabs";
+	private static final String USER_ACTION_LIST_WAITING_PASSENGER = "list_waiting_passenger";
+	private static final String USER_ACTION_LIST_DRIVING = "list_driving";
 
+	private static final String[] sUserActions = {
+		USER_ACTION_ADDCAB,
+		USER_ACTION_ADDPASSENGER,
+		USER_ACTION_LIST_WAITING_CABS,
+		USER_ACTION_LIST_WAITING_PASSENGER,
+		USER_ACTION_LIST_DRIVING,
+		USER_ACTION_EXIT
+	}; 
+	
 	private final SocketStationContext mStationContext;
 	private final Client mClient;
 
@@ -36,7 +51,13 @@ public class StationClient {
 
 		boolean running = true;
 		while(running) {
-			System.out.println("Please enter action [addcab,addpassenger,exit]: ");
+			StringBuilder sb = new StringBuilder();
+			sb.append(sUserActions[0]);
+			for(int i=1; i<sUserActions.length; i++) {
+				sb.append(", ");
+				sb.append(sUserActions[i]);
+			}
+			System.out.printf("Please enter action [%s]: ",sb.toString());
 			String input = scan.nextLine();
 
 			switch (input) {
@@ -54,7 +75,7 @@ public class StationClient {
 			}
 		}
 		
-		RequestMessage msg = new RequestMessage(RequestMessage.ACTION_EXIT);
+		Request msg = new Request(MessageFactory.ACTION_EXIT);
 		mClient.sendRequest(msg.toJSON());
 		
 		mClient.close();
@@ -73,18 +94,15 @@ public class StationClient {
 			return;
 		}
 
-		RequestMessage msg = new RequestMessage(RequestMessage.ACTION_ADDCAB);
-		msg.put(RequestMessage.KEY_CABNUM, Integer.valueOf(numberStr));
-		msg.put(RequestMessage.KEY_CABWHILEWAITING, whileWaiting);
+		Request msg = new Request(MessageFactory.ACTION_ADDCAB);
+		msg.put(Request.KEY_CABNUM, Integer.valueOf(numberStr));
+		msg.put(Request.KEY_CABWHILEWAITING, whileWaiting);
 
 		mClient.sendRequest(msg.toJSON());
-//		mClient.sendRequest(json);
+
 		//wait for response
 		JSONObject response = (JSONObject)mClient.receiveResponse();
-		ResponseMessage message = new ResponseMessage();
-		if (response!=null) {
-			message.parse(response);
-		}
+		AbstractResponse message = MessageFactory.parseResponse(response);
 		if (message.isStatusOk()) {
 			System.out.println("New cab added!");
 		} else {

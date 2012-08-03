@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.station.taxi.sockets;
+package com.station.taxi.sockets.message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +8,7 @@ import org.json.simple.JSONObject;
  *
  * @author alex
  */
-public class ResponseMessage implements JSONMessage {
+abstract public class AbstractResponse implements JSONMessage {
 	private static final String KEY_RESPONSE_STATUS = "status";
 	
 	public static final String STATUS_OK = "ok";
@@ -24,7 +20,7 @@ public class ResponseMessage implements JSONMessage {
 	private String mAction;
 	private List<String> mErrors = new ArrayList<>();
 	
-	public ResponseMessage() {
+	public AbstractResponse() {
 	}
 
 	/**
@@ -75,10 +71,11 @@ public class ResponseMessage implements JSONMessage {
 	public JSONObject toJSON() {
 		JSONObject json = new JSONObject();
 		json.put(KEY_RESPONSE_STATUS, mStatus);
-		json.put(RequestMessage.KEY_ACTION, mAction);
+		json.put(MessageFactory.KEY_ACTION, mAction);
 		if (mErrors.size() > 0) {
 			json.put(KEY_ERRORS, mErrors);
 		}
+		toJSONType(json);
 		return json;
 	}
 
@@ -88,7 +85,10 @@ public class ResponseMessage implements JSONMessage {
 		if (json.containsKey(KEY_ERRORS)) {
 			mErrors = (List<String>) json.get(KEY_ERRORS);
 		}
+		parseType(json);
 	}
 	
+	abstract protected void parseType(JSONObject json);
 
+	abstract protected void toJSONType(JSONObject json);
 }

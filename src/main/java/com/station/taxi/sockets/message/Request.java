@@ -1,27 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.station.taxi.sockets;
+package com.station.taxi.sockets.message;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Represent request of StationClient
  * @author alex
  */
-public class RequestMessage implements JSONMessage {
-	
-	public static final String KEY_ACTION = "action";
-
-	public static final String ACTION_ADDCAB = "addcab";
-	public static final String ACTION_LIST_WAITING_CABS = "list_waiting_cabs";
-	public static final String ACTION_LIST_WAITING_PASSENGERS = "list_waiting_passengers";
-	public static final String ACTION_LIST_DRIVING = "list_driving";
-	public static final String ACTION_EXIT = "exit";
-
+public class Request implements JSONMessage {
 	public static final String KEY_CABNUM = "num";
 	public static final String KEY_CABWHILEWAITING = "whileWaiting";
 	
@@ -29,14 +16,14 @@ public class RequestMessage implements JSONMessage {
 	private String mAction = "";
 	private Map<String,Object> mData = new HashMap<>();
 	
-	public RequestMessage() {
+	public Request() {
 		
 	}
 	/**
 	 * 
 	 * @param action 
 	 */
-	public RequestMessage(String action) {
+	public Request(String action) {
 		mAction = action;
 	}
 	/**
@@ -71,7 +58,7 @@ public class RequestMessage implements JSONMessage {
 			throw new IllegalStateException("Action is not defined");
 		}
 		JSONObject json = new JSONObject();
-		json.put(KEY_ACTION, mAction);
+		json.put(MessageFactory.KEY_ACTION, mAction);
 		json.putAll(mData);
 		return json;
 	}
@@ -79,7 +66,7 @@ public class RequestMessage implements JSONMessage {
 	@Override
 	public void parse(JSONObject json) {
 		for (Object key: json.keySet()) {
-			if (key.equals(KEY_ACTION)) {
+			if (key.equals(MessageFactory.KEY_ACTION)) {
 				mAction = (String) json.get(key);
 			} else {
 				mData.put((String)key, json.get(key));

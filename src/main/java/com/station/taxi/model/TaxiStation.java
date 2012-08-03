@@ -188,7 +188,7 @@ public class TaxiStation implements Station, StationEventListener {
 	}
 	/**
 	 * 
-	 * @return All passengers in station
+	 * @return All waiting passengers in station
 	 */
 	@Override
 	public List<Passenger> getPassengers() {
