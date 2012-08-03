@@ -40,12 +40,7 @@
     <div class="container">
 
 <div class="hero-unit">
-  <h1>Heading</h1>
-  <p>Tagline</p>
-  <p>
-    <a class="btn btn-primary btn-large">
-      Learn more
-    </a>
+  <h1>Login</h1>
   </p>
 </div>
     </div> <!-- /container -->

@@ -31,8 +31,14 @@
           </a>
           <a class="brand" href="#">Taxi Station</a>
 		<ul class="nav pull-right">
-		  <li><a href="/login.jsp">Login</a></li>
+		  <li><a href="#">Logout</a></li>
 		</ul>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="#">Waiting Cabs</a></li>
+              <li><a href="#about">Waiting Passengers</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
@@ -40,7 +46,7 @@
     <div class="container">
 
 <div class="hero-unit">
-  <h1>Heading</h1>
+  <h1>User Page</h1>
   <p>Tagline</p>
   <p>
     <a class="btn btn-primary btn-large">
