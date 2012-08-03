@@ -93,7 +93,7 @@ public class Config {
 	/**
 	 * @return the stationConfig
 	 */
-	public ConfigStation getStationConfig() {
+	public ConfigStation getConfigStation() {
 		return stationConfig;
 	}
 

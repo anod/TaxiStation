@@ -1,23 +1,17 @@
 package com.station.taxi.configuration;
 
-import com.station.taxi.model.TaxiMeter;
-import com.station.taxi.model.Passenger;
-import com.station.taxi.model.TaxiStation;
+import com.station.taxi.configuration.jaxb.Config;
+import com.station.taxi.configuration.jaxb.Config.ConfigPassenger;
+import com.station.taxi.configuration.jaxb.Config.ConfigStation;
+import com.station.taxi.configuration.jaxb.Config.ConfigTaxi;
+import com.station.taxi.configuration.jaxb.ConfigManager;
 import com.station.taxi.model.Cab;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
+import com.station.taxi.model.Passenger;
+import com.station.taxi.model.TaxiMeter;
+import com.station.taxi.model.TaxiStation;
 import com.station.taxi.spring.StationContext;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Parse configuration xml and load station
  * @author alex
@@ -39,88 +33,79 @@ public class StationConfigLoader {
 	/**
 	 * Load station from configuration file
 	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
 	 */
-	public TaxiStation load() throws ParserConfigurationException, SAXException, IOException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(new File(mFileName));
-        doc.getDocumentElement().normalize();
+	public TaxiStation load() {
+		ConfigManager cm = new ConfigManager();
+		Config config = cm.load(mFileName);
         
         // parse <system> tag
-        TaxiMeter meter = readTaxiMeter(doc);
-        TaxiStation station = readStation(doc, meter);
-        ArrayList<Cab> taxis = readTaxiCabs(doc);
-        ArrayList<Passenger> passengers = readPassengers(doc);
+        TaxiMeter meter = createTaxiMeter(config);
+        TaxiStation station = createStation(config, meter);
+        ArrayList<Cab> taxis = createTaxiCabs(config);
+        ArrayList<Passenger> passengers = readPassengers(config);
         station.init(taxis, passengers);
 		return station;
 	}
 
 	/**
 	 * Creates passengers from configuration
-	 * @param doc
+	 * @param config
 	 * @return
 	 */
-	private ArrayList<Passenger> readPassengers(Document doc) {
+	private ArrayList<Passenger> readPassengers(Config config) {
 		ArrayList<Passenger> result = new ArrayList<>();
-		
-        NodeList taxis = doc.getElementsByTagName("passenger");
-        for(int i=0; i<taxis.getLength() ; i++){
-        	 NamedNodeMap attrs = taxis.item(i).getAttributes();
-             String name = attrs.getNamedItem("name").getNodeValue();
-             String destination = attrs.getNamedItem("destination").getNodeValue();
-        	 result.add(mContext.createPassenger(name, destination));
+		List<ConfigPassenger> passengers = config.getPassengers();
+        for(int i=0; i<passengers.size() ; i++){
+			ConfigPassenger cp = passengers.get(i);
+            String name = cp.getName();
+            String destination = cp.getDestination();
+			result.add(mContext.createPassenger(name, destination));
         }
 		return result;		
 	}
 
 	/**
 	 * Creates cabs from configuration
-	 * @param doc
+	 * @param config
 	 * @return
 	 */
-	private ArrayList<Cab> readTaxiCabs(Document doc) {
+	private ArrayList<Cab> createTaxiCabs(Config config) {
 		ArrayList<Cab> result = new ArrayList<>();
-
-        NodeList taxis = doc.getElementsByTagName("taxi");
-        for(int i=0; i<taxis.getLength() ; i++){
-        	 NamedNodeMap attrs = taxis.item(i).getAttributes();
-             String cabNum = attrs.getNamedItem("number").getNodeValue();
-             String whileWaiting = attrs.getNamedItem("whileWaiting").getNodeValue();
-        	 result.add(mContext.createCab(Integer.valueOf(cabNum), whileWaiting));
+		List<ConfigTaxi> taxis = config.getTaxis();
+		
+        for(int i=0; i<taxis.size() ; i++){
+			ConfigTaxi taxi = taxis.get(i);
+            Integer cabNum = taxi.getNumber(); 
+            String whileWaiting = taxi.getWhileWaiting();
+        	result.add(mContext.createCab(cabNum, whileWaiting));
         }
 		return result;
 	}
 
 	/**
 	 * Create a station from configuration
-	 * @param doc
+	 * @param config
 	 * @param meter
 	 * @return
 	 */
-	private TaxiStation readStation(Document doc, TaxiMeter meter) {
-        NodeList stations = doc.getElementsByTagName("station");
+	private TaxiStation createStation(Config config, TaxiMeter meter) {
         
-        NamedNodeMap attrs = stations.item(0).getAttributes();
-        String stationName = attrs.getNamedItem("name").getNodeValue();
-        String maxWaitingTaxis = attrs.getNamedItem("maxWaitingTaxis").getNodeValue();
+		ConfigStation sc = config.getConfigStation();
+		
+        String stationName = sc.getName();
+        Integer maxWaitingTaxis = sc.getMaxWaitingTaxis();
         
-		return new TaxiStation(mContext, stationName, Integer.valueOf(maxWaitingTaxis), meter);
+		return new TaxiStation(mContext, stationName, maxWaitingTaxis, meter);
 	}
 
 	/**
 	 * Read taxi meter values
-	 * @param doc
+	 * @param config
 	 */
-	private TaxiMeter readTaxiMeter(Document doc) {
-		String pricePerSecond = doc.getDocumentElement().getAttribute("pricePerSecond");
-        String startPrice = doc.getDocumentElement().getAttribute("startPrice");
-        
+	private TaxiMeter createTaxiMeter(Config config) {
         return new TaxiMeter(
-       		Double.parseDouble(startPrice),
-        	Double.parseDouble(pricePerSecond)
+       		config.getStartPrice(),
+        	config.getOneSecPrice()
         );
 	}	
 	

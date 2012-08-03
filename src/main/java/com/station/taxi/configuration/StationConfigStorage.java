@@ -1,12 +1,12 @@
 package com.station.taxi.configuration;
 
+import com.station.taxi.configuration.jaxb.Config;
+import com.station.taxi.configuration.jaxb.Config.ConfigTaxi;
+import com.station.taxi.configuration.jaxb.ConfigManager;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -17,12 +17,12 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
 import com.station.taxi.model.TaxiStation;
 import com.station.taxi.model.TaxiMeter;
+import java.util.ArrayList;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 /**
  * 
@@ -31,22 +31,11 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
  */
 public class StationConfigStorage {
 	private String mConfigFile;
-	private Element root = null;
-	private Document doc = null;
+	
 	public StationConfigStorage(String fileName) {
 		mConfigFile = fileName;
-		try {
-			setup();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
-		}
 	}
-	private void setup() throws ParserConfigurationException, SAXException, IOException {
-        DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-        doc = docBuilder.newDocument();
-        root = doc.createElement("system");
-	}
+	
 	/**
 	 * 
 	 * @param station
@@ -60,54 +49,38 @@ public class StationConfigStorage {
 			station.getPassengers()
 		);
 	}	
-	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<Cab> taxis,List<Passenger> passengers)
+	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<Cab> cabs,List<Passenger> passengers)
 	{
-		root.setAttribute("pricePerSecond", String.valueOf(meter.getPricePerSecond()));
-		root.setAttribute("startPrice", String.valueOf(meter.getStartPrice()));
-		root.appendChild(writeStationElement(name,maxWaitingTaxis));
-		root.appendChild(writeTaxisElements(taxis));
-		root.appendChild(writePassengerElements(passengers));
-		doc.appendChild(root);
-		exportDoc(doc);
-	}
-	private void exportDoc(Document data) {
-		try {
-		TransformerFactory transfac = TransformerFactory.newInstance();
-        Transformer trans = transfac.newTransformer();
-        trans.setOutputProperty(OutputKeys.INDENT, "yes");
-        FileWriter sw = new FileWriter(mConfigFile);
-        DOMSource source = new DOMSource(doc);
-        StreamResult result =  new StreamResult(sw);
-        trans.transform(source, result);
-		} catch (TransformerFactoryConfigurationError | IllegalArgumentException | IOException | TransformerException e) {
-			e.printStackTrace();
+		Config config = new Config();
+		config.setOneSecPrice(meter.getPricePerSecond());
+		config.setStartPrice(meter.getStartPrice());
+		
+		Config.ConfigStation cs = new Config.ConfigStation();
+		cs.setName(name);
+		cs.setMaxWaitingTaxis(maxWaitingTaxis);
+
+		config.setStationConfig(cs);
+
+		List<Config.ConfigTaxi> taxis = new ArrayList<>();
+		for(Cab cab: cabs) {
+			ConfigTaxi ct = new Config.ConfigTaxi();
+			ct.setNumber(cab.getNumber());
+			ct.setWhileWaiting(cab.getWhileWaiting());
+			taxis.add(ct);
 		}
-	}
-	private Node writePassengerElements(List<Passenger> passengers) {
-		Element passengersRoot = doc.createElement("passengers");
+		config.setTaxis(taxis);
+		
+		List<Config.ConfigPassenger> confPassangers = new ArrayList<>();
 		for(Passenger p: passengers) {
-			Element pChild = doc.createElement("passenger");
-			pChild.setAttribute("name", p.getPassangerName());
-			pChild.setAttribute("destination", p.getDestination());
-			passengersRoot.appendChild(pChild);
+			Config.ConfigPassenger cp = new Config.ConfigPassenger();
+			cp.setName(p.getPassangerName());
+			cp.setDestination(p.getDestination());
+			confPassangers.add(cp);
 		}
-		return passengersRoot;
-	}
-	private Node writeTaxisElements(List<Cab> taxis) {
-		Element taxiRoot = doc.createElement("taxis");
-		for(Cab c: taxis) {
-			Element taxiChild = doc.createElement("taxi");
-			taxiChild.setAttribute("number", String.valueOf(c.getNumber()));
-			taxiChild.setAttribute("whileWaiting", c.getWhileWaiting());
-			taxiRoot.appendChild(taxiChild);
-		}
-		return taxiRoot;
-	}
-	private Node writeStationElement(String name, int maxWaitingTaxis) {
-		Element station = doc.createElement("station");
-		station.setAttribute("name", name);
-		station.setAttribute("maxWaitingTaxis", String.valueOf(maxWaitingTaxis));
-		return station;
+		config.setPassengers(confPassangers);
+		
+		ConfigManager cm = new ConfigManager();
+		cm.save(config, mConfigFile);
 	}
 
 }
