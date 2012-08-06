@@ -1,6 +1,7 @@
 
 package com.station.taxi.sockets;
 
+import com.station.taxi.logger.LoggerWrapper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,6 +35,9 @@ public class JSONSocket {
 	
 	public Object receiveMessage() throws IOException {
 		String string = mFromNetInputStream.readLine();
+		if (string == null) {
+			return null;
+		}
 		JSONObject message = (JSONObject)JSONValue.parse(string);
 		return message;
 	}

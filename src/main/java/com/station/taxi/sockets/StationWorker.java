@@ -47,16 +47,18 @@ public class StationWorker implements Runnable {
 				running = false;
 				break;
 			}
-			String action;
+			String action = "";
 			AbstractResponse response;
 			try {
 				JSONObject json = (JSONObject)mWorker.readRequest();
 				Request request = new Request();
 				if (json != null) {
 					request.parse(json);
+					action = request.getAction();
+					response = MessageFactory.createResponse(action);
+				} else {
+					response = new SimpleResponse();
 				}
-				action = request.getAction();
-				response = MessageFactory.createResponse(action);
 				switch (action) {
 					case MessageFactory.ACTION_ADDCAB:
 						addCab(request,(SimpleResponse)response);
