@@ -121,7 +121,7 @@ public class StationWorker implements Runnable {
 	private void listDriving(ListDrivingCabsResponse response) {
 		List<Cab> cabs = mStation.getCabs();
 		for(Cab cab : cabs) {
-			if (!cab.isDriving()) {
+			if (cab.isDriving()) {
 	 			response.addCab(cab);
 			}
 		}

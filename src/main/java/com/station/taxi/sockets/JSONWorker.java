@@ -29,7 +29,7 @@ public class JSONWorker implements Worker {
 
 	@Override
 	public boolean isSocketConnected() {
-		return mJSONSocket.canWrite();
+		return !mJSONSocket.checkError();
 	}
 
 	@Override
