@@ -6,10 +6,6 @@ import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.spring.StationContext;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 /**
  * Taxi cab station object
  * @author alex

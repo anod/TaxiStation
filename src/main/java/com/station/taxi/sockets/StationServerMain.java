@@ -64,8 +64,13 @@ public class StationServerMain implements StateChangeListener {
 		if (!mServer.start()) {
 			return;
 		}
-		// loop
-		mServer.accept();
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				// loop
+				mServer.accept();
+			}
+		}).start();;
 	}
 
 	@Override
