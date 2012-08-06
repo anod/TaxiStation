@@ -16,4 +16,5 @@ public interface Worker  {
 	
 	public void sendResponse(JSONObject response);
 	
+	public void close();
 }

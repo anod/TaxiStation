@@ -45,4 +45,8 @@ public class JSONSocket {
 	public Socket getSocket() {
 		return mSocket;
 	}
+
+	public boolean canWrite() {
+		return !mToNetOutputStream.checkError();
+	}
 }

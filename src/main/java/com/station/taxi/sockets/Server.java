@@ -8,9 +8,9 @@ public interface Server {
 
 	/**
 	 * Start server to listen to incoming connection on predefined port
-	 * @return 
+	 * @return true if its has been connected
 	 */
-	void start();
+	boolean start();
 
 	/**
 	 * Accept connections and start worker thread

@@ -81,14 +81,15 @@ public class StationWorker implements Runnable {
 				}
 				mWorker.sendResponse(response.toJSON());
 			} catch (Exception ex) {
+				running = false;
 				LoggerWrapper.logException(StationWorker.class.getName(), ex);
 				response = new SimpleResponse();
 				response.setStatus(AbstractResponse.STATUS_ERROR);
 				response.addError("Server error");
 				mWorker.sendResponse(response.toJSON());
-				continue;
 			}
 		}
+		mWorker.close();
 	}
 	
 	/**

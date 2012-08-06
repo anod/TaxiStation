@@ -1,16 +1,12 @@
 package com.station.taxi.sockets;
 
 import com.station.taxi.configuration.StationConfigLoader;
-import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
 import com.station.taxi.model.Station;
 import com.station.taxi.model.StationExecutor;
 import com.station.taxi.model.TaxiStation;
 import com.station.taxi.model.TaxiStation.StateChangeListener;
-import java.io.IOException;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -51,14 +47,7 @@ public class StationServerMain implements StateChangeListener {
 		//Create configuration loader
 		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML, mContext);
 
-		Station station;
-		try {
-			//Load station from configuration
-			station = configLoader.load();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			LoggerWrapper.logException(StationServer.class.getName(), e);
-			return;
-		}
+		Station station = configLoader.load();
 		station.registerStateListener(this);
 		StationExecutor executor = new StationExecutor();
 		//Start station thread
@@ -72,7 +61,9 @@ public class StationServerMain implements StateChangeListener {
 	@Override
 	public void onStationStart(TaxiStation station) {
 		mServer = mContext.createServer(station);
-		mServer.start();
+		if (!mServer.start()) {
+			return;
+		}
 		// loop
 		mServer.accept();
 	}

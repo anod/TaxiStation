@@ -59,13 +59,8 @@ public class StationWindowAdapter extends WindowAdapter {
 		//Create configuration loader
 		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML, mStationFrame.getContext());
 
-		try {
-			//Load station from configuration
-			mStation = configLoader.load();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			LoggerWrapper.logException(StationWindowAdapter.class.getName(), e);
-			return;
-		}
+		//Load station from configuration
+		mStation = configLoader.load();
 		mStation.registerStateListener(mStationFrame);
 		StationExecutor executor = new StationExecutor();
 		//Start station thread

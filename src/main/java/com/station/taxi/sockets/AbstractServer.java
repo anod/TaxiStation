@@ -26,12 +26,14 @@ abstract class AbstractServer implements Server {
 	}
 	
 	@Override
-	public void start() {
+	public boolean start() {
 		try {
 			mServer = new ServerSocket(mPort);
 		} catch (IOException ex) {
 			LoggerWrapper.logException(StationServer.class.getName() , ex);
+			return false;
 		}
+		return true;
 	}
 
 	@Override

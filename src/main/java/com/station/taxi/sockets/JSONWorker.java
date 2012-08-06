@@ -29,7 +29,7 @@ public class JSONWorker implements Worker {
 
 	@Override
 	public boolean isSocketConnected() {
-		return mJSONSocket.getSocket().isConnected();
+		return mJSONSocket.canWrite();
 	}
 
 	@Override
@@ -44,6 +44,17 @@ public class JSONWorker implements Worker {
 		} catch (IOException ex) {
 			LoggerWrapper.logException(JSONWorker.class.getName(), ex);
 			return null;
+		}
+	}
+
+	@Override
+	public void close() {
+		if (mJSONSocket!=null) {
+			try {
+				mJSONSocket.close();
+			} catch (IOException ex) {
+				LoggerWrapper.logException(JSONWorker.class.getName(), ex);
+			}
 		}
 	}
 	
