@@ -34,6 +34,10 @@ public class ListDrivingCabsResponse extends AbstractResponse{
 		List<Passenger> passengers = cab.getPassegners();
 		List<String> names = new ArrayList<>(passengers.size());
 
+		for(Passenger p: passengers) {
+			names.add(p.getPassangerName());
+		}
+		
 		Map<String,Object> data = new HashMap<>();
 		data.put(KEY_DESTINATION, destination);
 		data.put(KEY_PASSENGERS, names);
