@@ -50,7 +50,7 @@ public class ListDrivingCabsResponse extends AbstractResponse{
 		Map<Integer, Map<String, Object>> cabs = (Map<Integer,Map<String,Object>>) json.get(KEY_CABS);
 		Map<String, Object> data;
 		for(Object key: cabs.keySet()) {
-			int number = (Integer) key;
+			int number = Integer.valueOf((String)key);
 			data = cabs.get(key);
 			mCabs.put(number, data);
 		}

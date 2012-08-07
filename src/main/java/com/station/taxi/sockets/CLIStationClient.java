@@ -15,21 +15,21 @@ import org.springframework.validation.ObjectError;
  *
  * @author alex
  */
-public class StationClient {
+public class CLIStationClient {
 	private static final String HOST = "localhost";
 
 	private static final String USER_ACTION_EXIT = "exit";
 	private static final String USER_ACTION_ADDCAB = "addcab";
 	private static final String USER_ACTION_ADDPASSENGER = "addpassenger";
 	private static final String USER_ACTION_LIST_WAITING_CABS= "list_waiting_cabs";
-	private static final String USER_ACTION_LIST_WAITING_PASSENGER = "list_waiting_passenger";
+	private static final String USER_ACTION_LIST_PASSENGERS = "list_passengers";
 	private static final String USER_ACTION_LIST_DRIVING = "list_driving";
 
 	private static final String[] sUserActions = {
 		USER_ACTION_ADDCAB,
 		USER_ACTION_ADDPASSENGER,
 		USER_ACTION_LIST_WAITING_CABS,
-		USER_ACTION_LIST_WAITING_PASSENGER,
+		USER_ACTION_LIST_PASSENGERS,
 		USER_ACTION_LIST_DRIVING,
 		USER_ACTION_EXIT
 	}; 
@@ -37,7 +37,7 @@ public class StationClient {
 	private final SocketStationContext mStationContext;
 	private final Client mClient;
 
-	public StationClient(SocketStationContext context) {
+	public CLIStationClient(SocketStationContext context) {
 		mStationContext = context;
 		mClient = context.createClient(HOST, StationServer.PORT);
 	}
@@ -76,7 +76,7 @@ public class StationClient {
 				case USER_ACTION_LIST_WAITING_CABS:
 					sendListRequest(MessageFactory.ACTION_LIST_WAITING_CABS);
 					break;
-				case USER_ACTION_LIST_WAITING_PASSENGER:
+				case USER_ACTION_LIST_PASSENGERS:
 					sendListRequest(MessageFactory.ACTION_LIST_WAITING_PASSENGERS);
 					break;
 				default:
@@ -104,16 +104,12 @@ public class StationClient {
 			return;
 		}
 
-		Request msg = new Request(MessageFactory.ACTION_ADDCAB);
-		msg.put(Request.KEY_CABNUM, Integer.valueOf(numberStr));
-		msg.put(Request.KEY_CABWHILEWAITING, whileWaiting);
-
-		mClient.sendRequest(msg.toJSON());
+		Request msg = MessageFactory.createAddCabRequest(Integer.valueOf(numberStr), whileWaiting);
 
 		//wait for response
-		JSONObject response = (JSONObject)mClient.receiveResponse();
-		AbstractResponse message = MessageFactory.parseResponse(response);
-		if (message.isStatusOk()) {
+		JSONObject json = (JSONObject)mClient.sendAndReceive(msg.toJSON());
+		AbstractResponse response = MessageFactory.parseResponse(json);
+		if (response.isStatusOk()) {
 			System.out.println("New cab added!");
 		} else {
 			System.out.println("Error when adding a new cab");
@@ -160,10 +156,14 @@ public class StationClient {
 
 	private void sendListRequest(String action) {	
 		Request msg = new Request(action);
-		mClient.sendRequest(msg.toJSON());
-		
 		//wait for response
-		JSONObject response = (JSONObject)mClient.receiveResponse();
+		JSONObject json = (JSONObject)mClient.sendAndReceive(msg.toJSON());
+		AbstractResponse response = MessageFactory.parseResponse(json);
+		if (response.isStatusOk()) {
+			System.out.println("Response is ok");
+		} else {
+			System.out.println("Error occured");			
+		}
 	}
 
 }

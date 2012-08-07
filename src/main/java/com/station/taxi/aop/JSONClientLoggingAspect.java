@@ -49,4 +49,21 @@ public class JSONClientLoggingAspect {
 			LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Empty response.");			
 		}
     }
+	
+	@Before("execution(* com.station.taxi.sockets.Client.sendAndReceive(..))")
+    public void logBeforeSendAndReceive(JoinPoint joinPoint) {
+		Object[] args = joinPoint.getArgs();
+		LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Sending request: " + ((JSONObject)args[0]).toString());
+    }
+
+	@AfterReturning(pointcut="execution(* com.station.taxi.sockets.Client.sendAndReceive(..))", returning = "result")
+    public void logAfterSendAndReceive(JoinPoint joinPoint, Object result) {
+		JSONObject json = (JSONObject)result;
+		if (json != null) {
+			LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Recieved response: " + json.toString());
+		} else {
+			LoggerWrapper.log(joinPoint.getTarget().getClass().getSimpleName(),"Empty response.");			
+		}
+    }
+
 }

@@ -31,4 +31,11 @@ public interface Client {
 	 * @throws IOException 
 	 */
 	public Object receiveResponse();
+	
+	/**
+	 * Send request and wait for response
+	 * @param request
+	 * @return 
+	 */
+	public Object sendAndReceive(Object request);
 }

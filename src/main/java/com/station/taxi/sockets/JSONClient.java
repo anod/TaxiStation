@@ -28,10 +28,10 @@ public class JSONClient implements Client {
 			mJSONSocket = new JSONSocket(new Socket(mHost, mPort));
 			mJSONSocket.init();
 		} catch (UnknownHostException ex) {
-			LoggerWrapper.logException(StationClient.class.getName(), ex);
+			LoggerWrapper.logException(CLIStationClient.class.getName(), ex);
 			return false;		
 		} catch (IOException ex) {
-			LoggerWrapper.logException(StationClient.class.getName(), ex);
+			LoggerWrapper.logException(CLIStationClient.class.getName(), ex);
 			return false;
 		}
 		return true;
@@ -45,7 +45,7 @@ public class JSONClient implements Client {
 		try {
 			mJSONSocket.close();
 		} catch (IOException ex) {
-			LoggerWrapper.logException(StationClient.class.getName(), ex);
+			LoggerWrapper.logException(CLIStationClient.class.getName(), ex);
 		}
 		mJSONSocket = null;
 	}
@@ -64,6 +64,12 @@ public class JSONClient implements Client {
 			Logger.getLogger(JSONClient.class.getName()).log(Level.SEVERE, null, ex);
 			return null;
 		}
+	}
+
+	@Override
+	public Object sendAndReceive(Object request) {
+		sendRequest(request);
+		return receiveResponse();
 	}
 	
 }

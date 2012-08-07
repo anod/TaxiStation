@@ -3,7 +3,7 @@ package com.station.taxi.sockets.message;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Factory for creating and parsing request and response messages
  * @author alex
  */
 public class MessageFactory {
@@ -67,5 +67,18 @@ public class MessageFactory {
 		Request request = new Request();
 		request.parse(json);
 		return request;
+	}
+	
+	/**
+	 * 
+	 * @param number
+	 * @param whileWaiting
+	 * @return 
+	 */
+	public static Request createAddCabRequest(int number, String whileWaiting) {
+		Request msg = new Request(MessageFactory.ACTION_ADDCAB);
+		msg.put(Request.KEY_CABNUM, number);
+		msg.put(Request.KEY_CABWHILEWAITING, whileWaiting);
+		return msg;
 	}
 }

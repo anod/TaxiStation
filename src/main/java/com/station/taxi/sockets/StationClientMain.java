@@ -8,12 +8,12 @@ public class StationClientMain {
 
 		
 	/**
-	 * Start StationClient 
+	 * Start CLIStationClient 
 	 * @param args 
 	 */
 	public static void main(String[] args) {
 		final SocketStationContext context = SocketStationContext.readFromXml();
-		final StationClient client = new StationClient(context);
+		final CLIStationClient client = new CLIStationClient(context);
 		client.run();
 		
 	}
