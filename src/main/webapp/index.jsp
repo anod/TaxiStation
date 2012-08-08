@@ -31,8 +31,15 @@
           </a>
           <a class="brand" href="#">Taxi Station</a>
 		<ul class="nav pull-right">
-		  <li><a href="login.jsp">Login</a></li>
+		  <li><a href="admin/">Admin</a></li>
 		</ul>
+           <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="../cabs.jsp">Waiting Cabs</a></li>
+              <li><a href="../passengers.jsp">Waiting Passengers</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+
         </div>
       </div>
     </div>
@@ -43,30 +50,12 @@
   <h1>Welcome to Taxi Station</h1>
   <p>Please login in order to get access to the information</p>
   <p>
-    <a a="login.jsp" class="btn btn-primary btn-large">
-      Login
+    <a href="admin/" class="btn btn-primary btn-large">
+      Admin
     </a>
   </p>
 </div>
     </div> <!-- /container -->
-
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster 
-    <script src="../assets/js/jquery.js"></script>
-    <script src="../assets/js/bootstrap-transition.js"></script>
-    <script src="../assets/js/bootstrap-alert.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
-    <script src="../assets/js/bootstrap-scrollspy.js"></script>
-    <script src="../assets/js/bootstrap-tab.js"></script>
-    <script src="../assets/js/bootstrap-tooltip.js"></script>
-    <script src="../assets/js/bootstrap-popover.js"></script>
-    <script src="../assets/js/bootstrap-button.js"></script>
-    <script src="../assets/js/bootstrap-collapse.js"></script>
-    <script src="../assets/js/bootstrap-carousel.js"></script>
-    <script src="../assets/js/bootstrap-typeahead.js"></script>
-	-->
 
   </body>
 </html>
