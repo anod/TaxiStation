@@ -2,15 +2,11 @@ package com.station.taxi.gui;
 
 import com.station.taxi.configuration.StationConfigLoader;
 import com.station.taxi.configuration.StationConfigStorage;
-import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.model.StationExecutor;
 import com.station.taxi.model.TaxiStation;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
-import javax.xml.parsers.ParserConfigurationException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.xml.sax.SAXException;
 
 /**
  * StationFrame window adapter - initialize and stop station thread
@@ -19,7 +15,7 @@ import org.xml.sax.SAXException;
  * @author Eran Zimbler
  */
 public class StationWindowAdapter extends WindowAdapter {
-	
+	private static final String SCHEMA_XSD = "src/main/resources/jaxb/config.xsd";
 	private static final String CONFIG_XML = "configs/config1.xml";
 
 	private TaxiStation mStation;
@@ -57,7 +53,7 @@ public class StationWindowAdapter extends WindowAdapter {
 	public void windowOpened(WindowEvent event) {
 		super.windowOpened(event);
 		//Create configuration loader
-		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML, mStationFrame.getContext());
+		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML, SCHEMA_XSD, mStationFrame.getContext());
 
 		//Load station from configuration
 		mStation = configLoader.load();

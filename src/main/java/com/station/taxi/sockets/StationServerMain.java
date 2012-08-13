@@ -30,6 +30,7 @@ public class StationServerMain implements StateChangeListener {
 	/**
 	 * Station configuration path
 	 */
+	private static final String SCHEMA_XSD = "src/main/resources/jaxb/config.xsd";
 	private static final String CONFIG_XML = "configs/config1.xml";
 	
 	private Server mServer;
@@ -45,7 +46,7 @@ public class StationServerMain implements StateChangeListener {
 	public void startStationAndServer() {
 		
 		//Create configuration loader
-		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML, mContext);
+		StationConfigLoader configLoader = new StationConfigLoader(CONFIG_XML, SCHEMA_XSD, mContext);
 
 		Station station = configLoader.load();
 		station.registerStateListener(this);

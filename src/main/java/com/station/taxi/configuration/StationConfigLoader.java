@@ -20,13 +20,17 @@ import java.util.List;
 public class StationConfigLoader {
 	private final String mFileName;
 	private final StationContext mContext;
+	private final String mSchemaFileName;
 
 	/**
 	 * 
-	 * @param fileName path to configuration file
+	 * @param fileName
+	 * @param schemaFileName 
+	 * @param context 
 	 */
-	public StationConfigLoader(String fileName, StationContext context) {
+	public StationConfigLoader(String fileName, String schemaFileName, StationContext context) {
 		mFileName = fileName;
+		mSchemaFileName = schemaFileName;
 		mContext = context;
 	}
 	
@@ -36,7 +40,7 @@ public class StationConfigLoader {
 	 */
 	public TaxiStation load() {
 		ConfigManager cm = new ConfigManager();
-		Config config = cm.load(mFileName);
+		Config config = cm.load(mFileName,mSchemaFileName);
         
         // parse <system> tag
         TaxiMeter meter = createTaxiMeter(config);
