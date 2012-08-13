@@ -8,8 +8,12 @@ package com.station.taxi.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DBHandler {
     private static Connection conn = null;
@@ -50,5 +54,37 @@ public class DBHandler {
             }
             
         }
+    }
+    public static boolean InsertQuery(String Query)
+    {
+        boolean ret = false;
+        if(conn == null)
+        {
+            createConnection(connectionString);
+        }
+        try {
+            Statement selectStatement = conn.createStatement();
+            ret = selectStatement.execute(Query);
+        } catch (SQLException ex) {
+            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
+    }
+    public static ArrayList<ResultSet> selectQuery(String Query) 
+    {
+        ArrayList<ResultSet> ret = new ArrayList<>();
+        if(conn == null)
+        { createConnection(connectionString); }
+        try {
+            Statement selectStatement = conn.createStatement();
+            selectStatement.execute(Query);
+            while( ((selectStatement.getMoreResults() != false) && (selectStatement.getUpdateCount() != -1)))
+            {
+               ret.add(selectStatement.getResultSet());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ret;
     }
 }
