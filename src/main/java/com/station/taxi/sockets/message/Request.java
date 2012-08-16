@@ -11,14 +11,15 @@ import org.json.simple.JSONObject;
 public class Request implements JSONMessage {
 	public static final String KEY_CABNUM = "num";
 	public static final String KEY_CABWHILEWAITING = "whileWaiting";
-	
+
+	public static final String KEY_PASSENGERNAME = "name";
+	public static final String KEY_PASSENGERDESTINATION = "dest";
 
 	private String mAction = "";
 	private Map<String,Object> mData = new HashMap<>();
 	
-	public Request() {
-		
-	}
+	public Request() { }
+	
 	/**
 	 * 
 	 * @param action 

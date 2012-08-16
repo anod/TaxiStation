@@ -75,7 +75,7 @@ public class CLIStationClient {
 					addCabRequest(scan);
 					break;
 				case USER_ACTION_ADDPASSENGER:
-					//TODO
+					addPassengerRequest(scan);
 					break;
 				case USER_ACTION_LIST_DRIVING:
 					sendListRequest(MessageFactory.ACTION_LIST_DRIVING);
@@ -103,13 +103,13 @@ public class CLIStationClient {
 	 * @param scan 
 	 */
 	private void addCabRequest(Scanner scan) {
-		System.out.println("Please enter cab number: ");
+		System.out.print("Please enter cab number: ");
 		String numberStr = scan.nextLine();
 		if (!validateNumber(numberStr)) {
 			return;
 		}
 
-		System.out.println("Please enter while waiting action: ");
+		System.out.print("Please enter while waiting action: ");
 		String whileWaiting = scan.nextLine();
 		if (!validateWhileWaiting(whileWaiting)) {
 			return;
@@ -126,6 +126,7 @@ public class CLIStationClient {
 			System.out.println("Error when adding a new cab");
 		}
 	}
+
 	
 	/**
 	 * Validate number from user input and print error in case of error
@@ -163,6 +164,35 @@ public class CLIStationClient {
 		ObjectError error = errors.getGlobalError();
 		System.out.println("Error: " + error.getDefaultMessage());
 		return false;
+	}
+
+
+	private void addPassengerRequest(Scanner scan) {
+		System.out.print("Please enter name of the passanger: ");
+		String name = scan.nextLine();
+		if (name.equals("")) {
+			System.out.println("Error: Name cannot be empty");			
+			return;
+		}
+
+		System.out.print("Please enter destination: ");
+		String dest = scan.nextLine();
+		if (dest.equals("")) {
+			System.out.println("Error: Destination cannot be empty");
+			return;
+		}
+
+		Request msg = MessageFactory.createAddPassengerRequest(name, dest);
+
+		//wait for response
+		JSONObject json = (JSONObject)mClient.sendAndReceive(msg.toJSON());
+		AbstractResponse response = MessageFactory.parseResponse(json);
+		if (response.isStatusOk()) {
+			System.out.println("New passenger added!");
+		} else {
+			System.out.println("Error when adding a new cab");
+		}
+
 	}
 
 	/**

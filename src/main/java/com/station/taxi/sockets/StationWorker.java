@@ -12,6 +12,7 @@ import com.station.taxi.sockets.message.MessageFactory;
 import com.station.taxi.sockets.message.Request;
 import com.station.taxi.sockets.message.SimpleResponse;
 import com.station.taxi.validator.CabValidator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +69,9 @@ public class StationWorker implements Runnable {
 				switch (action) {
 					case MessageFactory.ACTION_ADDCAB:
 						addCab(request,(SimpleResponse)response);
+						break;
+					case MessageFactory.ACTION_ADDPASSENGER:
+						addPassenger(request,(SimpleResponse)response);
 						break;
 					case MessageFactory.ACTION_LIST_DRIVING:
 						listDriving((ListDrivingCabsResponse)response);
@@ -126,6 +130,34 @@ public class StationWorker implements Runnable {
 		response.setStatus(AbstractResponse.STATUS_OK);
 	}
 
+	/**
+	 * Add passenger to station by request
+	 * @param request
+	 * @param response 
+	 */
+	private void addPassenger(Request request, SimpleResponse response) {
+		String name = (String)request.getData(Request.KEY_PASSENGERNAME);
+		String dest = (String)request.getData(Request.KEY_PASSENGERDESTINATION);
+		
+		ArrayList<String> errors = new ArrayList<>();
+		if (name.equals("")) {
+			errors.add("Name cannot be empty");
+		}
+		
+		if (dest.equals("")) {
+			errors.add("Destination cannot be empty");
+		}
+		
+		if (errors.size() > 0) {
+			response.setStatus(AbstractResponse.STATUS_ERROR);
+			response.setErrors(errors);
+			return;
+		}
+
+		Passenger p = mContext.createPassenger(name, dest);
+		mStation.addPassenger(p);
+		response.setStatus(AbstractResponse.STATUS_OK);
+	}
 	/**
 	 * Add currently driving cabs to response
 	 * @param response 
