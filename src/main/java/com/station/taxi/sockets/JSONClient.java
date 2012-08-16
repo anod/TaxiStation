@@ -17,6 +17,11 @@ public class JSONClient implements Client {
 	private final String mHost;
 	private final Integer mPort;
 	
+	/**
+	 * 
+	 * @param host Socket server host
+	 * @param port Socket server port
+	 */
 	public JSONClient(String host, Integer port) {
 		mHost = host;
 		mPort = port;

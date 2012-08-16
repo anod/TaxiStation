@@ -4,15 +4,12 @@ import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.StationEventListener;
 import java.util.Date;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 
 /**
- *
+ * Cab model interface
  * @author alex
  */
 public interface Cab extends Runnable {
-
 
 	/**
 	 * Register cab event listener
@@ -131,7 +128,5 @@ public interface Cab extends Runnable {
 	 * @param listener
 	 */
 	void setStationEventListener(StationEventListener listener);
-
-	String toString();
 	
 }

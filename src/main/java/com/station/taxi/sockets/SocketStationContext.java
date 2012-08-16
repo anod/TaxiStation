@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- *
+ * Context of socket station
  * @author alex
  */
 public class SocketStationContext extends StationContext {

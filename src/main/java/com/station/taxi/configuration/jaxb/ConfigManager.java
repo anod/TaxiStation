@@ -17,11 +17,17 @@ import javax.xml.validation.SchemaFactory;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Load and Save Config object using JAXB
  * @author alex
  */
 public class ConfigManager {
 	
+	/**
+	 * 
+	 * @param fileName
+	 * @param schemaFileName
+	 * @return 
+	 */
 	public Config load(String fileName, String schemaFileName) {
 		FileInputStream is = null;
 		Config config = null;
@@ -45,6 +51,11 @@ public class ConfigManager {
 		return config;
 	}
 	
+	/**
+	 * 
+	 * @param config
+	 * @param fileName 
+	 */
 	public void save(Config config, String fileName) {
 		try {
 			ObjectFactory facotry = new ObjectFactory();
@@ -58,6 +69,11 @@ public class ConfigManager {
 		}
 	}
 	
+	/**
+	 * Apply schema validation for unmarshaller
+	 * @param unmarshaller
+	 * @param schemaFileName 
+	 */
 	private void applySchema(Unmarshaller unmarshaller, String schemaFileName) {
 		if (schemaFileName == null) {
 			return;
@@ -68,7 +84,7 @@ public class ConfigManager {
 			return;
 		}
 		
-		Schema schema = getSchema(schemaFile);
+		Schema schema = loadSchema(schemaFile);
 		if (schema == null) {
 			return;
 		}
@@ -76,7 +92,12 @@ public class ConfigManager {
 		unmarshaller.setSchema(schema);
 	}
 	
-	private Schema getSchema(File schemaFile) {
+	/**
+	 * Load schema
+	 * @param schemaFile
+	 * @return 
+	 */
+	private Schema loadSchema(File schemaFile) {
 		SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		Schema schema = null;
 		try {

@@ -1,5 +1,6 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.logger.LoggerWrapper;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
 import com.station.taxi.model.TaxiStation;
@@ -17,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 /**
  * TaxiStationMain station frame
@@ -40,8 +42,8 @@ public class StationFrame extends JFrame implements StateChangeListener {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			SwingUtilities.updateComponentTreeUI(this);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			LoggerWrapper.logException(StationFrame.class.getSimpleName(), e);
 		}
 		
 		mContext = context;

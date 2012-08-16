@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Before;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * AOP Aspect to log Socket JSON worker actions 
  * @author alex
  */
 @Aspect

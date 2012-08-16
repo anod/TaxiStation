@@ -3,29 +3,14 @@ package com.station.taxi.configuration;
 import com.station.taxi.configuration.jaxb.Config;
 import com.station.taxi.configuration.jaxb.Config.ConfigTaxi;
 import com.station.taxi.configuration.jaxb.ConfigManager;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
-import com.station.taxi.model.TaxiStation;
 import com.station.taxi.model.TaxiMeter;
+import com.station.taxi.model.TaxiStation;
 import java.util.ArrayList;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import java.util.List;
 /**
- * 
+ * Save station into xml
  * @author Eran Zimbler
  * @version 0.2
  */
@@ -37,7 +22,7 @@ public class StationConfigStorage {
 	}
 	
 	/**
-	 * 
+	 * Save station into xml
 	 * @param station
 	 */
 	public void save(TaxiStation station) {
@@ -48,7 +33,15 @@ public class StationConfigStorage {
 			station.getCabs(), 
 			station.getPassengers()
 		);
-	}	
+	}
+	/**
+	 * 
+	 * @param meter
+	 * @param name
+	 * @param maxWaitingTaxis
+	 * @param cabs
+	 * @param passengers 
+	 */
 	private void saveStation(TaxiMeter meter,String name,int maxWaitingTaxis,List<Cab> cabs,List<Passenger> passengers)
 	{
 		Config config = new Config();

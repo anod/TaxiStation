@@ -1,7 +1,7 @@
 package com.station.taxi.sockets;
 
 /**
- *
+ * Socket server interfaceß
  * @author alex
  */
 public interface Server {

@@ -5,7 +5,7 @@ import java.util.List;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Abstract JSON Response message
  * @author alex
  */
 abstract public class AbstractResponse implements JSONMessage {
@@ -88,7 +88,15 @@ abstract public class AbstractResponse implements JSONMessage {
 		parseType(json);
 	}
 	
+	/**
+	 * Parse concrete response type
+	 * @param json 
+	 */
 	abstract protected void parseType(JSONObject json);
 
+	/**
+	 * Convert concrete response to json
+	 * @param json 
+	 */
 	abstract protected void toJSONType(JSONObject json);
 }

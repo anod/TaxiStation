@@ -10,73 +10,81 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 /**
+ *
  * Receipt is used to keep the receipts in the cab object.
+ *
  * @author alex
  * @author Eran Zimbler
  * @version 0.2
- *
  */
 @Entity
-@Table(name="RECEIPTS")
+@Table(name = "RECEIPTS")
 public class Receipt implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
 	@Id
-	@GeneratedValue(strategy= GenerationType.AUTO)
-	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
 	private long mId;
-
-	@Column(name="price")
+	@Column(name = "price")
 	private double mPrice;
-
-	@Column(name="start_time")
+	@Column(name = "start_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date mStartTime;
-
-	@Column(name="end_time")
+	@Column(name = "end_time")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date mEndTime;
-
-	@Column(name="passenger_count")
+	@Column(name = "passenger_count")
 	private int mPassengersCount;
-        
-        @Column(name="cabID")
-        private int mCabID;
+	@Column(name = "cabID")
+	private int mCabID;
 
 	public Receipt() {
 	}
-	
-	
-	public Receipt(Date start,Date end,double price,int passengers) {
+
+	/**
+	 *
+	 * @param start
+	 * @param end
+	 * @param price
+	 * @param passengers
+	 */
+	public Receipt(Date start, Date end, double price, int passengers) {
 		mStartTime = start;
 		mEndTime = end;
 		mPrice = price;
 		mPassengersCount = passengers;
 	}
-	
+
 	public Long getId() {
 		return mId;
 	}
-	
+
 	public double getPrice() {
 		return mPrice;
 	}
+
 	public Date getStartTime() {
 		return mStartTime;
 	}
+
 	public Date getEndTime() {
 		return mEndTime;
 	}
+
 	public int getPassengersCount() {
 		return mPassengersCount;
 	}
+
 	/**
 	 * Calculates the time of the ride in seconds
+	 *
 	 * @return duration of ride in seconds as long
 	 */
-	public long getRideDuration(){
-		return (mEndTime.getTime()-mStartTime.getTime())/1000; 
+	public long getRideDuration() {
+		return (mEndTime.getTime() - mStartTime.getTime()) / 1000;
 	}
 
 	/**
@@ -112,16 +120,16 @@ public class Receipt implements Serializable {
 	 */
 	public void setPassengersCount(int passengersCount) {
 		this.mPassengersCount = passengersCount;
-    	}
-        public int getCabID() 
-        {
-            return mCabID;
-        }
+	}
 
-        public void setCabID(int cabID) 
-        {
-            this.mCabID = cabID;
-        }
+	public int getCabID() {
+		return mCabID;
+	}
+
+	public void setCabID(int cabID) {
+		mCabID = cabID;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -137,6 +145,6 @@ public class Receipt implements Serializable {
 		sb.append(mPassengersCount);
 
 		return sb.toString();
-		
+
 	}
 }

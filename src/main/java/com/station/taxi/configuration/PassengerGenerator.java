@@ -4,6 +4,10 @@ import com.station.taxi.model.Passenger;
 import com.station.taxi.spring.StationContext;
 import java.util.Random;
 
+/**
+ * Utility to generate random passengers
+ * @author Eran Zimbler
+ */
 public class PassengerGenerator {
 	
 	final private String[] DESTNATIONS = {"Holon","Eilat","RamatGan","Herzeliya","TelAviv","Haifa","BatYam"};

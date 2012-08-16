@@ -3,6 +3,10 @@ package com.station.taxi.logger;
 import java.util.logging.Filter;
 import java.util.logging.LogRecord;
 
+/**
+ * Filters log messages for passenger
+ * @author Eran Zimbler
+ */
 class PassengerFilter implements Filter {
 	final public static String PATTERN = "%s -";
 	private String mPassengerName;

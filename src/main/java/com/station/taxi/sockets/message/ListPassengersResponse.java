@@ -19,7 +19,12 @@ public class ListPassengersResponse extends AbstractResponse {
 	public Map<String,String> getPassengers() {
 		return mPassengers;
 	}
-
+	
+	/**
+	 * Add a passenger to response
+	 * @param name
+	 * @param destination 
+	 */
 	public void addPassenger(String name, String destination) {
 		mPassengers.put(name, destination);
 	}

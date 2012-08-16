@@ -1,11 +1,14 @@
 package com.station.taxi.logger;
 
+import com.station.taxi.events.CabEventListener;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
-import com.station.taxi.events.CabEventListener;
 import java.util.List;
 
-
+/**
+ * Log for cab events
+ * @author alex
+ */
 public class CabLogger extends CabEventListener {
 
 	@Override

@@ -1,17 +1,16 @@
 package com.station.taxi.spring;
 
 import com.station.taxi.db.ReceiptStorage;
-import com.station.taxi.db.repositories.ReceiptRepository;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
 import com.station.taxi.model.TaxiCab;
 import com.station.taxi.model.TaxiPassenger;
 import org.springframework.aop.framework.Advised;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 
 /**
- *
+ * Station environment context
+ * Contain spring application context pointer and access to configuration
  * @author alex
  */
 abstract public class StationContext {

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.db.repositories;
 
 import com.station.taxi.model.Receipt;
@@ -10,13 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
- *
+ * JPA Receipt Repository
  * @author alex
  */
-
 public interface ReceiptRepository extends CrudRepository<Receipt, Long> {
-
-	
+ 
+	/**
+	 * Load receipts by passengers count
+	 * @param count
+	 * @return 
+	 */
 	@Query("select r from Receipt r where r.mPassengersCount = ?1")
-	List<Receipt> findByPassengerNumber(Integer number);
+	List<Receipt> findByPassengersCount(Integer count);
 }

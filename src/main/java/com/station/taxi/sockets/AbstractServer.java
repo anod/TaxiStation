@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- *
+ * Abstract socket server implementation
  * @author alex
  */
 abstract class AbstractServer implements Server {

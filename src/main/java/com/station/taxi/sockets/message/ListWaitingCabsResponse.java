@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.sockets.message;
 
 import com.station.taxi.model.Cab;
@@ -10,7 +6,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Response message for list of waiting cabs
  * @author alex
  */
 public class ListWaitingCabsResponse extends AbstractResponse {
@@ -37,7 +33,10 @@ public class ListWaitingCabsResponse extends AbstractResponse {
 		return mCabsStatus;
 	}
 
-	
+	/**
+	 * Add a cab to response
+	 * @param cab 
+	 */
 	public void addCab(Cab cab) {
 		int number = cab.getNumber();
 		String status = cab.isOnBreak() ? STATUS_BREAK : STATUS_WAITING;

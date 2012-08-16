@@ -1,16 +1,14 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.configuration.PassengerGenerator;
 import com.station.taxi.model.Passenger;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
-
-import com.station.taxi.configuration.PassengerGenerator;
 /**
  * Represents toolbar of station
  * @author alex

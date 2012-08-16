@@ -3,7 +3,7 @@ package com.station.taxi.sockets.message;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * JSON Message
  * @author alex
  */
 public interface JSONMessage extends Message {

@@ -1,14 +1,10 @@
 package com.station.taxi.model;
 
-import com.station.taxi.events.StationEventListener;
 import com.station.taxi.events.PassengerEventListener;
+import com.station.taxi.events.StationEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * Represents passenger of taxi cab

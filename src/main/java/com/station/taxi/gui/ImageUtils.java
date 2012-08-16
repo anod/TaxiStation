@@ -3,10 +3,9 @@ package com.station.taxi.gui;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
-
 import javax.swing.ImageIcon;
 /**
- * Utils class to provide image reources
+ * Utility class to provide image resources
  * @author alex
  *
  */

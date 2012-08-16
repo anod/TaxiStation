@@ -5,11 +5,10 @@ import com.station.taxi.model.Receipt;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
+ * JPA Receipt Storage implementation
  * @author alex
  */
 public class JPAReceiptStorage implements ReceiptStorage {
-
 	
 	@Autowired
 	private ReceiptRepository repository;

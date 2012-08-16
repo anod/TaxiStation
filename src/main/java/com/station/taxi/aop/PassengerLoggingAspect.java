@@ -9,7 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
 /**
- *
+ * AOP Aspect to log passenger action
  * @author alex
  */
 @Aspect
@@ -45,6 +45,11 @@ public class PassengerLoggingAspect {
 		update(joinPoint, PassengerEventListener.INTERRUPT);
 	}
 
+	/**
+	 * Log the event
+	 * @param joinPoint
+	 * @param type 
+	 */
 	private void update(JoinPoint joinPoint, int type) {
 		Passenger p = (Passenger)joinPoint.getTarget();				
 		mLogger.update(type, p);

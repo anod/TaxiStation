@@ -1,7 +1,7 @@
 package com.station.taxi.sockets;
 
 /**
- * Entry point to run Station Client
+ * Entry point to run Socket Station Client
  * @author alex
  */
 public class StationClientMain {

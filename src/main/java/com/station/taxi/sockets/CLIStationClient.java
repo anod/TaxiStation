@@ -12,7 +12,7 @@ import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
 
 /**
- *
+ * Command line socket client for station
  * @author alex
  */
 public class CLIStationClient {
@@ -37,11 +37,18 @@ public class CLIStationClient {
 	private final SocketStationContext mStationContext;
 	private final Client mClient;
 
+	/**
+	 * 
+	 * @param context 
+	 */
 	public CLIStationClient(SocketStationContext context) {
 		mStationContext = context;
 		mClient = context.createClient(HOST, StationServer.PORT);
 	}
 
+	/**
+	 * Run client
+	 */
 	public void run() {
 		if (!mClient.connect()) {
 			return;
@@ -91,6 +98,10 @@ public class CLIStationClient {
 		mClient.close();
 	}
 	
+	/**
+	 * 
+	 * @param scan 
+	 */
 	private void addCabRequest(Scanner scan) {
 		System.out.println("Please enter cab number: ");
 		String numberStr = scan.nextLine();
@@ -154,6 +165,10 @@ public class CLIStationClient {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param action 
+	 */
 	private void sendListRequest(String action) {	
 		Request msg = new Request(action);
 		//wait for response

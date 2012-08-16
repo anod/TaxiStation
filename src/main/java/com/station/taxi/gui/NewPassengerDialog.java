@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -27,7 +26,7 @@ public class NewPassengerDialog extends JDialog {
 	private StationFrame mOwner;
 	
 	public NewPassengerDialog(StationFrame owner) {
-		new JDialog(owner, TextsBundle.getString("dialog_title_addpassenger"));
+		JDialog dialog = new JDialog(owner, TextsBundle.getString("dialog_title_addpassenger"));
 		
 		mOwner = owner;
 		setupViews();
@@ -73,12 +72,14 @@ public class NewPassengerDialog extends JDialog {
 		warning.setForeground(Color.RED);
 		btnPanel.add(okBtn);
 		okBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent ae) {
 				okButton();
 			}
 
 		});
 		noBtn.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent ae) {
 				noButton();
 			}

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.configuration.jaxb;
 
 import com.station.taxi.configuration.jaxb.Config.ConfigPassenger;
@@ -13,7 +9,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 import javax.xml.namespace.QName;
 
 /**
- *
+ * JAXB ObjectFactory
  * @author alex
  */
 @XmlRegistry

@@ -30,6 +30,9 @@ public class PassengerView extends JPanel{
 		setupViews();
 		updateSelf();
 	}
+	/**
+	 * Update passenger view
+	 */
 	public void updateSelf()	{
 		mTimeLeft= mPassenger.getTimeLeft();
 		lblTimeLeft.setText("Time left:" + mTimeLeft +"");
@@ -40,6 +43,9 @@ public class PassengerView extends JPanel{
 		}
 		repaint();
 	}
+	/**
+	 * setup views
+	 */
 	private void setupViews() {
 		
 		JLabel lblDestination = new JLabel(mPassenger.getDestination());
@@ -56,7 +62,6 @@ public class PassengerView extends JPanel{
 		mIcon.setBounds(0, 0, 72, 76);
 		mIconLayerdPane.add(mIcon);
 		mIcon.setVerticalAlignment(SwingConstants.TOP);
-
 		
 	}
 

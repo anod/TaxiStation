@@ -4,7 +4,7 @@ import com.station.taxi.model.TaxiStation.StateChangeListener;
 import java.util.List;
 
 /**
- *
+ * Taxi cab station interface
  * @author alex
  */
 public interface Station extends Runnable {

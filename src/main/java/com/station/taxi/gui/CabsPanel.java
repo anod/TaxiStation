@@ -3,7 +3,6 @@ package com.station.taxi.gui;
 import com.station.taxi.model.Cab;
 import java.awt.GridLayout;
 import java.util.HashMap;
-
 import javax.swing.JPanel;
 
 /**

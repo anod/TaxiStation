@@ -14,7 +14,7 @@ class StationFormatter extends Formatter {
 	final private SimpleDateFormat mDateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	@Override
 	public String format(LogRecord record) {
-		StringBuffer sb = new StringBuffer(1000);
+		StringBuilder sb = new StringBuilder(1000);
 		sb.append(mDateFormatter.format(new Date()));
 		sb.append(" ");
 		sb.append(record.getMessage());

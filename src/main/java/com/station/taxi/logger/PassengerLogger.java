@@ -1,8 +1,12 @@
 package com.station.taxi.logger;
 
-import com.station.taxi.model.Passenger;
 import com.station.taxi.events.PassengerEventListener;
+import com.station.taxi.model.Passenger;
 
+/**
+ * Log for passenger events
+ * @author alex
+ */
 public class PassengerLogger extends PassengerEventListener {
 
 	@Override

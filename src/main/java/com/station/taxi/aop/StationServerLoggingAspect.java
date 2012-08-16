@@ -6,8 +6,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 
 /**
- *
- * @author Alex Gavrishev
+ * AOP Aspect for logging Socket Station Ations
+ * @author alex
  */
 @Aspect
 public class StationServerLoggingAspect {

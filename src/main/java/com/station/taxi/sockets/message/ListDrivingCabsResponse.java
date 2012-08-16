@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.sockets.message;
 
 import com.station.taxi.model.Cab;
@@ -13,7 +9,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 
 /**
- *
+ * Response with list of driving cabs
  * @author alex
  */
 public class ListDrivingCabsResponse extends AbstractResponse{
@@ -27,7 +23,10 @@ public class ListDrivingCabsResponse extends AbstractResponse{
 	
 	private Map<Integer,Map<String,Object>> mCabs = new HashMap<>();
 
-	
+	/**
+	 * Add a cab to response
+	 * @param cab 
+	 */
 	public void addCab(Cab cab) {
 		int number = cab.getNumber();
 		String destination = cab.getDestination();

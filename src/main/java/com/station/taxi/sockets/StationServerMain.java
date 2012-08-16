@@ -9,7 +9,7 @@ import com.station.taxi.model.TaxiStation;
 import com.station.taxi.model.TaxiStation.StateChangeListener;
 
 /**
- *
+ * Main entry point for socket serverß
  * @author alex
  */
 public class StationServerMain implements StateChangeListener {
@@ -71,7 +71,7 @@ public class StationServerMain implements StateChangeListener {
 				// loop
 				mServer.accept();
 			}
-		}).start();;
+		}).start();
 	}
 
 	@Override

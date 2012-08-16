@@ -1,10 +1,10 @@
 package com.station.taxi.model;
 
-import com.station.taxi.events.StationEventListener;
 import com.station.taxi.events.PassengerEventListener;
+import com.station.taxi.events.StationEventListener;
 
 /**
- *
+ * Passenger interface
  * @author alex
  */
 public interface Passenger extends Runnable {

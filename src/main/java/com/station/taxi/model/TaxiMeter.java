@@ -1,21 +1,13 @@
 package com.station.taxi.model;
+
+import java.util.Date;
+
 /**
  * Taxi Meter calculate price for driven distance
  * @author alex
  * @author Eran Zimbler
  * @version 0.1
  *
- */
-import java.util.Date;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
-/**
- * TaxiMeter object
- * @author alex
- * @author Eran Zimbler
- * @version 0.2
  */
 public class TaxiMeter implements Cloneable {
 
@@ -81,7 +73,5 @@ public class TaxiMeter implements Cloneable {
 	public double getStartPrice() {
 		return mStartPrice;
 	}	
-	
-	
 	
 }

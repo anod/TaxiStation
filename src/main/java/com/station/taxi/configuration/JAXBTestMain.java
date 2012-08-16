@@ -4,7 +4,7 @@ import com.station.taxi.configuration.jaxb.Config;
 import com.station.taxi.configuration.jaxb.ConfigManager;
 
 /**
- *
+ * Test for JAXB load and save
  * @author alex
  */
 public class JAXBTestMain {
@@ -13,8 +13,6 @@ public class JAXBTestMain {
 	private static final String CONFIG2_XML = "configs/config2.xml";
 
 	public static void main(String[] args) {
-		
-		
 		ConfigManager manager = new ConfigManager();
 		Config config = manager.load(CONFIG_XML,SCHEMA_XSD);
 		System.out.println("Config is: "+config);

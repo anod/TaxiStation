@@ -20,14 +20,20 @@ import org.json.simple.JSONObject;
 import org.springframework.validation.MapBindingResult;
 
 /**
- *
+ * Server worker wrapper
  * @author alex
  */
 public class StationWorker implements Runnable {
 	private final Station mStation;
 	private final SocketStationContext mContext;
 	private final Worker mWorker;
-		
+	
+	/**
+	 * 
+	 * @param worker
+	 * @param station
+	 * @param context 
+	 */
 	public StationWorker(Worker worker, Station station, SocketStationContext context) {
 		mWorker = worker;
 		mStation = station;
@@ -120,6 +126,10 @@ public class StationWorker implements Runnable {
 		response.setStatus(AbstractResponse.STATUS_OK);
 	}
 
+	/**
+	 * Add currently driving cabs to response
+	 * @param response 
+	 */
 	private void listDriving(ListDrivingCabsResponse response) {
 		List<Cab> cabs = mStation.getCabs();
 		for(Cab cab : cabs) {
@@ -130,6 +140,10 @@ public class StationWorker implements Runnable {
 		response.setStatus(AbstractResponse.STATUS_OK);
 	}
 
+	/**
+	 * Add waiting passengers to response
+	 * @param response 
+	 */
 	private void listWaitingPassengers(ListPassengersResponse response) {
 		List<Passenger> passengers = mStation.getPassengers();
 		for(Passenger p: passengers) {
@@ -138,6 +152,10 @@ public class StationWorker implements Runnable {
 		response.setStatus(AbstractResponse.STATUS_OK);
 	}
 
+	/**
+	 * Add waiting cabs to response
+	 * @param response 
+	 */
 	private void listWaitingCabs(ListWaitingCabsResponse response) {
 		List<Cab> cabs = mStation.getCabs();
 		for(Cab cab : cabs) {

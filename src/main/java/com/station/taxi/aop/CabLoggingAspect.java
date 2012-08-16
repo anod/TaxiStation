@@ -1,13 +1,13 @@
 package com.station.taxi.aop;
 
-import com.station.taxi.model.Cab;
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.logger.CabLogger;
+import com.station.taxi.model.Cab;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 
 /**
- * 
+ * Logging AOP aspect for Cab actions
  * @author alex
  */
 @Aspect 
@@ -48,6 +48,11 @@ public class CabLoggingAspect {
 		update(joinPoint, CabEventListener.INTERRUPT);
 	}
 
+	/**
+	 * Log an event
+	 * @param joinPoint
+	 * @param type 
+	 */
 	private void update(JoinPoint joinPoint, int type) {
 		Cab cab = (Cab)joinPoint.getTarget();				
 		mLogger.update(type, cab);

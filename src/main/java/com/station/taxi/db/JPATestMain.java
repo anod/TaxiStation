@@ -4,10 +4,6 @@ import com.station.taxi.db.repositories.ReceiptRepository;
 import com.station.taxi.gui.GuiMain;
 import com.station.taxi.model.Receipt;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -15,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- *
+ * Test file for JPA Storage
  * @author alex
  */
 public class JPATestMain {
@@ -49,7 +45,7 @@ public class JPATestMain {
 
 			System.out.println("====-22222-====");
 		
-		all = repository.findByPassengerNumber(2);
+		all = repository.findByPassengersCount(2);
 		for(Receipt r: all) {
 			System.out.println(r);
 		}

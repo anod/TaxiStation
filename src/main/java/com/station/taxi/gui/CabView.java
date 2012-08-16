@@ -1,8 +1,8 @@
 package com.station.taxi.gui;
 
+import com.station.taxi.events.CabEventListener;
 import com.station.taxi.model.Cab;
 import com.station.taxi.model.Passenger;
-import com.station.taxi.events.CabEventListener;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -42,7 +42,10 @@ public class CabView extends JPanel {
 	private JLabel mTotalEarningsLabel;
 	private MouseAdapter mClickAdapter;
 	
-	
+	/**
+	 * View of cab
+	 * @param cab 
+	 */
 	public CabView(Cab cab) {
 		setBorder(new TitledBorder(null, cab.getNumber()+"", TitledBorder.CENTER, TitledBorder.TOP, null, null));
 		setLayout(new BorderLayout(0, 0));
@@ -60,7 +63,10 @@ public class CabView extends JPanel {
 		addMouseListener(mClickAdapter);
 	}
 
-
+	/**
+	 * Mouse click adapter
+	 * @return 
+	 */
 	private MouseAdapter initClickAdpater() {
 		return new MouseAdapter() {
 			@Override

@@ -3,10 +3,6 @@ package com.station.taxi.model;
 import com.station.taxi.events.CabEventListener;
 import com.station.taxi.events.StationEventListener;
 import java.util.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  * Tax cab object
@@ -14,8 +10,6 @@ import javax.xml.bind.annotation.XmlType;
  * @author Eran Zimbler
  * @version 0.2
  */
-@XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name="taxi")
 public class TaxiCab implements Cab { 
     /**
      * Lock used when maintaining queue of requested updates.

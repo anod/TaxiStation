@@ -4,6 +4,7 @@ import com.station.taxi.model.TaxiStation;
 import java.net.Socket;
 
 /**
+ * Station server implementation
  * @author alex
  */
 public class StationServer extends AbstractServer{

@@ -6,11 +6,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- *
+ * JAXB XML configuration object 
  * @author alex
  */
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -105,6 +104,9 @@ public class Config {
 	}
 	
 
+	/**
+	 * Describe station xml node
+	 */
 	@XmlAccessorType(XmlAccessType.FIELD)
 	@XmlType(name="station")
 	public static class ConfigStation {
@@ -152,6 +154,9 @@ public class Config {
 		
 	}
 
+	/**
+	 * Describe list of taxis node
+	 */
 	@XmlAccessorType(XmlAccessType.FIELD)
 	@XmlType(name="taxi")
 	public static class ConfigTaxi {
@@ -197,6 +202,9 @@ public class Config {
 		
 	}
 	
+	/**
+	 * Describe passengers node
+	 */
 	@XmlAccessorType(XmlAccessType.FIELD)
 	@XmlType(name="passenger")
 	public static class ConfigPassenger {
@@ -252,6 +260,5 @@ public class Config {
 			+ "  passengers: " + passengers + " \n"
 		+ "]";
 	}
-	
-	
+
 }
