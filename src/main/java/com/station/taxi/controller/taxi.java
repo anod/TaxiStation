@@ -30,13 +30,20 @@ public class taxi {
         {
             mClient = mStationContext.createClient(HOST, StationServer.PORT);
         }
-        mClient.connect();
+        if(mClient.connect())
+        {
         ListDrivingCabsResponse response = (ListDrivingCabsResponse)getList(MessageFactory.ACTION_LIST_DRIVING);
         if(response.isStatusOk())
         {model.addAttribute("DrivingCabs", response.getCabs());}
         ListWaitingCabsResponse response2 = (ListWaitingCabsResponse)getList(MessageFactory.ACTION_LIST_WAITING_CABS);
         if(response2.isStatusOk())
         {model.addAttribute("WaitingCabs", response2.mCabsStatus());}
+        mClient.close();
+        }
+        else
+        {
+            model.addAttribute("ERROR", "Error cannot connect to socket");
+        }
         return "taxiView";
 	}
     @RequestMapping(value="/{cabno}")
@@ -44,7 +51,7 @@ public class taxi {
         // currently do nothing since i am not sure it is needed and i should have finished it by now.
         return "singleCab";
     }
-    }
+
     private AbstractResponse getList(String action)
         {
             Request msg = new Request(action);
