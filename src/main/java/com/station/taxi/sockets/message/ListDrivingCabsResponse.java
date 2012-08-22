@@ -59,5 +59,7 @@ public class ListDrivingCabsResponse extends AbstractResponse{
 	protected void toJSONType(JSONObject json) {
 		json.put(KEY_CABS, mCabs);
 	}
-
+        public Map<Integer,Map<String,Object>> getCabs() {
+		return mCabs;
+	}
 }

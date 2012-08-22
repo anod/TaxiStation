@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * SQL JDBC implementation of Receipt storage
+ * SQL JDBC implementation of Receipt Storage
  *
  * @author Eran Zimbler
  */
