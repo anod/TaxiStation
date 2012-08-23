@@ -23,7 +23,7 @@ public interface ReceiptRepository extends CrudRepository<Receipt, Long> {
         @Query("select r from Receipt r where r.mCabID = ?1 and r.mStartTime<=?2 and r.mEndTime>=$3")
         List<Receipt> findBymCabID(Integer id,Date startTime,Date endTime);
         
-        @Query("select r from Receipt r where r.mStartTime<=?1")
+        @Query("select r from Receipt r where r.mStartTime>?1")
         List<Receipt> findAllinTimeRange(Date startTime);
      
  
