@@ -1,6 +1,7 @@
 package com.station.taxi.db.repositories;
 
 import com.station.taxi.model.Receipt;
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,11 +12,19 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface ReceiptRepository extends CrudRepository<Receipt, Long> {
  
-	/**
-	 * Load receipts by passengers count
-	 * @param count
-	 * @return 
-	 */
-	@Query("select r from Receipt r where r.mPassengersCount = ?1")
-	List<Receipt> findByPassengersCount(Integer count);
+	//@Query("select r from Receipt r where r.mPassengersCount = ?1")
+        List<Receipt> findBymPassengersCount(Integer count);
+        
+        List<Receipt> findBymCabID(Integer id);
+        
+        @Query("select r from Receipt r where r.mCabID = ?1 and r.mStartTime>= ?2")
+        List<Receipt> findBymCabIDandmStartTime(Integer id,Date starttime);
+        
+        @Query("select r from Receipt r where r.mCabID = ?1 and r.mStartTime<=?2 and r.mEndTime>=$3")
+        List<Receipt> findBymCabID(Integer id,Date startTime,Date endTime);
+        
+        @Query("select r from Receipt r where r.mStartTime<=?1")
+        List<Receipt> findAllinTimeRange(Date startTime);
+     
+ 
 }
