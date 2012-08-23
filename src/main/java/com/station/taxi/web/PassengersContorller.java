@@ -1,4 +1,4 @@
-package com.station.taxi.controller;
+package com.station.taxi.web;
 
 import com.station.taxi.sockets.Client;
 import com.station.taxi.sockets.SocketStationContext;
@@ -10,24 +10,22 @@ import com.station.taxi.sockets.message.Request;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
  * @author srgrn
  */
 @Controller
-@RequestMapping(value = "/passenger")
-public class Passenger {
+@RequestMapping(value = "/passengers")
+public class PassengersContorller {
 
 	private static final String HOST = "localhost";
 	private static Client mClient = null;
+	private static final String TPL_PASSENGERS = "passengers";
 
 	@RequestMapping(value = "/")
-	public String passenger(Model model) {
+	public String passengers(Model model) {
 		if (mClient == null) {
 			SocketStationContext stationContext = SocketStationContext.readFromXml();
 			mClient = stationContext.createClient(HOST, StationServer.PORT);
@@ -41,13 +39,7 @@ public class Passenger {
 		} else {
 			model.addAttribute("ERROR", "Error cannot connect to socket");
 		}
-		return "passengerView";
-	}
-
-	@RequestMapping(value = "/{var}")
-	public String SpecificPassenger(@PathVariable String var, Model model) {
-		model.addAttribute("name", var);
-		return "passengerdetails";
+		return TPL_PASSENGERS;
 	}
 
 	private AbstractResponse getList(String action) //unusfull code duplication for the moment

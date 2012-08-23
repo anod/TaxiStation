@@ -3,7 +3,10 @@
     Created on : Aug 23, 2012, 1:58:45 AM
     Author     : srgrn
 --%>
-  <head>
+  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<head>
     <meta charset="utf-8">
     <title>Taxi Station - Web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,12 +47,20 @@
           <a class="brand" href="#">TaxiStation</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="/TaxiStation/">Home</a></li>
+              <li><a href="/TaxiStation/">Home</a></li>
               <li><a href="<c:url value="/taxi/"/>">Taxi List</a></li>
-              <li><a href="<c:url value="/passenger/"/>" >Passengers List</a></li>
-              <li><a href="<c:url value="/admin/"/>" >Admin Page</a></li>
+              <li><a href="<c:url value="/passengers/"/>" >Passengers List</a></li>
+				<c:choose>
+				   <c:when test="${param.is_admin}">
+					 <li><a href="<c:url value="/admin/driving"/>" >Driving List</a></li>			  
+					 <li><a href="<c:url value="/admin/reports"/>" >Reports</a></li>
+				   </c:when>
+				   <c:otherwise>
+					 <li><a href="<c:url value="/admin/"/>" >Admin Area</a></li>
+				   </c:otherwise>
+				</c:choose>
             </ul>
-          </div><!--/.nav-collapse -->
+          </div><!--/.nav-collapse class="active"-->
         </div>
       </div>
     </div>

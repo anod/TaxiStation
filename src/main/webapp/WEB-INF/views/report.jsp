@@ -5,11 +5,11 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@include  file="header.jsp" %>
+<jsp:include page="header.jsp">
+	<jsp:param name="is_admin" value="true" />
+</jsp:include>
 <div class="container">
-<div class="hero-unit">
-  <h3>Receipts Report</h3>
-    </div>
+	<h1>Receipts Report</h1>
     <table class="table table-bordered table-hover">
         <tr>
             <th>ID</th>
@@ -24,12 +24,12 @@
                 <td>${r.getId()}</td>
                 <td>${r.getStartTime()}</td>
                 <td>${r.getEndTime()}</td>
-                <td>${r.getPassengersCount()}</td>
+                <td><a href="<c:url value="/admin/reports/count/${r.getPassengersCount()}"/>" >${r.getPassengersCount()}</a></td>
                 <td>${r.getPrice()}</td>
-                <td>${r.getCabID()}</td>
+                <td><a href="<c:url value="/admin/reports/cab/${r.getCabID()}"/>" >${r.getCabID()}</a></td>
             </tr>
         </c:forEach>
     </table>
-            
-    </div> <!-- /container -->
+
+</div> <!-- /container -->
 <%@include  file="footer.jsp" %>

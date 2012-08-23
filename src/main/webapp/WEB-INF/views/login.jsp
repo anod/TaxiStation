@@ -5,6 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%! static boolean IS_ADMIN = false; %>
 <%@include  file="header.jsp" %>
 <div class="container">
 	<div class="hero-unit">

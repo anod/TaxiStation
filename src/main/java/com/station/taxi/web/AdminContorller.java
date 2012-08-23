@@ -1,19 +1,21 @@
-package com.station.taxi.controller;
+package com.station.taxi.web;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
 
 /**
  *
  * @author alex
  */
 @Controller
-@RequestMapping(value = "/admin")
 public class AdminContorller {
+	private static final String TPL_ADMIN = "admin";
 
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/admin")
 	public String admin(Model model) {
-		return "admin";	
+		return TPL_ADMIN;	
 	}
+	
+
 }

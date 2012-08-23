@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.station.taxi.controller;
+package com.station.taxi.web;
 
 import com.station.taxi.db.repositories.ReceiptRepository;
 import java.text.DateFormat;
@@ -20,31 +20,31 @@ import java.util.Date;
  * @author srgrn
  */
 @Controller
-@RequestMapping(value = "/reports")
-public class Report {
+public class ReportsController {
+	private static final String TPL_REPORT = "report";
     
     @Autowired
     private ReceiptRepository repository;
     
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/admin/reports")
     public String report(Model model)
     {
         model.addAttribute("receipts", repository.findAll());
-        return "report";
+        return TPL_REPORT;
     }
-    @RequestMapping(value="/cab/{cabno}")
+    @RequestMapping(value="/admin/reports/cab/{cabno}")
     public String reportByCab(Model model,@PathVariable int cabno)
     {
         model.addAttribute("receipts", repository.findBymCabID(cabno));
-        return "report";
+        return TPL_REPORT;
     }
-    @RequestMapping(value="/count/{number}")
+    @RequestMapping(value="/admin/reports/count/{number}")
     public String reportByPassengerCount(Model model,@PathVariable int number)
     {
         model.addAttribute("receipts", repository.findBymPassengersCount(number));
-        return "report";
+        return TPL_REPORT;
     }
-    @RequestMapping(value = "/from/{date}")
+    @RequestMapping(value = "/admin/reports/from/{date}")
     public String reportFromDate(Model model,@PathVariable String date)
     {
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -55,9 +55,9 @@ public class Report {
             e.printStackTrace();
         }
        
-        return "report";
+        return TPL_REPORT;
     }
-    @RequestMapping(value = "/from/{date}/to/{date2}")
+    @RequestMapping(value = "/admin/reports/from/{date}/to/{date2}")
     public String reportFromDateTo(Model model,@PathVariable String date,@PathVariable String date2)
     {
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -69,6 +69,6 @@ public class Report {
             e.printStackTrace();
         }
        
-        return "report";
+        return TPL_REPORT;
     }
 }
