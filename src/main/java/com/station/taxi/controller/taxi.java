@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/taxi")
-public class taxi {
+public class Taxi {
 
 	private static final String HOST = "localhost";
 	private static Client mClient = null;

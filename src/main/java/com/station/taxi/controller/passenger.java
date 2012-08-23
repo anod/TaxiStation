@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping(value = "/passenger")
-public class passenger {
+public class Passenger {
 
 	private static final String HOST = "localhost";
 	private static Client mClient = null;
