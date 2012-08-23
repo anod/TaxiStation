@@ -57,5 +57,18 @@ public class Report {
        
         return "report";
     }
-    
+    @RequestMapping(value = "/from/{date}/to/{date2}")
+    public String reportFromDateTo(Model model,@PathVariable String date,@PathVariable String date2)
+    {
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            Date start = df.parse(date);
+            Date end = df.parse(date2);
+            model.addAttribute("receipts", repository.findAllinTimeRange(start, end));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+       
+        return "report";
+    }
 }

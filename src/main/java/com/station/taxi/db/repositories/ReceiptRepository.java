@@ -26,5 +26,7 @@ public interface ReceiptRepository extends CrudRepository<Receipt, Long> {
         @Query("select r from Receipt r where r.mStartTime>?1")
         List<Receipt> findAllinTimeRange(Date startTime);
      
+        @Query("select r from Receipt r where r.mStartTime>?1 and r.mEndTime<=?2")
+        List<Receipt> findAllinTimeRange(Date startTime,Date endTime);
  
 }
