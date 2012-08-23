@@ -4,6 +4,7 @@ import com.station.taxi.model.Receipt;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,10 +30,10 @@ public class SQLRecieptStorage implements ReceiptStorage {
 
 	@Override
 	public void save(Receipt receipt) {
-		ArrayList<ResultSet> results = DBHandler.selectQuery("Select max(id) as OUTPUT from RECEIPT");
+		ArrayList<ResultSet> results = DBHandler.selectQuery("Select max(id) as jack from RECEIPTS");
 		int id = 0;
 		try {
-			id = (results.get(0)).getInt("OUTPUT");
+			id = (results.get(0)).getInt("jack");
 		} catch (SQLException ex) {
 			Logger.getLogger(SQLRecieptStorage.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -62,4 +63,37 @@ public class SQLRecieptStorage implements ReceiptStorage {
 		}
 		return r;
 	}
+
+    Iterable<Receipt> findBymPassengersCount(int i) {
+        ArrayList<ResultSet> results = DBHandler.selectQuery("Select * from RECEIPT");
+
+		ArrayList<Receipt> list = new ArrayList<>();		
+		for (ResultSet r : results) {
+			list.add(convert(r));
+		}
+
+		return (Iterable<Receipt>) list.iterator();
+    }
+
+    Iterable<Receipt> findBymCabID(int i) {
+        ArrayList<ResultSet> results = DBHandler.selectQuery("Select * from RECEIPT");
+
+		ArrayList<Receipt> list = new ArrayList<>();		
+		for (ResultSet r : results) {
+			list.add(convert(r));
+		}
+
+		return (Iterable<Receipt>) list.iterator();
+    }
+
+    Iterable<Receipt> findBymCabIDandmStartTime(int i, Date three) {
+        ArrayList<ResultSet> results = DBHandler.selectQuery("Select * from RECEIPT");
+
+		ArrayList<Receipt> list = new ArrayList<>();		
+		for (ResultSet r : results) {
+			list.add(convert(r));
+		}
+
+		return (Iterable<Receipt>) list.iterator();
+    }
 }
