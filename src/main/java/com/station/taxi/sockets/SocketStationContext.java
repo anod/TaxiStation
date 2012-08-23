@@ -11,7 +11,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author alex
  */
 public class SocketStationContext extends StationContext {
-	private static final String CONFIG_PATH = "SocketsXMLConfig.xml";
+	private static final String CONFIG_PATH = "com/station/taxi/sockets/SocketsXMLConfig.xml";
 	
 	/**
 	 * Factory method to create instance SocketStationContext
@@ -19,7 +19,7 @@ public class SocketStationContext extends StationContext {
 	 * @return 
 	 */
 	public static SocketStationContext readFromXml() {
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH, StationServer.class);
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext(CONFIG_PATH);
 		return new SocketStationContext(applicationContext);
 	}
 	

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-        metadata-complete="true">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+		 metadata-complete="true">
 
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
@@ -36,4 +36,33 @@
 		<welcome-file></welcome-file>
 	</welcome-file-list>	
 
+	<session-config>
+		<session-timeout>
+			30
+		</session-timeout>
+	</session-config>
+	<security-constraint>
+		<display-name>AdminConstraint</display-name>
+		<web-resource-collection>
+			<web-resource-name>StationAdmin</web-resource-name>
+			<description/>
+			<url-pattern>/admin/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<description/>
+			<role-name>AdminRole</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<realm-name>file</realm-name>
+		<form-login-config>
+			<form-login-page>/login</form-login-page>
+			<form-error-page>/loginError</form-error-page>
+		</form-login-config>
+	</login-config>
+	<security-role>
+		<description/>
+		<role-name>AdminRole</role-name>
+	</security-role>
 </web-app>

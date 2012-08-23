@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.station.taxi.controller;
 
 import com.station.taxi.sockets.Client;
@@ -24,43 +20,41 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author srgrn
  */
 @Controller
-@RequestMapping(value="/passenger")
+@RequestMapping(value = "/passenger")
 public class passenger {
-    private static final String HOST = "localhost";
-    private static int PORT = StationServer.PORT;
-    private static SocketStationContext mStationContext = SocketStationContext.readFromXml();
-    private static Client mClient = null;
 
-    
-    @RequestMapping(value="/")
-    public String passenger(Model model) {
-	if(mClient == null)
-        {
-            mClient = mStationContext.createClient(HOST, StationServer.PORT);
-        }
-        if(mClient.connect())
-        {
-        ListPassengersResponse response = (ListPassengersResponse)getList(MessageFactory.ACTION_LIST_WAITING_PASSENGERS);
-        if(response.isStatusOk())
-        {model.addAttribute("PassengersInLine", response.getPassengers());}
-        mClient.close();
-        }
-        else
-        {
-            model.addAttribute("ERROR", "Error cannot connect to socket");
-        }
-        return "passengerView";
+	private static final String HOST = "localhost";
+	private static Client mClient = null;
+
+	@RequestMapping(value = "/")
+	public String passenger(Model model) {
+		if (mClient == null) {
+			SocketStationContext stationContext = SocketStationContext.readFromXml();
+			mClient = stationContext.createClient(HOST, StationServer.PORT);
+		}
+		if (mClient.connect()) {
+			ListPassengersResponse response = (ListPassengersResponse) getList(MessageFactory.ACTION_LIST_WAITING_PASSENGERS);
+			if (response.isStatusOk()) {
+				model.addAttribute("PassengersInLine", response.getPassengers());
+			}
+			mClient.close();
+		} else {
+			model.addAttribute("ERROR", "Error cannot connect to socket");
+		}
+		return "passengerView";
 	}
-    @RequestMapping(value="/{var}")
-    public String SpecificPassenger(@PathVariable String var,Model model) {
-            model.addAttribute("name", var);
-            return "passengerdetails";
+
+	@RequestMapping(value = "/{var}")
+	public String SpecificPassenger(@PathVariable String var, Model model) {
+		model.addAttribute("name", var);
+		return "passengerdetails";
 	}
-    private AbstractResponse getList(String action) //unusfull code duplication for the moment
-        {
-            Request msg = new Request(action);
-            JSONObject json = (JSONObject)mClient.sendAndReceive(msg.toJSON());
-            AbstractResponse response = MessageFactory.parseResponse(json);
-            return response;
-        }
+
+	private AbstractResponse getList(String action) //unusfull code duplication for the moment
+	{
+		Request msg = new Request(action);
+		JSONObject json = (JSONObject) mClient.sendAndReceive(msg.toJSON());
+		AbstractResponse response = MessageFactory.parseResponse(json);
+		return response;
+	}
 }

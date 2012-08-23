@@ -45,8 +45,9 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
-              <li><a href="<c:url value="/taxi/"/>">TaxiList</a></li>
-              <li><a href="<c:url value="/passenger/"/>" >PassengersList</a></li>
+              <li><a href="<c:url value="/taxi/"/>">Taxi List</a></li>
+              <li><a href="<c:url value="/passenger/"/>" >Passengers List</a></li>
+              <li><a href="<c:url value="/admin/"/>" >Admin Page</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

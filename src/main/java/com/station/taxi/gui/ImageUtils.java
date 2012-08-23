@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
  */
 public class ImageUtils {
 
-	private static final String IMAGE_PATH = "/com/station/taxi/gui/resources/";
+	private static final String IMAGE_PATH = "/com/station/taxi/gui/";
 	private static final String IMAGE_EXT = ".png";
 	
 	/**
