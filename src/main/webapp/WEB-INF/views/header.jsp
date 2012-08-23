@@ -44,7 +44,7 @@
           <a class="brand" href="#">TaxiStation</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
+              <li class="active"><a href="/TaxiStation/">Home</a></li>
               <li><a href="<c:url value="/taxi/"/>">Taxi List</a></li>
               <li><a href="<c:url value="/passenger/"/>" >Passengers List</a></li>
               <li><a href="<c:url value="/admin/"/>" >Admin Page</a></li>
