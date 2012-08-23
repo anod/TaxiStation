@@ -35,13 +35,13 @@ public class ReportsController {
     @RequestMapping(value="/admin/reports/cab/{cabno}")
     public String reportByCab(Model model,@PathVariable int cabno)
     {
-        model.addAttribute("receipts", repository.findBymCabID(cabno));
+        model.addAttribute("receipts", repository.findByCabID(cabno));
         return TPL_REPORT;
     }
     @RequestMapping(value="/admin/reports/count/{number}")
     public String reportByPassengerCount(Model model,@PathVariable int number)
     {
-        model.addAttribute("receipts", repository.findBymPassengersCount(number));
+        model.addAttribute("receipts", repository.findByPassengersCount(number));
         return TPL_REPORT;
     }
     @RequestMapping(value = "/admin/reports/from/{date}")

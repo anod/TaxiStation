@@ -49,17 +49,17 @@ public class JPATestMain {
 
 			System.out.println("====-22222-====");
 			System.out.println("By Passenger Count = 2");
-		all = repository.findBymPassengersCount(2);
+		all = repository.findByPassengersCount(2);
 		for(Receipt r: all) {
 			System.out.println(r);
 		}
                 System.out.println("By Cab ID = 222");
-                all = repository.findBymCabID(222);
+                all = repository.findByCabID(222);
 		for(Receipt r: all) {
 			System.out.println(r);
 		}
 		System.out.println("By CabId 222 and start date");
-		all = repository.findBymCabIDandmStartTime(333, three);
+		all = repository.findByCabIDandStartTime(333, three);
 		for(Receipt r: all) {
 			System.out.println(r);
 		}

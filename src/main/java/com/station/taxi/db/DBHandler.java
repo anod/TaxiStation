@@ -1,5 +1,6 @@
 package com.station.taxi.db;
 
+import com.station.taxi.model.Receipt;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -48,7 +49,7 @@ public class DBHandler {
 		createConnection(connectionString + "create=true;");
 		try {
 			   Statement createTable = conn.createStatement();
-			   String s = "create table RECIPT ("
+			   String s = "create table RECEIPTS ("
 					   + " \"ID\" INTEGER not null primary key generated always as identity (start with 1 increment by 1),"
 					   + "\"START_TIME\" TIMESTAMP not null,"
 					   + "\"END_TIME\" TIMESTAMP,"
@@ -87,21 +88,44 @@ public class DBHandler {
 	 * @param query
 	 * @return 
 	 */
-    public static ArrayList<ResultSet> selectQuery(String query) 
+    public static ArrayList<Receipt> selectQuery(String query) 
     {
-        ArrayList<ResultSet> ret = new ArrayList<>();
+        ArrayList<Receipt> ret = new ArrayList<>();
         if(conn == null)
         { createConnection(connectionString); }
         try {
             Statement selectStatement = conn.createStatement();
-            selectStatement.execute(query);
-            while( ((selectStatement.getMoreResults() != false) && (selectStatement.getUpdateCount() != -1)))
+            ResultSet rs = selectStatement.executeQuery(query);
+            while(rs.next())
             {
-               ret.add(selectStatement.getResultSet());
+               ret.add(convert(rs));
             }
         } catch (SQLException ex) {
             Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+		
         return ret;
     }
+	
+	/**
+	 * Convert ResultSet into Receipt
+	 * @param rs
+	 * @return 
+	 */
+	private static Receipt convert(ResultSet rs) {
+		Receipt r = null;
+		try {
+			r = new Receipt(
+				rs.getDate("START_TIME"), 
+				rs.getDate("END_TIME"), 
+				rs.getDouble("PRICE"), 
+				rs.getInt("PASSENGER_COUNT")
+			);
+			r.setCabID(rs.getInt("CABID"));
+
+		} catch (SQLException ex) {
+			Logger.getLogger(SQLReceiptStorage.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return r;
+	}
 }

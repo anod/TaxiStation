@@ -2,6 +2,7 @@ package com.station.taxi.db;
 
 import com.station.taxi.db.repositories.ReceiptRepository;
 import com.station.taxi.model.Receipt;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -23,4 +24,20 @@ public class JPAReceiptStorage implements ReceiptStorage {
 		repository.save(receipt);
 	}
 
+	@Override
+	public Iterable<Receipt> findByPassengersCount(int i) {
+		return repository.findByPassengersCount(i);
+	}
+
+	@Override
+	public Iterable<Receipt> findByCabID(int i) {
+		return repository.findByCabID(i);
+	}
+
+	@Override
+	public Iterable<Receipt> findByCabIDandStartTime(int i, Date three) {
+		return repository.findByCabIDandStartTime(i, three);
+	}
+
+	
 }

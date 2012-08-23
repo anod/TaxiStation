@@ -18,7 +18,7 @@
 	<bean id="cab" class="com.station.taxi.model.TaxiCab" scope="prototype" />
 	<bean id="passenger" class="com.station.taxi.model.TaxiPassenger" scope="prototype" />
 	<bean id="station" class="com.station.taxi.model.TaxiStation" scope="prototype" />
-	<bean id="receiptStorage" class="com.station.taxi.db.JPAReceiptStorage" />
+	<bean id="receiptStorage" class="com.station.taxi.db.SQLReceiptStorage" />
 
 	<context:annotation-config />
 
