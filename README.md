@@ -11,15 +11,17 @@ Passengers can wait in queue for available taxi cab or drive to destination
 
 * Java 1.7 compatible
 * Maven dependency manager
-* 4 different implmentations: Swing GUI, Socket Client-Server, Web Application, Android client
+* 4 different implmentations: Swing GUI, Socket Client-Server, Web Application, [Android Client][1]
 * Derby db
 * Glassfish web server
 * Spring Framework
-* JPA or JDBC
-* JAXB for configuration parsin
+* JPA or JDBC to communicate with db (Can be switched in spring.xml)
+* JAXB for loading and saving of configuration
 * Spring AOP used for logging
 * Multi-threading: Station, taxis and passengers are running in separate threads 
 
 ## Authors
 
 Alex Gavrishev, Eran Zimbler 2012
+
+ [1]: https://github.com/anod/TaxiStationAndroid
