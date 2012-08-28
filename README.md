@@ -3,9 +3,9 @@
 This is study project for course "JAVA Programming Languages" @ Afeka College of Engineering.
 
 Project simulates lifecycle of taxi station. 
-There is station that has taxi cabs and passengers
-Each taxi can be in next 3 states: waiting for passengers, on break or driving to the distination
-Passengers can wait in queue for available taxi cab or drive to destination
+There is station that has taxi cabs and passengers.
+Each taxi can be in next 3 states: waiting for passengers, on break or driving to the distination.
+Passengers can wait in queue for available taxi cab or drive to destination.
 
 ## Implementation Highlights
 
@@ -14,6 +14,7 @@ Passengers can wait in queue for available taxi cab or drive to destination
 * 4 different implmentations: Swing GUI, Socket Client-Server, Web Application, [Android Client][1]
 * Derby db
 * Glassfish web server
+* Socket Server and Clinet (Communication using JSON format)
 * Spring Framework
 * JPA or JDBC to communicate with db (Can be switched in spring.xml)
 * JAXB for loading and saving of configuration
